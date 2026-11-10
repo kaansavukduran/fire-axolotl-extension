@@ -18,3 +18,5 @@ Lisanslar ve tam ilgili kaynak dağıtımı: [THIRD_PARTY_NOTICES.md](THIRD_PART
 0.3.0: ±10 saniye altyazı oynatma ayarı eklendi; DOM ve yerel tam ekran izleri aynı kaydırmayı kullanır, dışa aktarma özgün zamanları korur. Aynı tür model yeniden yüklenince eski dil algılama sonucunun veya eski worker olayının yeni oturuma karışması engellendi. Model çeviri kalite sınırları değişmedi.
 
 0.4.0: modelden bağımsız TextTrack altyazı gezinmesi, satır tekrarı ve açık eylemle kelime/cümle kaydı eklendi. Kaynak değişince çalışma metni temizlenir. Dosya altyazıları ve erişilemeyen özel oynatıcılar bu gezinme akışına dâhil değildir.
+
+0.5.0: yan panelde geçici çoklu sekme seçimi ve onay/iptal destekli toplu kapatma; isteğe bağlı `sessions` izniyle geri açma ve izin kaldırma. Model çeviri kalitesi ve önceki dağıtım/platform açıkları değişmedi.

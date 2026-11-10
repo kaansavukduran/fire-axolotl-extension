@@ -15,9 +15,11 @@ h1,h2,label,summary{overflow-wrap:anywhere}
 .sidebar header {padding:0;gap:.5rem}.sidebar h1{font-size:1.1rem}
 .tab-list{list-style:none;padding:0;margin:1rem 0}.tab-row{display:flex;flex-wrap:wrap;gap:.2rem;padding:.3rem;border-radius:.6rem;border:1px solid transparent;margin-block:.3rem}
 .tab-row.active{border-color:var(--accent);background:var(--surface)}
-.tab-row .tab-select{flex:1 1 100%;text-align:start;overflow-wrap:anywhere;background:transparent;color:var(--ink)}
+.tab-row .tab-select{flex:1 1 calc(100% - 2rem);min-width:0;text-align:start;overflow-wrap:anywhere;background:transparent;color:var(--ink)}
 .tab-row .quiet{padding:.3rem .65rem;min-height:2.5rem}
 #companions{width:100%;height:30rem;border:0;border-radius:1rem}
 .newtab main{max-width:54rem;margin:auto}.newtab nav{margin-block:1.25rem;align-items:center;gap:1rem}
 #qr-image{image-rendering:pixelated;max-width:100%;background:white;padding:1rem}
 .tab-select[aria-current=true]{font-weight:700}
+
+.tab-row>input[type=checkbox]{width:1.15rem;min-width:1.15rem;min-height:1.15rem;accent-color:var(--accent)}

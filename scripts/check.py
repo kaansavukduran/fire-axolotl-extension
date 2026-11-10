@@ -38,6 +38,7 @@ with zipfile.ZipFile(package) as archive:
     final = json.loads(archive.read('manifest.json'))
     assert final['browser_specific_settings']['gecko']['id'] != 'uBlock0@raymondhill.net'
     assert final['browser_specific_settings']['gecko']['id'] != 'aion@fire-axolotl.browser'
+    assert 'sessions' in final['optional_permissions'] and 'sessions' not in final['permissions']
     assert final['options_ui']['page'] == 'aion/settings.html'
     assert final['background'] == {'page': 'background.html'}
     assert 'mozilla-recommendation.json' not in archive.namelist()

@@ -36,7 +36,7 @@ def package(with_sources=False, native_newtab=False):
     manifest.pop('short_name', None)
     manifest['author'] = 'Kaan Savuk Duran; Aion contributors; uBlock Origin by Raymond Hill and contributors'
     manifest['permissions'] = sorted(set(manifest['permissions'] + aion['permissions']))
-    manifest['optional_permissions'] = []
+    manifest['optional_permissions'] = ['sessions']
     manifest['options_ui'] = {'page': 'aion/settings.html', 'open_in_tab': True}
     manifest['browser_action'] = {**aion['browser_action'], 'default_popup': 'aion/popup.html', 'default_title': aion['name']}
     manifest['browser_action']['default_icon'] = {k: 'aion/' + v for k, v in aion['browser_action']['default_icon'].items()}

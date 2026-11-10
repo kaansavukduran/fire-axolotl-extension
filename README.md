@@ -2,7 +2,7 @@
 
 Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci bir reklam engelleme eklentisi gerekmez. Fire Axolotl donör olarak kullanılır; donör depo bu çalışma tarafından değiştirilmez.
 
-**Durum: 0.4.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
+**Durum: 0.5.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
 
 ## Neler var?
 
@@ -13,6 +13,7 @@ Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci b
 - Açık eylemle HTTPS çeviri hizmeti, seçili metin/altyazı alma, kelime defteri. Çeviri taslağı açılır pencere kapandıktan sonra korunur.
 - Model yüklemeden okunabilir video altyazısında önceki/sonraki satır, tekrar oynatma ve kelime/cümle kaydı.
 - Altyazı senkronu için −10 / +10 saniye oynatma ayarı; özgün ve çeviri birlikte kayar, VTT dışa aktarma zamanları korunur.
+- Yan panelde görünür sekmeleri çoklu seçme, iptal edilebilir toplu kapatma ve isteğe bağlı Firefox oturum izniyle son kapanan sekmeyi geri açma. İzin sonradan kaldırılabilir.
 - Sekme yan paneli: arama, etkinleştirme, sabitleme, kapatma, klavyeyle yukarı/aşağı taşıma. `Alt+Shift+A` paneli açar.
 - Aion, kuzu, kurt, baykuş; yerel PNG kare dizisi içe aktarma ve karakter yedeği. Animasyon durdurma ve sistemin azaltılmış hareket tercihi.
 - Firefox renk teması ve bağımsız Aion görünümü: Türkçe/English, dört tema, %80–%200 arayüz ölçeği, bağımsız yazı boyutu, OpenDyslexic/Lexend, ayar yedeği ve gerçek eylemlere dayalı isteğe bağlı ilerleme.
@@ -23,11 +24,11 @@ Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci b
 
 İki alternatif paket vardır; **yalnızca birini** kur:
 
-- `fire-axolotl-extension-0.4.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
-- `fire-axolotl-extension-0.4.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
+- `fire-axolotl-extension-0.5.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
+- `fire-axolotl-extension-0.5.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
 
-1. [Geliştirici sürümünü](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.4.0-preview.1) aç.
-2. Mevcut yeni sekmeyi korumak için `fire-axolotl-extension-0.4.0-native-newtab-unsigned.xpi` dosyasını indir. Aion yeni sekmesi için diğer XPI’yi seç.
+1. [Geliştirici sürümünü](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.5.0-preview.1) aç.
+2. Mevcut yeni sekmeyi korumak için `fire-axolotl-extension-0.5.0-native-newtab-unsigned.xpi` dosyasını indir. Aion yeni sekmesi için diğer XPI’yi seç.
 3. Masaüstü Firefox'ta adres çubuğuna `about:debugging#/runtime/this-firefox` yaz.
 4. **Geçici Eklenti Yükle / Load Temporary Add-on** düğmesine bas, bu XPI'yi seç.
 5. Firefox'un eklenti menüsünden **Fire Axolotl Extension** düğmesini aç. Ayarlar, Sekmeler, Engelleme ve Araçlar buradadır. Aion yeni sekmeli pakette yeni sekme açınca oyun görünür; diğer pakette popup içinden açılır.

@@ -96,7 +96,7 @@ try:
     wait.until(lambda d: d.window_handles)
     driver.switch_to.window(driver.window_handles[-1])
     driver.switch_to.new_window('tab')
-    package = ROOT / 'dist/fire-axolotl-extension-0.4.0-unsigned.xpi'
+    package = ROOT / 'dist/fire-axolotl-extension-0.5.0-unsigned.xpi'
     addon_id = driver.install_addon(str(package), temporary=True)
     assert addon_id == 'fire-axolotl-extension@kaansavukduran.github.io'
     driver.set_context('chrome')

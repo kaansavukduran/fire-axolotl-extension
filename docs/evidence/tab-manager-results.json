@@ -1,0 +1,7 @@
+{
+  "passed": [
+    "Visible-only selection, filter resets, cancel and confirmed batch close preserve unrelated tabs",
+    "Denying optional sessions permission keeps it ungranted",
+    "Granting through Firefox restores a real closed tab; revocation removes permission"
+  ]
+}

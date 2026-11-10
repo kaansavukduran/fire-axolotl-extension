@@ -1000,5 +1000,47 @@
   },
   "captionPositioned": {
     "message": "Altyazı zamanına gidildi; oynatıcıdan oynatmayı başlat."
+  },
+  "selectVisibleTabs": {
+    "message": "Görünen sekmeleri seç"
+  },
+  "clearTabSelection": {
+    "message": "Seçimi temizle"
+  },
+  "closeSelectedTabs": {
+    "message": "Seçilenleri kapat"
+  },
+  "selectedTabs": {
+    "message": "Seçilen sekme"
+  },
+  "selectTab": {
+    "message": "Sekmeyi seç"
+  },
+  "confirmCloseTabs": {
+    "message": "Seçilen sekmeler kapatılsın mı? Adet:"
+  },
+  "selectedTabsClosed": {
+    "message": "Seçilen sekmeler kapatıldı."
+  },
+  "restoreClosedTab": {
+    "message": "Son kapanan sekmeyi geri aç"
+  },
+  "revokeSessions": {
+    "message": "Geri açma iznini kaldır"
+  },
+  "restoreTabPrivacy": {
+    "message": "Geri açma, Firefox’un isteğe bağlı oturum iznini yalnız düğmeye basınca ister. Kapanan sekmelerin listesi eklenti depolamasına veya sunucuya kaydedilmez."
+  },
+  "sessionsPermissionDenied": {
+    "message": "Geri açmak için oturum izni verilmedi."
+  },
+  "noClosedTab": {
+    "message": "Geri açılabilecek yakın zamanda kapanmış sekme yok."
+  },
+  "closedTabRestored": {
+    "message": "Kapanan sekme geri açıldı."
+  },
+  "sessionsRevoked": {
+    "message": "Oturum izni kaldırıldı."
   }
 }
