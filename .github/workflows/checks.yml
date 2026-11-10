@@ -28,6 +28,7 @@ jobs:
       - run: python3 tests/native_newtab_e2e.py
       - run: python3 tests/tab_manager_e2e.py
       - run: python3 tests/page_translation_e2e.py
+      - run: python3 tests/caption_learning_e2e.py
       - run: python3 scripts/fetch_previous_preview.py
       - name: Preserve settings and blocker data on temporary developer upgrade
         env:
@@ -44,6 +45,7 @@ jobs:
             work/upgrade-test-artifacts/
             work/tab-manager-test-artifacts/
             work/page-translation-test-artifacts/
+            work/caption-learning-test-artifacts/
             work/components/*corresponding-source.tar.gz
             work/ai-support/
           retention-days: 30

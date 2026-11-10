@@ -1,0 +1,10 @@
+{
+  "passed": [
+    "Native caption sources are selectable without AI; a real line loops repeatedly, pauses normally, resumes and stops explicitly",
+    "Seeking outside the loop lets playback continue and never forces the user back into the old line",
+    "Stopping immediately after starting cannot leave a late asynchronous loop running",
+    "A final cue extending past media duration loops across actual playback end and restores the original whole-video loop preference",
+    "A real SRT loaded through the popup supports local-source read, previous/next, vocabulary and timing offset without a model",
+    "Loaded caption lines loop too; closing the AI controller stops the loop and removes its overlay while restoring the player track"
+  ]
+}

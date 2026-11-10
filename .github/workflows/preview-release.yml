@@ -22,7 +22,7 @@ jobs:
         run: |
           count=$(gh run list --workflow checks.yml --commit "$GITHUB_SHA" --status success --json databaseId --jq 'length')
           test "$count" -ge 1
-          test "$(gh release view v0.6.0-preview.1 --json isDraft --jq .isDraft)" = true
+          test "$(gh release view v0.7.0-preview.1 --json isDraft --jq .isDraft)" = true
       - run: npm ci --ignore-scripts
       - run: npm run build:ai
       - run: npm test
@@ -35,9 +35,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release edit v0.6.0-preview.1 --target "$GITHUB_SHA" --notes-file docs/RELEASE_NOTES_0.6.0.md
-          gh release upload v0.6.0-preview.1 work/release/* --clobber
-          gh release edit v0.6.0-preview.1 --draft=false --prerelease --latest=false
+          gh release edit v0.7.0-preview.1 --target "$GITHUB_SHA" --notes-file docs/RELEASE_NOTES_0.7.0.md
+          gh release upload v0.7.0-preview.1 work/release/* --clobber
+          gh release edit v0.7.0-preview.1 --draft=false --prerelease --latest=false
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:

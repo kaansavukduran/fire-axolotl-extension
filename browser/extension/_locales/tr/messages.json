@@ -972,7 +972,7 @@
     "message": "Altyazıyla öğren"
   },
   "captionStudyHelp": {
-    "message": "Seçili videonun okunabilir altyazısında gezin. Model yüklemeden kullanılabilir. Dosyadan eklenen çift altyazı burada gezinme kaynağı değildir."
+    "message": "Model yüklemeden okunabilir video altyazısı veya uygulanmış özgün VTT/SRT satırlarıyla çalış. Kaynakları yenileyip altyazıyı seç; önceki/sonraki satıra git, tekrar oynat veya satırı döngüye al. Yalnız okunabilir altyazılar desteklenir."
   },
   "captionPrevious": {
     "message": "Önceki satır"
@@ -1096,5 +1096,26 @@
   },
   "pageScanRequired": {
     "message": "Önce hedef sayfanın metnini önizle."
+  },
+  "captionRefresh": {
+    "message": "Altyazı kaynaklarını yenile"
+  },
+  "captionLocalSource": {
+    "message": "Aion · yüklenmiş özgün altyazı"
+  },
+  "captionNativeForLive": {
+    "message": "Canlı çeviri için oynatıcının altyazısını seç; yüklenen dosya için dosya çevirisini kullan."
+  },
+  "captionLoop": {
+    "message": "Bu satırı döngüye al"
+  },
+  "captionLoopStop": {
+    "message": "Satır döngüsünü durdur"
+  },
+  "captionLooping": {
+    "message": "Satır döngüsü başlatıldı. Video duraklatılabilir; başka zamana elle gitmek döngüyü sonlandırır."
+  },
+  "captionLoopStopped": {
+    "message": "Satır döngüsü durduruldu."
   }
 }

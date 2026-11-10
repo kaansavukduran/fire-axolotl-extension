@@ -1,15 +1,15 @@
 {
-  "version": "0.6.0",
+  "version": "0.7.0",
   "unsigned": true,
   "model_weights_embedded": false,
   "packages": {
-    "fire-axolotl-extension-0.6.0-native-newtab-unsigned.xpi": {
-      "bytes": 21118589,
-      "sha256": "59748717709142f025c4c882b76d63716ab770d565fbbef7f62fd3c584046eb1"
+    "fire-axolotl-extension-0.7.0-native-newtab-unsigned.xpi": {
+      "bytes": 21120055,
+      "sha256": "7f73f9b80295b6b88ce3d50332cc17afb7ece4cccec8ffcd50873690be454cf6"
     },
-    "fire-axolotl-extension-0.6.0-unsigned.xpi": {
-      "bytes": 21118614,
-      "sha256": "a01de2200faa9f1d640238b626e3712ed3a4873ef6f056ccb5a6ae95ef7a43d9"
+    "fire-axolotl-extension-0.7.0-unsigned.xpi": {
+      "bytes": 21120081,
+      "sha256": "3d5f17154a3267494441b5f6838fbb1a2699b019cd44c6f44a2388c3a31097a6"
     }
   }
 }

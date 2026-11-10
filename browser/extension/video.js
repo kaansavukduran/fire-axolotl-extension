@@ -3,14 +3,14 @@
   'use strict';
   if (globalThis.__aionVideoInstalled) return;
   globalThis.__aionVideoInstalled = true;
-  let overlay, stopOverlay, capturedTrack, capturedMode, defaultSpeed, mediaObserver;
+  let overlay, stopOverlay, capturedTrack, capturedMode, defaultSpeed, mediaObserver, localCaptionSource, stopLoop;
   const speedListeners=new Map();
   function video(action) {
     const videos = [...document.querySelectorAll('video')].filter(v => v.getBoundingClientRect().width > 0);
     if (!videos.length && ['speed','info','setDefaultSpeed','clearDefaultSpeed'].includes(action)) return [...document.querySelectorAll('audio')].sort((a,b)=>Number(a.paused)-Number(b.paused))[0];
     return videos.sort((a, b) => Number(b === document.pictureInPictureElement) - Number(a === document.pictureInPictureElement) || Number(!b.paused) - Number(!a.paused) || b.clientWidth * b.clientHeight - a.clientWidth * a.clientHeight)[0];
   }
-  function showOverlay(v, original, translated, language, preferences = {}) {
+  function showOverlay(v, original, translated, language, preferences = {}, sourceCues = original) {
     const offset = Number.isFinite(preferences.offset) ? Math.max(-10, Math.min(10, preferences.offset)) : 0;
     // Shift both tracks together; keep the caller's source/export timestamps intact.
     const shift = cues => cues.filter(c => Number.isFinite(c.start) && Number.isFinite(c.end) && c.end > c.start)
@@ -23,6 +23,7 @@
     const top = preferences.position === 'top';
     const font = {opendyslexic: 'AionOpenDyslexic', lexend: 'AionLexend'}[preferences.font] || 'system-ui';
     if (stopOverlay) stopOverlay();
+    localCaptionSource = {video:v, cues:sourceCues};
     overlay = document.createElement('div');
     overlay.setAttribute('data-aion-captions', '');
     // Fixed host remains visible when video is inside an arbitrary site layout.
@@ -83,7 +84,7 @@
     }
     const timer = setInterval(update, 150); update();
     document.addEventListener('fullscreenchange', move);
-    const onPageHide = () => stopOverlay?.();
+    const onPageHide = () => {stopLoop?.();stopOverlay?.();};
     stopOverlay = () => {
       clearInterval(timer);
       document.removeEventListener('fullscreenchange', move);
@@ -91,14 +92,17 @@
       nativeTrack.mode = 'disabled'; nativeElement.remove(); nativeStyle.remove();
       previousTracks.forEach(track => {if (track.mode === 'hidden') track.mode = 'showing';});
       overlay.remove(); stopOverlay = null;
+      localCaptionSource = undefined;
     };
-    close.onclick = () => stopOverlay?.();
+    close.onclick = () => {stopLoop?.();stopOverlay?.();};
     window.addEventListener('pagehide', onPageHide, {once: true});
   }
   browser.runtime.onMessage.addListener((message, sender) => {
     if (sender.id !== browser.runtime.id || message.type !== 'aionVideo') return undefined;
     const cmd = message.command || {};
-    if(cmd.action==='closeOverlay'){stopOverlay?.();return Promise.resolve({stopped:true});}
+    if(cmd.action==='closeOverlay'){stopLoop?.();stopOverlay?.();return Promise.resolve({stopped:true});}
+    if(cmd.action==='captionLoopStop'){stopLoop?.();return Promise.resolve({stopped:true});}
+    if(cmd.action==='captureStop')stopLoop?.();
     if(cmd.action==='captureStop'&&!video('info')){if(capturedTrack&&capturedTrack.mode==='hidden')capturedTrack.mode=capturedMode;capturedTrack=null;return Promise.resolve({stopped:true});}
     if(cmd.action==='clearDefaultSpeed'){mediaObserver?.disconnect();mediaObserver=null;for(const [media,listener] of speedListeners)media.removeEventListener('loadedmetadata',listener);speedListeners.clear();defaultSpeed=undefined;return Promise.resolve({stopped:true});}
     if(cmd.action==='setDefaultSpeed'){
@@ -113,27 +117,50 @@
       capturedTrack = null;
       return Promise.resolve({stopped: true});
     }
-    if (['captionNavigate', 'captionCurrent'].includes(cmd.action)) {
+    if (cmd.action === 'captionSources') return Promise.resolve({tracks:[...v.textTracks].filter(track=>track.label!=='Aion').map((track,id)=>({id,label:track.label,language:track.language})),local:localCaptionSource?.video===v && !!localCaptionSource.cues.length});
+    if (['captionNavigate', 'captionCurrent', 'captionLoop'].includes(cmd.action)) {
       const tracks = [...v.textTracks].filter(track => track.label !== 'Aion');
       const selected = Number.isInteger(cmd.track) ? tracks[cmd.track] : tracks.find(track => track.mode === 'showing') || (tracks.includes(capturedTrack) ? capturedTrack : undefined) || tracks[0];
-      if (!selected) return Promise.resolve({error:'noCaptions'});
-      const previousMode = selected.mode;
+      const local = cmd.track === 'local';
+      if (local ? localCaptionSource?.video !== v || !localCaptionSource.cues.length : !selected) return Promise.resolve({error:'noCaptions'});
+      const previousMode = local ? undefined : selected.mode;
       if (previousMode === 'disabled') selected.mode = 'hidden';
       const offset = Number.isFinite(cmd.style?.offset) ? Math.max(-10, Math.min(10, cmd.style.offset)) : 0;
-      const cues = [...(selected.cues || [])].filter(c => Number.isFinite(c.startTime) && Number.isFinite(c.endTime) && c.endTime > c.startTime)
-        .map(c => ({start:Math.max(0,c.startTime + offset),end:c.endTime + offset,text:String(c.text || '').replace(/<[^>]*>/g,'').slice(0,2000)})).filter(c => c.end > c.start);
+      const source = local ? localCaptionSource.cues : [...(selected.cues || [])].map(c=>({start:c.startTime,end:c.endTime,text:c.text}));
+      const cues = source.filter(c => Number.isFinite(c.start) && Number.isFinite(c.end) && c.end > c.start)
+        .map(c => ({start:Math.max(0,c.start + offset),end:c.end + offset,text:String(c.text || '').replace(/<[^>]*>/g,'').slice(0,2000)})).filter(c => c.end > c.start);
       if (previousMode === 'disabled') selected.mode = previousMode;
       const active = cues.findIndex(c => c.start <= v.currentTime && v.currentTime < c.end);
       if (cmd.action === 'captionCurrent') return Promise.resolve({text:active < 0 ? '' : cues[active].text});
-      if (!['previous','repeat','next'].includes(cmd.direction)) return Promise.resolve({error:'invalidCaptions'});
+      if (cmd.action !== 'captionLoop' && !['previous','repeat','next'].includes(cmd.direction)) return Promise.resolve({error:'invalidCaptions'});
       let index;
-      if (cmd.direction === 'next') index = cues.findIndex(c => c.start > v.currentTime + .001);
+      if (cmd.action === 'captionLoop') index = active >= 0 ? active : cues.findLastIndex(c => c.start <= v.currentTime);
+      else if (cmd.direction === 'next') index = cues.findIndex(c => c.start > v.currentTime + .001);
       else if (cmd.direction === 'previous') index = active >= 0 ? active - 1 : cues.findLastIndex(c => c.start < v.currentTime);
       else index = active >= 0 ? active : cues.findLastIndex(c => c.start <= v.currentTime);
       if (index < 0 || index >= cues.length) return Promise.resolve({error:'captionBoundary'});
       const cue = cues[index];
       if (!Number.isFinite(v.duration) || cue.start >= v.duration) return Promise.resolve({error:'captionSeekUnavailable'});
+      stopLoop?.();
       try {v.currentTime = cue.start;} catch {return Promise.resolve({error:'captionSeekUnavailable'});}
+      if (cmd.action === 'captionLoop') {
+        const end = Math.min(cue.end, v.duration);
+        const previousLoop = v.loop;v.loop=false;
+        const rewind = () => {v.currentTime=cue.start;};
+        const update = () => {
+          if (!v.isConnected) {stopLoop?.();return;}
+          if (!v.paused && !v.seeking && v.currentTime >= end) rewind();
+        };
+        const seeking = () => {if (v.currentTime < cue.start || v.currentTime >= end) stopLoop?.();};
+        const ended = () => {rewind();v.play().catch(()=>stopLoop?.());};
+        v.addEventListener('timeupdate',update);v.addEventListener('seeking',seeking);v.addEventListener('ended',ended);
+        const pagehide = () => stopLoop?.();window.addEventListener('pagehide',pagehide,{once:true});
+        stopLoop = () => {
+          v.removeEventListener('timeupdate',update);v.removeEventListener('seeking',seeking);v.removeEventListener('ended',ended);
+          window.removeEventListener('pagehide',pagehide);stopLoop=undefined;
+          if(!v.loop)v.loop=previousLoop;
+        };
+      }
       let playing;
       try {playing = v.play();} catch {return Promise.resolve({time:cue.start,text:cue.text,playing:false});}
       return Promise.resolve(playing).then(() => ({time:cue.start,text:cue.text,playing:true}), () => ({time:cue.start,text:cue.text,playing:false}));
@@ -173,7 +200,7 @@
       return Promise.resolve({text: cues.join('\n').slice(0, 5000)});
     } else if (cmd.action === 'overlay') {
       if (!Array.isArray(cmd.original) || !Array.isArray(cmd.translated)) return Promise.resolve({error: 'invalidCaptions'});
-      showOverlay(v, cmd.original, cmd.translated, cmd.language, cmd.style);
+      showOverlay(v, cmd.original, cmd.translated, cmd.language, cmd.style, Array.isArray(cmd.study) ? cmd.study : cmd.original);
     } else if (cmd.action === 'closeOverlay') {if (stopOverlay) stopOverlay();}
     return Promise.resolve({speed: v.playbackRate, width: v.videoWidth || 0, height: v.videoHeight || 0, paused:v.paused, area:v.clientWidth*v.clientHeight, kind:v.tagName.toLowerCase()});
   });

@@ -38,7 +38,7 @@ async function onMessage(message, sender) {
   const modules = {containers: 'containers', temporaryContainer: 'containers', createContainer: 'containers', openContainer: 'containers', video: 'video', mediaTab: 'video', forgetSpeed: 'video', selection: 'translation', translate: 'translation', word: 'translation', localAI: 'ai'};
   const module = modules[message.type];
   if (message.type === 'pageTranslation' && message.command?.action !== 'restore' && (await readSettings()).disabledModules.some(name => ['ai','translation'].includes(name))) throw new Error('moduleDisabled');
-  if (module && (await readSettings()).disabledModules.includes(module) && !(message.type === 'localAI' && ['status','cancel','unload','clear'].includes(message.action)) && !(['video','mediaTab'].includes(message.type) && ['closeOverlay','captureStop'].includes(message.command?.action))) throw new Error('moduleDisabled');
+  if (module && (await readSettings()).disabledModules.includes(module) && !(message.type === 'localAI' && ['status','cancel','unload','clear'].includes(message.action)) && !(['video','mediaTab'].includes(message.type) && ['closeOverlay','captureStop','captionLoopStop'].includes(message.command?.action))) throw new Error('moduleDisabled');
   switch (message.type) {
     case 'settings': return readSettings();
     case 'save': return writeSettings(message.patch);

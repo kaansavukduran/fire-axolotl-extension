@@ -4,7 +4,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 30 geçti |
+| Node birim/izin/veri doğrulama | 32 geçti |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
 | 0.1.0 → 0.2.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
@@ -12,7 +12,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | web-ext 10.8.0 | 0 hata, 11 uyarı; [rapor](evidence/web-ext-lint.json) |
 | npm audit | 0 açık; [rapor](evidence/npm-audit.json); kapsamlı güvenlik garantisi değildir |
-| Gerçek M2M100 418M CPU · 0.6.0 | 8 teknik akış ve 4 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
+| Gerçek M2M100 418M CPU · 0.7.0 | 9 teknik akış ve 4 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
 | Gerçek Qwen 2.5 1.5B CPU · 0.2.0 | 6 teknik kontrol geçti (dosya SHA, yükleme, sayfayı yeniden açma, çevrimdışı genel soru/çeviri çıktısı ve altyazı aktarımı, bellekten çıkarma); [rapor](evidence/qwen-results.json); **Türkçe çeviri kalite kapısı başarısız** |
 | WebGPU, Windows/macOS/Android, gerçek hesapla cihazlar arası Sync | Doğrulanmadı |
 
@@ -88,3 +88,14 @@ Ayrı [gerçek M2M100 raporunda](evidence/m2m-results.json), hash doğrulanmış
 ![Ağ kapalıyken gerçek yerel modelin sayfa ve web diyaloğu çıktısı](evidence/m2m-offline-page.png)
 
 0.6.0 elle sürüm kontrolü testinde yayımlanmış önizlemenin seçilmesi, taslakların ve geçersiz etiketlerin dışlanması, boş liste/hatalı API yanıtı ve yalnız proje GitHub sürüm adresinin kullanılması doğrulandı. GitHub’ın `/releases/latest` uç noktası yalnız önizleme bulunan bu depoda gerçekten 404 döndürüyordu; liste API’sine geçildi. Bu bir otomatik kurulum veya imza doğrulama testi değildir.
+
+
+## 0.7.0: satır döngüsü ve dosya altyazısıyla öğrenme
+
+[Gerçek Firefox raporu](evidence/caption-learning-results.json) altı akışı doğrular: model olmadan kaynak seçimi/native satır döngüsü ve normal duraklatma; elle başka zamana gidince çıkış; hızlı başlat/durdurda geç kalmış döngünün çalışmaması; video süresini aşan son satırda gerçek medya bitişinden tekrar ve önceki tam-video döngü ayarının geri gelmesi; popup’ın gerçek SRT dosya seçicisiyle yüklenen kaynağında okuma/gezinme/kelime ve gecikme; panel kapanınca dosya döngüsü/katmanın temizlenip oynatıcı altyazısının geri gelmesi. Testte zaman konumu açıkça seçilir; önceki iki denemede akmakta olan videonun konumuna bağlı gecikme varsayımı başarısızdı ve düzeltilmiştir.
+
+İki yeni birim testi, bir sekmedeki bekleyen medya başlangıcından sonra gelen temizlemenin sırasını, diğer sekmenin bağımsızlığını ve başarısız başlangıçtan sonra temizleme/sonraki denetimlerin çalışmasını doğrular. Ayrı gerçek M2M100 çevrimdışı deneyinde özgün satır katmanda gizliyken de dosya öğrenme kaynağından okunabildi. Önceki dört sınırlı metin kalite kontrolü geçti; bilinen anlam/zaman hatası sürüyor.
+
+Qwen [tanı denemeleri](evidence/qwen-diagnostics-0.7.json) farklı komutların ve sabit upstream LFS SHA-256 ile doğrulanmış q4 dosyasının Türkçe hatasını çözmediğini gösterir. Native CPU ve Firefox deneylerinde sistem komutları farklı olduğundan bu tek başına hatalı katmanı yalıtmaz. q4 ürüne eklenmedi, başarısız sonuçlar gizlenmedi. Bu denemeler kapsamlı dil ölçümü değildir.
+
+![Dosya altyazısında öğrenme ve döngü kontrolleri](evidence/caption-learning.png)

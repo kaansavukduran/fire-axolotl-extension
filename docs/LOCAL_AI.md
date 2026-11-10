@@ -53,7 +53,7 @@ M2M100 418M is a local CPU translation model with 100 language choices; Qwen 2.5
 
 ## Altyazıyla öğrenme · 0.4.0
 
-AI sayfasında videoyu seçip **Altyazıyla öğren** kontrollerini model yüklemeden kullanabilirsin. Önceki/sonraki satır ve tekrar oynatma, videonun okunabilir yerel TextTrack altyazısını ve seçili gecikmeyi kullanır. **O anki satırı al** metni düzenleme alanına getirir; kaydetmeden önce kelimeye kısaltabilir veya cümleyi düzeltebilirsin. En fazla 300 karakter açık kaydetme eylemiyle yerel kelime defterine eklenir. Bu akış metni çeviri sunucusuna göndermez. Dosyadan eklenen çift altyazı gezinme kaynağı değildir. Oynatıcı otomatik oynatmayı engellerse zaman seçilir ve videodan oynatmayı başlatman istenir.
+AI sayfasında videoyu seçip **Altyazıyla öğren** kontrollerini model yüklemeden kullanabilirsin. Önceki/sonraki satır ve tekrar oynatma, videonun okunabilir yerel TextTrack altyazısını ve seçili gecikmeyi kullanır. **O anki satırı al** metni düzenleme alanına getirir; kaydetmeden önce kelimeye kısaltabilir veya cümleyi düzeltebilirsin. En fazla 300 karakter açık kaydetme eylemiyle yerel kelime defterine eklenir. Bu akış metni çeviri sunucusuna göndermez. 0.7.0’dan itibaren dosyadan eklenen özgün altyazı da kaynak listesinden seçilerek gezinme için kullanılabilir. Oynatıcı otomatik oynatmayı engellerse zaman seçilir ve videodan oynatmayı başlatman istenir.
 
 
 ## Sayfa ve web popup metni · 0.6.0
@@ -63,3 +63,12 @@ Yerel AI ekranında kaynak/hedef dili ve hedef sekmeyi seç. **Ana belgedeki gö
 En çok 40 metin parçası / 12.000 karakter ve parça başına 1.000 karakter işlenir. Çok uzun parçalar atlanır; bu tam sayfa ve her sitede eksiksiz çeviri garantisi değildir. Modelin çıktı sınırı ve dil doğruluğu uzun çevirileri sınırlayabilir. Formlar, düzenlenebilir alanlar, kod, görünmeyen metin ve iframe’ler kapsam dışıdır. Web popup kapsamı açık HTML `dialog`, `role=dialog` ve `role=alertdialog` öğeleridir; ayrı pencere olarak açılmış bir web sayfası kendi sekmesi seçilerek çevrilebilir. Firefox’un sistem popup’larına erişilmez.
 
 **Özgün metne geri dön** yalnız eklentinin değiştirdiği ve o zamandan beri site tarafından değiştirilmemiş metni geri yükler. Yeniden tarama önce önceki uygulamayı geri alır. Site değişiklikleri ezilmez; dinamik siteler kendi yeniden çiziminde çeviriyi kaldırabilir. Durdur düğmesi ortak modeli bellekten çıkarır; önbellek ağırlıklarını silmez. Çeviri panelini kapatmak yeni uygulamaları durdurur; uygulanmış metni geri almak için paneli yeniden açıp sekmeyi seçebilirsin veya sayfayı yenileyebilirsin.
+
+
+## Satır döngüsü ve dosya altyazısıyla öğrenme · 0.7.0
+
+Videoyu seçip **Altyazı kaynaklarını yenile** düğmesine bas. Yerel oynatıcı altyazısını veya popup’tan uygulanmış özgün VTT/SRT için **Aion · yüklenmiş özgün altyazı** kaynağını seç. Oku, önceki/sonraki, tekrar ve kelime kaydet kontrolleri model yüklemeden çalışır. AI ile dosya çevirisinde özgün altyazı ekranda gizlense bile öğrenme kaynağı korunur. Kaynak yalnız ilgili belgededir; kalıcı bir dosya geçmişi oluşturulmaz.
+
+**Bu satırı döngüye al** o anki satırı (satırlar arasındaysa önceki satırı) tekrarlar. Video duraklatılabilir ve kaldığı yerden devam edebilir. **Satır döngüsünü durdur**, satır dışına elle gitmek, kaynak/video değiştirmek veya paneli kapatmak döngüyü sonlandırır. Gecikme ayarı değişince eski zaman aralığındaki döngü durur; yeniden başlatmak yeni gecikmeyi kullanır. Döngü, videonun kendi tamamını tekrarlama tercihini geçici bırakır ve durunca geri yükler. Son satırın bitişi video süresine kırpılır. Native `timeupdate`/`ended` olayları kullanıldığından sınırlar örnek hassasiyetinde ses kesimi değildir.
+
+Dosya kaynağı seçiliyken canlı oynatıcı çevirisi başlamaz; dosya çevirisi kullanılmalıdır. Hatalı seçim mevcut dosya katmanını silmez. Konuşma tanıma, kapalı servis altyazı API’leri veya korumalı Firefox ekranları bu özellik değildir.

@@ -972,7 +972,7 @@
     "message": "Learn with captions"
   },
   "captionStudyHelp": {
-    "message": "Navigate readable captions in the selected video without loading a model. File-based dual captions are not a navigation source here."
+    "message": "Study readable player captions or loaded original VTT/SRT lines without loading a model. Refresh sources and choose a track; go to the previous/next line, replay or loop a line. Only readable captions are supported."
   },
   "captionPrevious": {
     "message": "Previous line"
@@ -1096,5 +1096,26 @@
   },
   "pageScanRequired": {
     "message": "Preview the target page text first."
+  },
+  "captionRefresh": {
+    "message": "Refresh caption sources"
+  },
+  "captionLocalSource": {
+    "message": "Aion · loaded original captions"
+  },
+  "captionNativeForLive": {
+    "message": "Choose the player’s caption track for live translation; use file translation for imported captions."
+  },
+  "captionLoop": {
+    "message": "Loop this line"
+  },
+  "captionLoopStop": {
+    "message": "Stop line loop"
+  },
+  "captionLooping": {
+    "message": "Line loop started. You can pause the video; seeking outside the line ends the loop."
+  },
+  "captionLoopStopped": {
+    "message": "Line loop stopped."
   }
 }

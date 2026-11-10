@@ -1,7 +1,15 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 globalThis.AionMedia = (() => {
   const touched = new Set();
-  async function command(tabId, command) {
+  const queues = new Map();
+  function command(tabId, action) {
+    const result = (queues.get(tabId) || Promise.resolve()).then(()=>performCommand(tabId,action));
+    const tail = result.catch(()=>{});
+    queues.set(tabId,tail);
+    tail.then(()=>{if(queues.get(tabId)===tail)queues.delete(tabId);});
+    return result;
+  }
+  async function performCommand(tabId, command) {
     const tab = await browser.tabs.get(tabId);
     if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
     await browser.tabs.executeScript(tabId, {file:'/aion/video.js',allFrames:true}).catch(()=>{});
@@ -10,7 +18,7 @@ globalThis.AionMedia = (() => {
     const probes = await Promise.allSettled(frames.map(async frameId=>({frameId,info:await send(frameId,{action:'info'})})));
     const media = probes.filter(item=>item.status==='fulfilled' && !item.value.info.error).map(item=>item.value);
     touched.add(tabId);
-    if (['closeOverlay','captureStop','clearDefaultSpeed'].includes(command.action)) {
+    if (['closeOverlay','captureStop','clearDefaultSpeed','captionLoopStop'].includes(command.action)) {
       await Promise.allSettled(frames.map(frame=>send(frame,command)));return {stopped:true};
     }
     if(command.action==='setDefaultSpeed'){const results=await Promise.allSettled(frames.map(frame=>send(frame,command)));if(results.some(item=>item.status==='fulfilled'&&!item.value.error))return {speed:command.value};throw new Error('noVideo');}

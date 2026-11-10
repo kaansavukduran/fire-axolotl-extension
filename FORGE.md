@@ -22,3 +22,5 @@ Lisanslar ve tam ilgili kaynak dağıtımı: [THIRD_PARTY_NOTICES.md](THIRD_PART
 0.5.0: yan panelde geçici çoklu sekme seçimi ve onay/iptal destekli toplu kapatma; isteğe bağlı `sessions` izniyle geri açma ve izin kaldırma. Model çeviri kalitesi ve önceki dağıtım/platform açıkları değişmedi.
 
 0.6.0: ana belge/açık web diyaloğu için önizle → yerel model → metin düğümü uygula → geri al akışı. Form/kod/gizli metin/iframe atlanır; tarama token’ı ve değer karşılaştırması site güncellemelerini korur. `tests/page_translation_e2e.py` DOM sınırlarını sabit metinlerle, `tests/m2m_e2e.py` gerçek modelle ağ kapalı uygulamayı ayrı doğrular.
+
+0.7.0: yerel oynatıcı/özgün VTT-SRT için kaynak seçimi, öğrenme ve satır döngüsü. Sekme başına medya kuyruğu, hata sonrası cleanup, hızlı başlat/durdur, son satır/video bitişi ve panel kapanışı denetlenir. Qwen prompt/native uint8/q4 tanı deneyleri Türkçe hatasını çözmedi; q4 ürüne eklenmez. `docs/evidence/qwen-diagnostics-0.7.json` karşılaştırmanın farklı sistem promptlarını ve dolayısıyla kök nedeni tek başına yalıtmadığını belirtir.
