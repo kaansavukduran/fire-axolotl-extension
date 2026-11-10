@@ -14,3 +14,5 @@ Sonraki işler: M2M100 kalite/değerlendirme kapsamını ve model dağıtımı l
 Kaynak yedeği `scripts/backup.py` ile temiz commit’ten ZIP, tam ulaşılabilir Git bundle ve SHA-256 makbuzu olarak üretilir; kullanıcı profili, model önbelleği ve anahtarlar alınmaz. Özel Drive hedefi genel kaynakta yayımlanmaz. Yükleme/doğrulama makbuzu ve GitHub sürüm varlıkları teslimde ayrıca doğrulanır; bu dosya tek başına yükleme kanıtı değildir.
 
 Lisanslar ve tam ilgili kaynak dağıtımı: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [INTEGRATION.md](docs/INTEGRATION.md). Ücretsiz dağıtım, üçüncü taraf lisans koşullarını kaldırmaz; hukuki/marka uygunluğu garantisi verilmez.
+
+0.3.0: ±10 saniye altyazı oynatma ayarı eklendi; DOM ve yerel tam ekran izleri aynı kaydırmayı kullanır, dışa aktarma özgün zamanları korur. Aynı tür model yeniden yüklenince eski dil algılama sonucunun veya eski worker olayının yeni oturuma karışması engellendi. Model çeviri kalite sınırları değişmedi.

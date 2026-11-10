@@ -15,7 +15,7 @@ options.set_preference('remote.prefs.recommended',False)
 driver=webdriver.Firefox(options=options,service=Service(os.environ['AION_GECKODRIVER'],service_args=['--allow-system-access'],log_output=str(artifacts/'geckodriver.log')))
 wait=WebDriverWait(driver,30);results=[]
 try:
-    addon=driver.install_addon(str(ROOT/'dist/fire-axolotl-extension-0.2.0-native-newtab-unsigned.xpi'),temporary=True)
+    addon=driver.install_addon(str(ROOT/'dist/fire-axolotl-extension-0.3.0-native-newtab-unsigned.xpi'),temporary=True)
     driver.set_context('chrome');uuid=driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]",addon);driver.set_context('content')
     base=f'moz-extension://{uuid}/aion/'
     driver.get(base+'popup.html');wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')

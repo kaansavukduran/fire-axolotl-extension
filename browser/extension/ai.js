@@ -33,6 +33,7 @@ function render() {
   }
   $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value === 'm2m';
   if ($('aiModel').value === 'm2m') $('aiBackend').value = 'wasm';
+  $('captionOffset-value').value = new Intl.NumberFormat(UI.locale, {maximumFractionDigits:1,signDisplay:'always'}).format(UI.settings.captionOffset) + ' s';
   for (const name of ['captionSize', 'captionOpacity']) $(name + '-value').value = UI.settings[name];
   const preview = $('caption-preview');
   preview.style.fontSize = UI.settings.captionSize + 'px'; preview.style.backgroundColor = `rgba(6,21,47,${UI.settings.captionOpacity / 100})`;
@@ -111,6 +112,7 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
     await UI.save({[element.dataset.setting]: value});
   }));
   $('aiModel').onchange = () => UI.run(async () => {const selected = $('aiModel').value; await stopVideo(); const state = await callAI('unload'); $('aiModel').value = selected; renderModel(state); if (selected === 'm2m') await UI.save({aiBackend:'wasm'}); render();});
+  action('reset-caption-offset', () => UI.save({captionOffset:0}));
   action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value});});
   action('model-load', () => callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value}));
   action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value, files: [...$('model-files').files]});});

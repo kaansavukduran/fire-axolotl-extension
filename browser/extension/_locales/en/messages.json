@@ -958,5 +958,14 @@
   },
   "aiBackendHelp": {
     "message": "Reload the model to apply a changed backend; the ready status shows the active backend."
+  },
+  "captionOffset": {
+    "message": "Subtitle timing offset"
+  },
+  "captionOffsetHelp": {
+    "message": "Positive values delay both tracks; negative values show them earlier. This affects playback only; exported VTT timestamps stay unchanged."
+  },
+  "resetCaptionOffset": {
+    "message": "Reset subtitle timing"
   }
 }

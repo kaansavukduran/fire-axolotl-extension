@@ -6,7 +6,7 @@
     font: 'system', lineHeight: 1.5, letterSpacing: 0,
     progress: true, animations: true, sounds: false, imageSearch: true, browserTheme: false, runner: true,
     targetLanguage: 'tr', endpoint: '', vocabulary: [], milestones: [], quality: 'auto', character: 'aion', characterActivity: 'idle',
-    captionSize: 24, captionOpacity: 90, captionFont: 'system', captionPosition: 'bottom', captionColor: '#ffffff', captionTranslationColor: '#85e7ff',
+    captionSize: 24, captionOpacity: 90, captionOffset: 0, captionFont: 'system', captionPosition: 'bottom', captionColor: '#ffffff', captionTranslationColor: '#85e7ff',
     captionOriginal: true, captionTranslated: true, aiSource: 'auto', aiTarget: 'tr', aiBackend: 'wasm',
     moduleOrder: ['containers', 'video', 'translation', 'ai', 'characters'], disabledModules: []
   });
@@ -27,6 +27,7 @@
     out.lineHeight = clamp(input.lineHeight ?? 1.5, 1, 2.5, 1.5);
     out.letterSpacing = clamp(input.letterSpacing ?? 0, 0, 0.2, 0);
     out.captionSize = Math.round(clamp(input.captionSize ?? 24, 16, 48, 24));
+    out.captionOffset = Math.round(clamp(input.captionOffset ?? 0, -10, 10, 0) * 10) / 10;
     out.captionOpacity = Math.round(clamp(input.captionOpacity ?? 90, 0, 100, 90));
     for (const [key, allowed] of Object.entries({captionFont: ['system', 'lexend', 'opendyslexic'], captionPosition: ['top', 'bottom'], aiBackend: ['wasm', 'webgpu']})) if (allowed.includes(input[key])) out[key] = input[key];
     for (const key of ['captionColor', 'captionTranslationColor']) if (typeof input[key] === 'string' && /^#[a-fA-F0-9]{6}$/.test(input[key])) out[key] = input[key];
@@ -91,7 +92,7 @@
   }
   function captionStyle(input) {
     const settings = normalize(input);
-    return {size: settings.captionSize, opacity: settings.captionOpacity, font: settings.captionFont, position: settings.captionPosition,
+    return {offset: settings.captionOffset, size: settings.captionSize, opacity: settings.captionOpacity, font: settings.captionFont, position: settings.captionPosition,
       color: settings.captionColor, translationColor: settings.captionTranslationColor};
   }
   function localPreferences(input = {}) {

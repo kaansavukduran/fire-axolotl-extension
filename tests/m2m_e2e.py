@@ -71,7 +71,7 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.2.0-unsigned.xpi'), temporary=True)
+    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.3.0-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
@@ -171,6 +171,8 @@ try:
     results.append('Real local model output is overlaid offline at paired caption timestamps and original tracks restore; this is a transport check, not a quality pass')
     Select(driver.find_element(By.ID,'aiSource')).select_by_value('en')
     wait.until(lambda d:d.execute_script('return UI.settings.aiSource')=='en')
+    driver.execute_script('const e=document.getElementById("captionOffset");e.value="0.5";e.dispatchEvent(new Event("input",{bubbles:true}));')
+    wait.until(lambda d:d.execute_script('return UI.settings.captionOffset')==.5)
     subtitle = ARTIFACTS / 'sample.vtt'
     subtitle.write_text('WEBVTT\n\n00:00:01.000 --> 00:00:03.000\nThe cat is sleeping.\n',encoding='utf-8')
     driver.find_element(By.ID,'subtitle-file').send_keys(str(subtitle.resolve()))
@@ -178,7 +180,9 @@ try:
     WebDriverWait(driver,600).until(lambda d:d.find_element(By.ID,'subtitle-download').is_displayed())
     exported=driver.execute_async_script('fetch(document.getElementById("subtitle-download").href).then(r=>r.text()).then(arguments[0]);')
     assert '00:00:01.000 --> 00:00:03.000' in exported and 'kedi' in exported.lower(),exported
-    results.append('A local VTT file was translated offline and its exported cue timestamps were preserved')
+    results.append('A local VTT file preserves its exported timestamps even with a nonzero playback offset')
+    driver.find_element(By.ID,'reset-caption-offset').click()
+    wait.until(lambda d:d.execute_script('return UI.settings.captionOffset')==0)
     driver.find_element(By.ID,'stop-video').click()
     driver.find_element(By.ID, 'model-unload').click()
     wait.until(lambda d: d.execute_async_script('browser.runtime.sendMessage({type:"localAI",action:"status"}).then(x=>arguments[0](x.phase==="unloaded"));'))

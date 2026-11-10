@@ -60,3 +60,16 @@ test('a cancelled language detection cannot restart an unloaded model', async ()
   await f.service.call({action:'unload'});finish({isReliable:true,languages:[{language:'en',percentage:99}]});
   await assert.rejects(task,/aiModelMissing/);assert.equal(worker.messages.length,1);
 });
+
+test('an old detection or worker callback cannot affect a reloaded model of the same kind', async () => {
+  const f=fixture();
+  async function load() { const task=f.service.call({action:'load',modelKind:'m2m'});await turn();const w=f.instances.at(-1);w.onmessage({data:{id:w.messages[0].id,result:{ready:true}}});await task;return w; }
+  const old=await load();let finish;
+  f.browser.i18n.detectLanguage=()=>new Promise(resolve=>{finish=resolve;});
+  const task=f.service.call({action:'translate',source:'auto',target:'tr',text:'Hello'});await turn();
+  const current=await load();
+  old.onmessage({data:{type:'state',phase:'error',error:'stale'}});
+  assert.equal((await f.service.call({action:'status'})).phase,'ready');
+  finish({isReliable:true,languages:[{language:'en',percentage:99}]});
+  await assert.rejects(task,/aiModelMissing/);assert.equal(current.messages.length,1);
+});

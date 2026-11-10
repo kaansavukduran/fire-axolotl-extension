@@ -11,6 +11,11 @@
     return videos.sort((a, b) => Number(b === document.pictureInPictureElement) - Number(a === document.pictureInPictureElement) || Number(!b.paused) - Number(!a.paused) || b.clientWidth * b.clientHeight - a.clientWidth * a.clientHeight)[0];
   }
   function showOverlay(v, original, translated, language, preferences = {}) {
+    const offset = Number.isFinite(preferences.offset) ? Math.max(-10, Math.min(10, preferences.offset)) : 0;
+    // Shift both tracks together; keep the caller's source/export timestamps intact.
+    const shift = cues => cues.filter(c => Number.isFinite(c.start) && Number.isFinite(c.end) && c.end > c.start)
+      .map(c => ({...c, start: Math.max(0, c.start + offset), end: c.end + offset})).filter(c => c.end > c.start);
+    original = shift(original); translated = shift(translated);
     const size = Number.isFinite(preferences.size) ? Math.max(16, Math.min(48, preferences.size)) : 24;
     const opacity = Number.isFinite(preferences.opacity) ? Math.max(0, Math.min(100, preferences.opacity)) / 100 : .9;
     const color = /^#[0-9a-f]{6}$/i.test(preferences.color) ? preferences.color : '#ffffff';

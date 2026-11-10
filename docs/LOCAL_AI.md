@@ -19,6 +19,10 @@ Video modu standart HTML TextTrack altyazılarını okur. Bazı YouTube, Netflix
 
 M2M100 CPU, Qwen CPU/WebGPU destekler. Qwen WebGPU yolu Firefox/platform desteği ve `shader-f16` gerektirir; bu yol henüz donanımda doğrulanmadı. Büyük modeller için kullanılabilir bellek ve disk alanı gerekir. Firefox güvenlik ve imza kontrolleri kapatılmaz.
 
+## Altyazı zamanını düzeltme
+
+Yapay zekâ ve altyazı ekranındaki **Altyazı zaman ayarı** iki satırı birlikte −10 ile +10 saniye arasında kaydırır. Artı değer geciktirir, eksi değer erkene alır. **Altyazı zamanını sıfırla** sıfıra döndürür. Ayar hem sayfa katmanı hem video tam ekranında uygulanır; dosyadan gelen veya çeviriyle indirilen VTT zamanları değiştirilmez. Tercih genel eklenti ayarıdır; farklı videoda gerekirse sıfırla.
+
 ## Kalite sınırı ve alternatif deneme
 
 `I was about to give up.` örneğinde M2M100 `Ben vazgeçmeye hazırım.` üretti; bu çıktı geçmiş zaman anlamını doğru korumaz. Bu cümlede sonuç hatalıdır. Üç basit testin geçmesi bütün dil yönleri veya cümleler için kalite güvencesi değildir. İkinci bir İngilizce→Türkçe seçenek olarak CC-BY-4.0 bildiren `onnx-community/opus-mt-tc-big-en-tr` (`ce128ea834a090aca240e4e113e7756e06cc78e0`) araştırıldı; mevcut Transformers.js ortamında tokenizer uyarısı ve anlamsız sonuç verdi. Bu model eklentiye eklenmedi.

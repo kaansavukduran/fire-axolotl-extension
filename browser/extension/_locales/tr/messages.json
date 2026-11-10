@@ -958,5 +958,14 @@
   },
   "aiBackendHelp": {
     "message": "Yöntem değişikliğini uygulamak için modeli yeniden yükle; hazır durumunda kullanılan yöntem gösterilir."
+  },
+  "captionOffset": {
+    "message": "Altyazı zaman ayarı"
+  },
+  "captionOffsetHelp": {
+    "message": "Artı değer iki altyazıyı da geciktirir; eksi değer erkene alır. Ayar yalnız oynatımı etkiler, indirilen VTT’nin zamanları korunur."
+  },
+  "resetCaptionOffset": {
+    "message": "Altyazı zamanını sıfırla"
   }
 }

@@ -96,7 +96,7 @@ try:
     wait.until(lambda d: d.window_handles)
     driver.switch_to.window(driver.window_handles[-1])
     driver.switch_to.new_window('tab')
-    package = ROOT / 'dist/fire-axolotl-extension-0.2.0-unsigned.xpi'
+    package = ROOT / 'dist/fire-axolotl-extension-0.3.0-unsigned.xpi'
     addon_id = driver.install_addon(str(package), temporary=True)
     assert addon_id == 'fire-axolotl-extension@kaansavukduran.github.io'
     driver.set_context('chrome')
@@ -271,6 +271,39 @@ try:
     assert driver.execute_script('return [...document.querySelector("video").textTracks].some(t=>t.label==="Aion")') is False
     assert driver.execute_script('return [...document.querySelector("video").textTracks].find(t=>t.label==="English").mode') == 'showing'
     record('Real dual-caption overlay and removal without reloading the page')
+    driver.switch_to.window(control_handle)
+    driver.get(base + 'ai.html')
+    wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
+    driver.execute_script('const e=document.getElementById("captionOffset");e.value="0.5";e.dispatchEvent(new Event("input",{bubbles:true}));')
+    saved('captionOffset',.5)
+    cues=[{'start':0,'end':.25,'text':'Timing sample'}]
+    response=driver.execute_async_script('browser.runtime.sendMessage({type:"mediaTab",tabId:arguments[0],command:{action:"overlay",original:arguments[1],translated:arguments[1]}}).then(arguments[2]);',web_tab_id,cues)
+    assert not response.get('error'),response
+    driver.switch_to.window(web_handle)
+    driver.execute_script('const v=document.querySelector("video");v.pause();v.currentTime=.1;')
+    host=driver.find_element(By.CSS_SELECTOR,'[data-aion-captions]')
+    shadow=host.shadow_root
+    wait.until(lambda d:not shadow.find_element(By.CSS_SELECTOR,'section').is_displayed())
+    driver.execute_script('document.querySelector("video").currentTime=.6;')
+    wait.until(lambda d:shadow.find_element(By.CSS_SELECTOR,'section').is_displayed())
+    assert shadow.find_elements(By.CSS_SELECTOR,'p')[0].text=='Timing sample'
+    shifted=driver.execute_script('const t=[...document.querySelector("video").textTracks].find(t=>t.label==="Aion");t.mode="hidden";const times=[...t.cues].map(c=>[c.startTime,c.endTime]);t.mode="disabled";return times;')
+    assert shifted==[[.5,.75],[.5,.75]],shifted
+    driver.switch_to.window(control_handle)
+    driver.execute_script('const e=document.getElementById("captionOffset");e.value="-0.2";e.dispatchEvent(new Event("input",{bubbles:true}));')
+    saved('captionOffset',-.2)
+    cues=[{'start':0,'end':.1,'text':'Expired'},{'start':0,'end':1,'text':'Clipped'}]
+    driver.execute_async_script('browser.runtime.sendMessage({type:"mediaTab",tabId:arguments[0],command:{action:"overlay",original:arguments[1],translated:arguments[1]}}).then(arguments[2]);',web_tab_id,cues)
+    driver.switch_to.window(web_handle)
+    clipped=driver.execute_script('const t=[...document.querySelector("video").textTracks].find(t=>t.label==="Aion");t.mode="hidden";const cues=[...t.cues].map(c=>({start:c.startTime,end:c.endTime,text:c.text}));t.mode="disabled";return cues;')
+    assert len(clipped)==2 and all(c['start']==0 and abs(c['end']-.8)<.001 and c['text']=='Clipped' for c in clipped),clipped
+    driver.switch_to.window(control_handle)
+    driver.find_element(By.ID,'reset-caption-offset').click();saved('captionOffset',0)
+    driver.execute_async_script('browser.runtime.sendMessage({type:"mediaTab",tabId:arguments[0],command:{action:"closeOverlay"}}).then(arguments[1]);',web_tab_id)
+    driver.get(base+'popup.html')
+    wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
+    driver.switch_to.window(web_handle)
+    record('Subtitle offset UI delays both DOM and native cues, clips negative starts, drops expired cues and resets to zero')
     handles_before_search = set(driver.window_handles)
     driver.set_context('chrome'); driver.execute_script('Services.io.offline = true;'); driver.set_context('content')
     ActionChains(driver).context_click(driver.find_element(By.ID, 'search-image')).perform()

@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 globalThis.AionLocalAI = (() => {
-  let worker, next = 0, pending, pins = {}, modelKind = 'qwen';
+  let worker, next = 0, pending, pins = {}, modelKind = 'qwen', epoch = 0;
   let status = {phase: 'unloaded', backend: 'wasm', modelKind: 'qwen'};
   const publish = patch => {
     status = {...status, ...patch};
@@ -11,13 +11,15 @@ globalThis.AionLocalAI = (() => {
     return pins[kind] ||= await (await fetch(browser.runtime.getURL(kind === 'm2m' ? 'aion/ai/translation-model.json' : 'aion/ai/model.json'))).json();
   }
   function stop() {
+    epoch++;
     worker?.terminate(); worker = undefined;
     pending?.reject(new Error('aiCancelled')); pending = undefined;
     publish({phase: 'unloaded', error: '', detail: '', loaded:0,total:0,file:''});
   }
   function start() {
-    worker = new Worker(browser.runtime.getURL('aion/ai/worker.mjs'), {type: 'module'});
+    const instance = worker = new Worker(browser.runtime.getURL('aion/ai/worker.mjs'), {type: 'module'});
     worker.onmessage = ({data}) => {
+      if (worker !== instance) return;
       if (data.type === 'state') {publish(data); return;}
       if (!pending || data.id !== pending.id) return;
       const current = pending; pending = undefined;
@@ -25,6 +27,7 @@ globalThis.AionLocalAI = (() => {
       else {publish({phase: 'ready', error: '', detail: ''}); current.resolve(data.result);}
     };
     worker.onerror = event => {
+      if (worker !== instance) return;
       pending?.reject(new Error('aiRuntimeFailed')); pending = undefined;
       publish({phase: 'error', error: 'aiRuntimeFailed', detail: String(event.message).slice(0, 600)});
     };
@@ -42,12 +45,13 @@ globalThis.AionLocalAI = (() => {
     if (kind === 'm2m' && message.action === 'generate') throw new Error('aiGeneralQwenOnly');
     let source = message.source;
     if (kind === 'm2m' && message.action === 'translate' && (!source || source === 'auto')) {
+      const detectionEpoch = epoch;
       const detected = await browser.i18n?.detectLanguage?.(String(message.text || '').slice(0, 4000)).catch(() => null);
       if (!detected) throw new Error('aiSourceRequired');
       if (!detected.isReliable || !detected.languages?.length || detected.languages[0].percentage < 50) throw new Error('aiSourceRequired');
       source = detected.languages[0].language;
       if (pending) throw new Error('aiBusy');
-      if (status.phase !== 'ready' || modelKind !== kind || !worker) throw new Error('aiModelMissing');
+      if (epoch !== detectionEpoch || status.phase !== 'ready' || modelKind !== kind || !worker) throw new Error('aiModelMissing');
     }
     if (kind === 'm2m' && message.action === 'translate') {
       if (!model.languages?.includes(String(source || '').split('-')[0])) throw new Error('aiSourceRequired');

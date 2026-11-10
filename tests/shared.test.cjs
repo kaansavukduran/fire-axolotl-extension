@@ -5,7 +5,7 @@ const Aion = require('../browser/extension/shared.js');
 
 test('subtitle appearance clamps numeric values and never accepts CSS or remote font input', () => {
   assert.deepEqual(Aion.captionStyle({captionSize:999,captionOpacity:-5,captionFont:'https://tracker/font',captionPosition:'left',captionColor:'red;display:none'}),
-    {size:48,opacity:0,font:'system',position:'bottom',color:'#ffffff',translationColor:'#85e7ff'});
+    {offset:0,size:48,opacity:0,font:'system',position:'bottom',color:'#ffffff',translationColor:'#85e7ff'});
   const settings=Aion.normalize({aiSource:'auto',aiTarget:'en',captionSize:32,captionPosition:'top',captionFont:'opendyslexic'});
   assert.equal(settings.aiSource,'auto');assert.equal(settings.aiTarget,'en');
   assert.equal(Aion.captionStyle(settings).font,'opendyslexic');
@@ -45,4 +45,13 @@ test('VTT and SRT cues retain timestamps and text while ignoring markup', () => 
   assert.deepEqual(Aion.parseVTT(vtt), [{start: 1, end: 3, text: 'Hello'}, {start: 4, end: 5, text: 'Işık'}]);
   assert.deepEqual(Aion.parseVTT('1\r\n00:00:01,500 --> 00:00:02,000\r\nMerhaba'), [{start: 1.5, end: 2, text: 'Merhaba'}]);
   assert.deepEqual(Aion.parseVTT('00:99.000 --> 00:99.100\ninvalid\n\n00:02 --> 00:01\nbackwards'), []);
+});
+
+test('subtitle timing offset is bounded, rounded and independent from imported cue times', () => {
+  assert.equal(Aion.normalize().captionOffset,0);
+  assert.equal(Aion.captionStyle({captionOffset:30}).offset,10);
+  assert.equal(Aion.captionStyle({captionOffset:-30}).offset,-10);
+  assert.equal(Aion.captionStyle({captionOffset:1.26}).offset,1.3);
+  assert.equal(Aion.captionStyle({captionOffset:'bad'}).offset,0);
+  assert.equal(Aion.captionStyle({captionOffset:Infinity}).offset,0);
 });

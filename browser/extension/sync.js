@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 globalThis.AionSync = (() => {
-  const keys = ['language','theme','scale','textSize','font','lineHeight','letterSpacing','progress','animations','imageSearch','quality','runner','moduleOrder','disabledModules','captionSize','captionOpacity','captionFont','captionPosition','captionColor','captionTranslationColor','captionOriginal','captionTranslated','aiSource','aiTarget'];
+  const keys = ['language','theme','scale','textSize','font','lineHeight','letterSpacing','progress','animations','imageSearch','quality','runner','moduleOrder','disabledModules','captionSize','captionOffset','captionOpacity','captionFont','captionPosition','captionColor','captionTranslationColor','captionOriginal','captionTranslated','aiSource','aiTarget'];
   async function enabled() {if (!(await browser.storage.local.get('aionSyncEnabled')).aionSyncEnabled) throw new Error('syncDisabled');}
   async function push() {
     await enabled(); const all = await readSettings();
