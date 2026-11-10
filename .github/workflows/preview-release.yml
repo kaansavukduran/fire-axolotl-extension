@@ -1,0 +1,46 @@
+name: Publish unsigned developer preview
+on: workflow_dispatch
+permissions:
+  contents: write
+  actions: read
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Require successful Firefox CI for this exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          count=$(gh run list --workflow checks.yml --commit "$GITHUB_SHA" --status success --json databaseId --jq 'length')
+          test "$count" -ge 1
+          test "$(gh release view v0.1.0-preview.1 --json isDraft --jq .isDraft)" = true
+      - run: npm ci --ignore-scripts
+      - run: npm run build:ai
+      - run: npm test
+      - run: python3 scripts/fetch_ai_support.py
+      - run: python3 scripts/package_extension.py --with-sources
+      - run: python3 scripts/package_extension.py --native-newtab
+      - run: npm run check
+      - run: python3 scripts/prepare_release.py
+      - name: Upload source-complete unsigned preview and publish as prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit v0.1.0-preview.1 --target "$GITHUB_SHA" --notes-file docs/RELEASE_NOTES_0.1.0.md
+          gh release upload v0.1.0-preview.1 work/release/* --clobber
+          gh release edit v0.1.0-preview.1 --draft=false --prerelease --latest=false
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: source-complete-unsigned-preview
+          path: work/release/
+          retention-days: 30
