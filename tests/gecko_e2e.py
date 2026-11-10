@@ -507,11 +507,16 @@ try:
     assert game('return root.querySelector("canvas").dataset.state') == 'ready'
     game('root.querySelector("[data-action=play]").click();')
     quick = WebDriverWait(driver, 12, poll_frequency=0.025)
-    quick.until(lambda d: game('return Number(root.querySelector("canvas").dataset.obstacleX) < 230 && Number(root.querySelector("canvas").dataset.obstacleX) > 170;'))
+    quick.until(lambda d: game('return Number(root.querySelector("canvas").dataset.obstacleX) < 210 && Number(root.querySelector("canvas").dataset.obstacleX) > 190;'))
     canvas = driver.execute_script('return document.querySelector("#fireaxolotl-runner").shadowRoot.querySelector("canvas")')
     assert game('return root.activeElement === root.querySelector("canvas");'), "Game canvas lost keyboard focus"
+    game('root.querySelector("canvas").addEventListener("keydown", e => { window.aionTestJump = {code:e.code, ...root.querySelector("canvas").dataset}; }, {once:true});')
     ActionChains(driver).send_keys(Keys.SPACE).perform()
-    quick.until(lambda d: game('return Number(root.querySelector("canvas").dataset.score) >= 1;'))
+    try:
+        quick.until(lambda d: game('return Number(root.querySelector("canvas").dataset.score) >= 1;'))
+    except Exception:
+        print("Jump timing diagnostic:", game('return {key:window.aionTestJump,current:{...root.querySelector("canvas").dataset}};'), flush=True)
+        raise
     ActionChains(driver).send_keys(Keys.ESCAPE).perform()
     assert game('return root.querySelector("canvas").dataset.state') == 'paused'
     game('root.querySelector("[data-action=play]").click();')
