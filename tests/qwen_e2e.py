@@ -41,11 +41,13 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.8.0-unsigned.xpi'), temporary=True)
+    version=json.loads((ROOT/'browser/extension/manifest.json').read_text())['version']
+    addon = driver.install_addon(str(ROOT / f'dist/fire-axolotl-extension-{version}-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
     driver.get(f'moz-extension://{uuid}/aion/ai.html')
+    assert driver.execute_script('return browser.runtime.getManifest().version') == version
     wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     Select(driver.find_element(By.ID,'aiModel')).select_by_value('qwen')
     wait.until(lambda d:d.find_element(By.ID,'model-files-details').is_displayed())

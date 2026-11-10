@@ -969,10 +969,10 @@
     "message": "Reset subtitle timing"
   },
   "captionStudy": {
-    "message": "Learn with captions"
+    "message": "Learn from this line"
   },
   "captionStudyHelp": {
-    "message": "Study readable player captions or loaded original VTT/SRT lines without loading a model. Refresh sources and choose a track; go to the previous/next line, replay or loop a line. Only readable captions are supported."
+    "message": "Playback is paused. Choose a word or the sentence, then translate or save it."
   },
   "captionPrevious": {
     "message": "Previous line"
@@ -1138,5 +1138,32 @@
   },
   "aiQwenHelp": {
     "message": "Qwen 2.5 1.5B is separately loaded for general text tasks. Its Turkish translation check produced a wrong result; Bergamot/M2M100 are other translation choices. This model has no browser tools."
+  },
+  "captionStudyContinue": {
+    "message": "Close and continue"
+  },
+  "captionStudyTranslate": {
+    "message": "Translate locally"
+  },
+  "captionStudySave": {
+    "message": "Save to vocabulary"
+  },
+  "captionStudySaved": {
+    "message": "Saved to vocabulary."
+  },
+  "captionStudySentence": {
+    "message": "Whole sentence"
+  },
+  "captionStudySource": {
+    "message": "From"
+  },
+  "captionStudyTarget": {
+    "message": "To"
+  },
+  "captionStudyLocal": {
+    "message": "Uses your local AI engine. Short words may need an explicit source language. Translations can be wrong. Escape closes this card and keeps the video paused."
+  },
+  "captionStudyPending": {
+    "message": "Working…"
   }
 }

@@ -14,7 +14,7 @@ function fixture() {
       if(command.action==='captionLoop')return new Promise((resolve,reject)=>{finish={resolve,reject};});
       return {stopped:true};
     }},webNavigation:{getAllFrames:async()=>[{frameId:0}]},commands:{onCommand:event}};
-  const context=vm.createContext({browser,Aion:{webURL:()=>true},URL});
+  const context=vm.createContext({browser,Aion:{webURL:()=>true},AionCaptionStudy:{revoke:()=>{}},URL});
   vm.runInContext(fs.readFileSync('browser/extension/media-controller.js','utf8'),context);
   return {media:context.AionMedia,calls,finish:()=>finish};
 }

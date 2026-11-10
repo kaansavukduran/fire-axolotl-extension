@@ -44,7 +44,7 @@ AION_GECKODRIVER="$PWD/work/test-runtime/geckodriver/geckodriver" \\
 
 Test, gerçek model dosyalarını arayüzden alır, hash doğrular, Firefox ağını kapatır ve çeviriyi/video zaman damgalarını sınar. `AION_TEST_MODEL_DOWNLOAD=1` indir düğmesini ayrıca sınar. Bu görevdeki yönetilen ortamda Firefox’un dış ağı için sağlanan proxy ve CA’nın geçici test profiline eklenmesi gerekmiştir; `AION_USE_TEST_PROXY=1` yalnız bu test profilinde bunu yapar, TLS doğrulamasını kapatmaz. Üretim eklentisi kullanıcının Firefox ağ ayarlarını değiştirmez.
 
-Yeni özellikler, yalnızca izin verilen eklenti sayfalarından ortak `localAI` servisini kullanır. Model ve revizyon, web sayfasından gelen rastgele yola göre seçilmez; bir seferde bir iş çalışır, iptal worker’ı sonlandırır. Genel soru modunun sekme, ağ veya dosya araçları yoktur.
+Genel AI işleri yalnızca izin verilen eklenti sayfalarından ortak `localAI` servisini kullanır. 0.9.0 altyazı kartı ayrıca, yalnız açık katmandaki kaynak kelimeler için belge/sekme/frame ve rastgele token ile sınırlandırılmış yerel çeviri/kayıt yetkisi kullanır. Model ve revizyon, web sayfasından gelen rastgele yola göre seçilmez; bir seferde bir iş çalışır, iptal worker’ı sonlandırır. Genel soru modunun sekme, ağ veya dosya araçları yoktur.
 
 M2M100 temel modelinin kartı MIT bildirir; ONNX dönüşüm deposunun ayrı lisans bildirmediği kaynak kaydında belirtilir. Qwen Apache-2.0’dır. [Üçüncü taraf bildirimleri](../THIRD_PARTY_NOTICES.md) ve [gerçek Firefox sonuçları](VALIDATION.md) ayrıntıları içerir.
 
@@ -84,3 +84,14 @@ Bergamot, Firefox’un ayrıcalıklı native çeviri API’sini kullanmaz; bu te
 Gerçek çevrimdışı testte `The cat is sleeping.` → `Kedi uyuyor.`, `Please close the door.` → `Lütfen kapıyı kapat.`, `We visited the museum yesterday.` → `Dün müzeyi ziyaret ettik.`, `Merhaba, nasılsın?` → `Hi, how are you?` geçti. **Bilinen hata:** `I was about to give up.` → `- Vermek için çok ilgiliydim.`; deyimin anlamını korumaz. Bu yanlış sonuç kalite geçişi sayılmaz; önemli metinleri kontrol et.
 
 Bergamot için model indirme ortam değişkeni gerekmeden `python3 tests/bergamot_e2e.py` çalıştırılabilir; Firefox/geckodriver yolları önceki örnekteki gibidir. Test ilk model açılmadan önce Firefox ağını kapatır ve gerçek popup/sayfa/video/VTT akışlarını sınar.
+
+
+## Video üzerinde kelime kartı · 0.9.0
+
+Çift altyazı çevirisi veya popup’tan özgün VTT/SRT katmanı açıkken **Bu satırdan öğren** düğmesine bas. Kart videoyu ve varsa satır döngüsünü durdurur. Kelime düğmelerinden birini ya da **Cümlenin tamamı** seçeneğini seç; kaynak/hedef dili ayarla, **Yerelde çevir** veya **Kelime defterine kaydet** düğmesini kullan. Kartı açmak ya da kelimeyi seçmek tek başına modeli başlatmaz. Bergamot ilk açık çeviride paket içinden çevrimdışı başlar; daha önce yüklenmiş diğer yerel motor da kullanılabilir. Kısa kelimeler için kaynak dili elle seçmek gerekebilir. Bir seferde 300 karaktere kadar çeviri/kayıt yapılır; uzun satırlardaki tek tek kelimeler yine seçilebilir.
+
+Karttaki dil seçimi o karta aittir; AI sayfasındaki kalıcı tercihi değiştirmez. Menü EN/TR ve AI ayarlarında seçilmiş ek kaynak/hedef dili sunar; başka dilleri önce AI ekranından seçebilirsin. Ortak motor başka bir iş yapıyorsa kart meşgul hatası verir; otomatik uzak hizmet/model indirme alternatifi yoktur. Kelime defteri kaynak kelimeyi/cümleyi saklar, model yanıtını otomatik kaydetmez.
+
+**Escape** kartı kapatır ve videoyu duraklatılmış bırakır. **Kapat ve devam et** açıkça oynatmayı başlatır. Altyazıdaki × tüm Aion altyazısını kapatır. AI panelinden durdurma, panel bağlantısının kapanması veya sayfadan ayrılma katmanı temizler; kapanan kartın gecikmiş sonucu yeni karta yazılmaz. Canlı altyazıya yeni satırlar eklenirken açık kart ve odak korunur.
+
+Kart erişilebilir iframe içinde de çalışır. Oynatıcı kapsayıcısının HTML tam ekranında görünür; video öğesinin kendi native tam ekranında Firefox yalnız altyazıyı çizer, etkileşimli kart gösterilemez. Kart için native tam ekrandan çık. Konuşma tanıma veya her hizmette altyazıya erişim bu sürüme eklenmez.

@@ -4,10 +4,10 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 36 geçti |
+| Node birim/izin/veri doğrulama | 40 geçti |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
-| 0.1.0 → 0.7.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
+| 0.1.0 → 0.9.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
 | JS/HTML/yerelleştirme/manifest/vendor hash | Geçti; aynı kilitli girdilerden ikinci XPI üretimi bayt bayt aynı |
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | web-ext 10.8.0 | 0 hata, 11 uyarı; [rapor](evidence/web-ext-lint.json) |
@@ -118,3 +118,16 @@ Ayrı M2M100 regresyonunda dokuz teknik akış ve dört sınırlı kalite kontro
 ![Paket içi motorla canlı çift altyazı](evidence/bergamot-live-dual-captions.png)
 
 ![Paket içi motorla sayfa ve web diyaloğu](evidence/bergamot-offline-page.png)
+
+
+## 0.9.0: video üzerindeki kelime kartı
+
+[Gerçek Firefox raporu](evidence/caption-card-results.json) beş akışı doğrular: açık öğrenme düğmesi videoyu durdurur, kapalı shadow ve gerçek kullanıcı olayı gereksinimi sayfa/script tıklamasıyla otomatik çıkarımı engeller; ağ zaten kapalıyken gerçek paket Bergamot motoru cümleyi ve `cat` → `Kedi` kelimesini çevirir, iki kaydetme tek kayıt oluşturur; canlı katman yenilenirken kart/yanıt korunur, Escape duraklatılmış bırakır ve açık devam düğmesi oynatır; kesme işareti/Türkçe kelime seçimi, HTML’nin düz metin kalması ve açık kartta modül kapatılması; TR kontrolü ve erişilebilir iframe çevirisi, iki frame’in de açık durdurmada temizlenmesi. Klavyeyle kelime seçimi ve dar ekran görünümü de aynı deneyde sınandı. HTML oynatıcı kapsayıcısı tam ekranı kartı korur; native video tam ekranı yalnız altyazı gösterebilir.
+
+Dört yeni birim testi kaynak dışı metin, yanlış kimlik/sekme/frame/URL/token, genel AI/ayar/model indirme istekleri, kapatma/gezinme/kaynak değiştirme/modül kapatma, bekleyen işlemde eski sonucu atma ve meşgul kontrolünü doğrular. Eski katmanın gecikmiş kapatma mesajı yeni canlı yenilemeyi iptal edemez; revizyon kontrolü ayrıca sınandı. Genel arka plan komutları eklenti sayfalarıyla sınırlı kalır.
+
+Sürüm incelemesinde ana/native-newtab ve isteğe bağlı model testlerinin eski XPI adını sabitlediği görüldü. Testler sürümü manifest’ten alır ve yüklü eklentinin gerçek sürümünü ayrıca doğrular. İlk eski-paket kontrolleri 0.9.0 kanıtı sayılmaz; ana/native-newtab akışları gerçek sürüm doğrulamasıyla güncel XPI üzerinde yeniden geçti. Bu düzeltme yeni kartın ilk gerçek 0.9.0 testinden bağımsızdır. Native/Qwen/M2M dil kalitesi veya AMO imza durumunda iyileşme iddia edilmez.
+
+![Video üzerinde yerel kelime çevirisi](evidence/on-video-word-card.png)
+
+![Dar ekranda kelime kartı](evidence/on-video-word-card-narrow.png)

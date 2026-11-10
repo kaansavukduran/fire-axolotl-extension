@@ -15,10 +15,12 @@ options.set_preference('remote.prefs.recommended',False)
 driver=webdriver.Firefox(options=options,service=Service(os.environ['AION_GECKODRIVER'],service_args=['--allow-system-access'],log_output=str(artifacts/'geckodriver.log')))
 wait=WebDriverWait(driver,30);results=[]
 try:
-    addon=driver.install_addon(str(ROOT/'dist/fire-axolotl-extension-0.8.0-native-newtab-unsigned.xpi'),temporary=True)
+    version=json.loads((ROOT/'browser/extension/manifest.json').read_text())['version']
+    addon=driver.install_addon(str(ROOT/f'dist/fire-axolotl-extension-{version}-native-newtab-unsigned.xpi'),temporary=True)
     driver.set_context('chrome');uuid=driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]",addon);driver.set_context('content')
     base=f'moz-extension://{uuid}/aion/'
     driver.get(base+'popup.html');wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
+    assert driver.execute_script('return browser.runtime.getManifest().version') == version
     controller=driver.current_window_handle;before=set(driver.window_handles)
     driver.execute_async_script('browser.tabs.create({}).then(()=>arguments[0](true));')
     wait.until(lambda d:len(set(d.window_handles)-before)==1);driver.switch_to.window(next(iter(set(driver.window_handles)-before)))

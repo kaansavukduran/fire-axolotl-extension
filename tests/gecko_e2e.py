@@ -96,7 +96,8 @@ try:
     wait.until(lambda d: d.window_handles)
     driver.switch_to.window(driver.window_handles[-1])
     driver.switch_to.new_window('tab')
-    package = ROOT / 'dist/fire-axolotl-extension-0.8.0-unsigned.xpi'
+    version = json.loads((ROOT/'browser/extension/manifest.json').read_text())['version']
+    package = ROOT / f'dist/fire-axolotl-extension-{version}-unsigned.xpi'
     addon_id = driver.install_addon(str(package), temporary=True)
     assert addon_id == 'fire-axolotl-extension@kaansavukduran.github.io'
     driver.set_context('chrome')
@@ -106,6 +107,7 @@ try:
     driver.get(blocking_url)
     assert driver.execute_script('return window.normalScriptRan && window.blockedScriptRan')
     driver.get(f'moz-extension://{ublock_uuid}/1p-filters.html')
+    assert driver.execute_script('return browser.runtime.getManifest().version') == version
     wait.until(lambda d: d.execute_script('return !!document.querySelector(".CodeMirror")?.CodeMirror'))
     # First launch compiles the real bundled filter lists. Give that work time
     # on a four-core host that is also compiling Firefox; do not skip the lists.

@@ -1,0 +1,9 @@
+{
+  "passed": [
+    "An explicit on-video learning button pauses playback without loading AI; the closed shadow and untrusted-click guard prevent automatic page-triggered inference",
+    "Trusted sentence and individual-word translations cold-load the actual bundled engine while offline; saving a word twice writes one local vocabulary entry",
+    "Live overlay refresh retains the current card and answer; Escape keeps playback paused, player fullscreen retains controls, and explicit continue resumes playback",
+    "Apostrophes and Turkish words remain selectable; subtitle markup is literal text, and disabling translation blocks an already open card",
+    "Turkish controls translate from an accessible iframe using its own frame capability; explicit stop removes both main-frame and iframe cards"
+  ]
+}

@@ -19,6 +19,7 @@ globalThis.AionMedia = (() => {
     const media = probes.filter(item=>item.status==='fulfilled' && !item.value.info.error).map(item=>item.value);
     touched.add(tabId);
     if (['closeOverlay','captureStop','clearDefaultSpeed','captionLoopStop'].includes(command.action)) {
+      if (command.action === 'closeOverlay') AionCaptionStudy.revoke(tabId);
       await Promise.allSettled(frames.map(frame=>send(frame,command)));return {stopped:true};
     }
     if(command.action==='setDefaultSpeed'){const results=await Promise.allSettled(frames.map(frame=>send(frame,command)));if(results.some(item=>item.status==='fulfilled'&&!item.value.error))return {speed:command.value};throw new Error('noVideo');}
@@ -30,7 +31,14 @@ globalThis.AionMedia = (() => {
       if (!success) throw new Error(results.find(item=>item.status==='fulfilled')?.value.error||'operationFailed');
       return success.value;
     }
-    return send(media[0].frameId,command);
+    const chosen = media[0].frameId;
+    if (command.action === 'overlay') {
+      const frame = (await browser.webNavigation.getAllFrames({tabId})).find(item=>item.frameId === chosen);
+      if (!frame || !Aion.webURL(frame.url)) throw new Error('restrictedPage');
+      const access=AionCaptionStudy.grant(tabId,frame,command.study || command.original);
+      command = {...command,studyToken:access.token,studyRevision:access.revision};
+    }
+    return send(chosen,command);
   }
   async function remember(tabId,speed) {
     const tab=await browser.tabs.get(tabId);if(!Aion.webURL(tab.url))throw new Error('restrictedPage');

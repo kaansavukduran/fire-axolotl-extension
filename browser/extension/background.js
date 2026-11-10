@@ -31,8 +31,20 @@ async function activeTab() {
   if (!tab || !Aion.webURL(tab.url)) throw new Error('restrictedPage');
   return tab;
 }
+async function saveWord(text) {
+  const word = String(text || '').trim().slice(0,300);
+  if (!word) throw new Error('textRequired');
+  await serial(async () => {
+    const settings = await readSettings();
+    if (!settings.vocabulary.includes(word)) settings.vocabulary.push(word);
+    await browser.storage.local.set({settings:Aion.normalize(settings)});
+  });
+  await milestone('word');
+  return true;
+}
 async function onMessage(message, sender) {
-  // Content scripts and websites cannot invoke privileged container/storage/network actions.
+  if (message.type === 'captionStudy') return AionCaptionStudy.handle(message,sender);
+  // General container/storage/network actions remain extension-page only.
   const allowedPages = ['popup.html', 'settings.html', 'characters.html', 'sidebar.html', 'newtab.html', 'tools.html', 'ai.html'].map(page => browser.runtime.getURL('aion/' + page));
   if (sender.id !== browser.runtime.id || !allowedPages.includes(sender.url)) throw new Error('unauthorized');
   const modules = {containers: 'containers', temporaryContainer: 'containers', createContainer: 'containers', openContainer: 'containers', video: 'video', mediaTab: 'video', forgetSpeed: 'video', selection: 'translation', translate: 'translation', word: 'translation', localAI: 'ai'};
@@ -102,6 +114,11 @@ async function onMessage(message, sender) {
       const tab = message.type==='mediaTab'?await browser.tabs.get(Number(message.tabId)):await activeTab();
       const settings = await readSettings();
       const command = {...message.command, style: Aion.captionStyle(settings), language: Aion.language(settings, browser.i18n.getUILanguage())};
+      if (command.action === 'overlay') {
+        const messages = await (await fetch(browser.runtime.getURL(`aion/_locales/${command.language}/messages.json`))).json();
+        const keys = ['captionStudy','captionStudyHelp','captionStudyContinue','captionStudyTranslate','captionStudySave','captionStudySaved','captionStudySentence','captionStudySource','captionStudyTarget','captionStudyLocal','captionStudyPending','aiBusy','aiSourceRequired','aiBergamotPairUnsupported','aiTargetUnsupported','moduleDisabled','operationFailed'];
+        command.studyUI = {source:settings.aiSource,target:settings.aiTarget,labels:Object.fromEntries(keys.map(key=>[key,messages[key]?.message || key]))};
+      }
       const result = await AionMedia.command(tab.id, command);
       if(message.remember && command.action==='speed'){await AionMedia.remember(tab.id,command.value);await AionMedia.command(tab.id,{action:'setDefaultSpeed',value:command.value});}
       if (result.error) throw new Error(result.error);
@@ -136,15 +153,7 @@ async function onMessage(message, sender) {
       finally {clearTimeout(timeout);}
     }
     case 'word': {
-      const word = String(message.word || '').trim().slice(0, 300);
-      if (!word) throw new Error('textRequired');
-      await serial(async () => {
-        const settings = await readSettings();
-        if (!settings.vocabulary.includes(word)) settings.vocabulary.push(word);
-        await browser.storage.local.set({settings: Aion.normalize(settings)});
-      });
-      await milestone('word');
-      return true;
+      return saveWord(message.word);
     }
     case 'checkUpdates': {
       // GitHub's /latest excludes all developer previews and can return 404

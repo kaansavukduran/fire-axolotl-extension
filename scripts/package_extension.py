@@ -56,7 +56,7 @@ def package(with_sources=False, native_newtab=False):
     files['manifest.json'] = (json.dumps(manifest, indent=2) + '\n').encode()
     # Preserve uBO's own root paths and locales; Aion lives under aion/.
     files['background.html'] = replace_once(files['background.html'].decode(), '</body>',
-        '<script src="aion/shared.js"></script>\n<script src="aion/ai-service.js"></script>\n<script src="aion/background.js"></script>\n<script src="aion/media-controller.js"></script>\n'
+        '<script src="aion/shared.js"></script>\n<script src="aion/ai-service.js"></script>\n<script src="aion/caption-study.js"></script>\n<script src="aion/background.js"></script>\n<script src="aion/media-controller.js"></script>\n'
         '<script src="aion/image-search.js"></script>\n<script src="aion/sync.js"></script>\n<script src="aion/site-style.js"></script>\n<script src="aion/browser-integration.js"></script>\n</body>').encode()
     # Both modules own menus in the same extension. Never erase the other module.
     data = files['js/vapi-background.js'].decode()

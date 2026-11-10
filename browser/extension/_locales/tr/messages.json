@@ -969,10 +969,10 @@
     "message": "Altyazı zamanını sıfırla"
   },
   "captionStudy": {
-    "message": "Altyazıyla öğren"
+    "message": "Bu satırdan öğren"
   },
   "captionStudyHelp": {
-    "message": "Model yüklemeden okunabilir video altyazısı veya uygulanmış özgün VTT/SRT satırlarıyla çalış. Kaynakları yenileyip altyazıyı seç; önceki/sonraki satıra git, tekrar oynat veya satırı döngüye al. Yalnız okunabilir altyazılar desteklenir."
+    "message": "Video duraklatıldı. Kelimeyi veya cümleyi seçip çevir ya da kaydet."
   },
   "captionPrevious": {
     "message": "Önceki satır"
@@ -1138,5 +1138,32 @@
   },
   "aiQwenHelp": {
     "message": "Qwen 2.5 1.5B genel metin görevleri için ayrıca yüklenir. Türkçe çeviri kontrolünde yanlış çıktı verdi; çeviri için Bergamot/M2M100 de seçilebilir. Bu modelin tarayıcı araçlarına erişimi yoktur."
+  },
+  "captionStudyContinue": {
+    "message": "Kapat ve devam et"
+  },
+  "captionStudyTranslate": {
+    "message": "Yerelde çevir"
+  },
+  "captionStudySave": {
+    "message": "Kelime defterine kaydet"
+  },
+  "captionStudySaved": {
+    "message": "Kelime defterine kaydedildi."
+  },
+  "captionStudySentence": {
+    "message": "Cümlenin tamamı"
+  },
+  "captionStudySource": {
+    "message": "Kaynak"
+  },
+  "captionStudyTarget": {
+    "message": "Hedef"
+  },
+  "captionStudyLocal": {
+    "message": "Yerel AI motorunu kullanır. Kısa kelimelerde kaynak dili seçmen gerekebilir. Çeviriler hatalı olabilir. Escape kartı kapatır, video duraklatılmış kalır."
+  },
+  "captionStudyPending": {
+    "message": "İşleniyor…"
   }
 }

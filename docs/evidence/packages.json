@@ -1,5 +1,5 @@
 {
-  "version": "0.8.0",
+  "version": "0.9.0",
   "unsigned": true,
   "model_weights_embedded": {
     "bergamot_en_tr": true,
@@ -7,13 +7,13 @@
     "m2m": false
   },
   "packages": {
-    "fire-axolotl-extension-0.8.0-native-newtab-unsigned.xpi": {
-      "bytes": 53368529,
-      "sha256": "6becffdad13069c2717c779108bf2c64b1c1948fbf5dc39ea60f2731b446076e"
+    "fire-axolotl-extension-0.9.0-native-newtab-unsigned.xpi": {
+      "bytes": 53372976,
+      "sha256": "cc2ab98e13d5770a03da933ae0967053c41b1d05bae523a7e2ce8dbda8f9c85e"
     },
-    "fire-axolotl-extension-0.8.0-unsigned.xpi": {
-      "bytes": 53368554,
-      "sha256": "d38fa00fe4bddb9e0248b1b149404de0218b7670d39afbbae9696f50ba18b8a9"
+    "fire-axolotl-extension-0.9.0-unsigned.xpi": {
+      "bytes": 53373001,
+      "sha256": "6abbc32e0cfbb7826c61a9b2412b71a36604a4558130fe1280658d315980bc41"
     }
   }
 }
