@@ -1,0 +1,32 @@
+{
+  "qrcode-generator": {
+    "version": "1.4.4",
+    "url": "https://registry.npmjs.org/qrcode-generator/-/qrcode-generator-1.4.4.tgz",
+    "integrity": "sha512-HM7yY8O2ilqhmULxGMpcHSF1EhJJ9yBj8gvDEuZ6M+KGJ0YY2hKpnXvRD+hZPLrDVck3ExIGhmPtSdcjC+guuw==",
+    "sha256": "ab6ed47d378877441deae95972e07b2716c26545a735a23aa6b9d442b33026ed",
+    "license": "MIT",
+    "repository": {
+      "url": "git+https://github.com/kazuhikoarase/qrcode-generator.git",
+      "type": "git"
+    },
+    "files": {
+      "qrcode.js": "18ae399f81182bc9de916e9c77b195df20cc58d6f2d55a62b085a299f1bf1780",
+      "qrcode_UTF8.js": "e522d64003b332e29271fdce4993ed3ae2934c8947f41654bd324ddcfa2de301"
+    }
+  },
+  "darkreader": {
+    "version": "4.9.135",
+    "url": "https://registry.npmjs.org/darkreader/-/darkreader-4.9.135.tgz",
+    "integrity": "sha512-h/gmS/KzY8HgmsgOSFh7ssJnsC5ymuhIwZqxksPKCS1K400OUJyjDPZN1L2YIrzX+oezhVUNnCDZPfmPUvdJNA==",
+    "sha256": "e1448dbb485a7d7f7ce879cb71240c70f195e2c25349b0e8abc1a4108f4ec8e5",
+    "license": "MIT",
+    "repository": {
+      "url": "git+https://github.com/darkreader/darkreader.git",
+      "type": "git"
+    },
+    "files": {
+      "darkreader.js": "6bc5cb7bc3dd4014902a73898cfad95e07474755d64abbfe9e7bac02c2f59937",
+      "darkreader-LICENSE": "f0a5f835174494f8981b2cbb1a34054d4f887a5c865318650d6a17afe1c7850e"
+    }
+  }
+}

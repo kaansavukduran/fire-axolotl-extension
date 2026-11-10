@@ -1,0 +1,350 @@
+Fire Axolotl adlı, Firefox üzerinde çalışan ücretsiz ve açık kaynaklı bir EKLENTİ geliştirmeni istiyorum. Başka bir repoda çalışacağız. Tarayıcı forku geliştirmeyeceğiz.
+
+Aşağıda önceki sohbette istediğim özellikleri, sonradan yaptığım düzeltmeleri de koruyarak kronolojik sırayla topladım. Bunları gereksinim listesi olarak takip et; yeni mesaj yazdığımda önceki işleri unutma. Tamamlandı, kısmen tamamlandı ve bekliyor durumlarını somut doğrulama sonuçlarıyla kaydet.
+
+1. PROJENİN AMACI VE GÜVENLİK
+
+Hem kendim hem herkes için kullanabileceğimiz, basit ve kullanıcı dostu bir Firefox eklentisi istiyorum.
+
+Birbirinden bağımsız çok sayıda eklenti kurmadan, ihtiyaç duyduğum araçlara tek yerden erişebilmeliyim. Amacım gereksiz üçüncü taraf erişimlerini ve veri paylaşımını azaltmak.
+
+Ancak bütün özellikleri tek eklentide toplamanın daha fazla yetki anlamına gelebileceğini de dikkate al. Gereksiz izin isteme. Siteye erişim ve dış hizmet kullanımı gerektiğinde kullanıcı bunu anlayıp seçebilsin. Kullanılmayan modüller kapatılabilsin.
+
+Telemetri, reklam ölçümü, davranış takibi, ziyaret geçmişi toplama ve arka planda veri satışı olmasın. “Virüs asla bulaşmaz” gibi verilemeyecek garantiler sunma; güvenliği gerçek izinler, veri akışları ve testlerle değerlendir.
+
+2. İLK İSTEDİĞİM YERLEŞİK ARAÇLAR
+
+Şu özellikleri tek eklenti içinde modüller halinde istiyorum:
+
+- Firefox konteynerleri mantığında ayrı oturumlar.
+- Video hızlandırma ve yavaşlatma.
+- İngilizce altyazıları Türkçeye veya seçilen başka dile çevirme.
+- Videolarda orijinal ve çevrilmiş altyazıyı birlikte gösterebilme.
+- Sayfalardaki yazıları, seçili metni ve uygun popup/arayüz metinlerini seçilen dile çevirebilme.
+- Kaynak ve hedef dili kullanıcı seçebilsin.
+
+Eklentinin kendi paneliyle web sitesinin açtığı popup’ı birbirinden ayır. Firefox’un ayrıcalıklı sistem ekranlarına normal bir WebExtension’ın müdahale edemeyeceği yerlerde bunu açıkça belirt.
+
+3. MARKA, LOGO VE AION
+
+Projenin adı Fire Axolotl.
+
+Önceki proje deposu:
+https://github.com/kaansavukduran/fire-axolotl
+
+Aion, benim isteğimle ChatGPT üzerinden yapay zekâyla oluşturulmuş pembe bir axolotl karakteri. Gönderdiğim referanslar da bu şekilde üretildi.
+
+Karakterin temel görünümü:
+- Sevimli, dolgun ve normal axolotl gövdesi.
+- Pembe renkler.
+- Mavi/camgöbeği detaylı dış solungaçlar.
+- Büyük mavi gözler.
+- Beyaz laboratuvar önlüğü.
+- Kuyrukta DNA benzeri görsel motif.
+
+Logo için Firefox’taki bir karakterin dairesel hareket oluşturması fikrini seviyorum; fakat sonuç özgün Fire Axolotl/Aion kimliği taşımalı. Mozilla veya Firefox’un resmî ürünüymüş gibi görünmemeli.
+
+Eklediğim görsel ZIP’indeki hazır varlıkları kullan. Önce PROVENANCE dosyalarını ve karakter kataloğunu oku.
+
+4. SEKMELERİN KONUMU
+
+İlk isteğim sekmeleri üstte, solda veya sağda kullanıcının seçebilmesiydi. Daha sonra açıkça düzelttim:
+
+VARSAYILAN SEKME KONUMU ÜSTTE OLMALI.
+
+Bunu şimdi eklenti olarak geliştiriyoruz. Normal WebExtension API’leri Firefox’un gerçek üst sekme çubuğunu tamamen taşıyamıyorsa, yapabiliyormuş gibi gösterme.
+
+API’nin izin verdiği ölçüde kullanışlı bir dikey sekme yan paneli yap. Üst/sol/sağ seçeneklerinden hangileri Firefox’un kendi ayarına bağlı, hangileri eklenti tarafından sağlanabiliyor, açıkça belirt. Kullanıcının mevcut sekme düzenini izinsiz değiştirme.
+
+5. KULLANICI DOSTU AYARLAR VE GÜNCELLEME
+
+Varsayılan kurulum sade, anlaşılır ve kullanışlı olsun. Gelişmiş özelleştirmeler isteyen kullanıcı için erişilebilir olsun.
+
+Kullanıcı:
+- Hangi araçların görüneceğini,
+- Hangilerinin kapalı olacağını,
+- Panel ve araç sırasını,
+- Uygun kısayolları,
+- Görünüm ve davranış tercihlerini
+ayarlayabilsin.
+
+Firefox’un kendi özellikleriyle uyumlu çalışsın.
+
+Güncelleme konusunda artık tarayıcı güncelleyicisi değil, Firefox’un desteklediği imzalı eklenti dağıtım ve güncelleme mekanizmasını hedefle. Çalışan güncelleme, ayarların korunması ve sürüm geçişi doğrulanmadan tamamlandı deme.
+
+6. TELİF, LİSANSLAR VE ÜCRETSİZ DAĞITIM
+
+Proje tamamen ücretsiz ve açık kaynaklı olacak.
+
+Ücretsiz dağıtımın üçüncü taraf lisans yükümlülüklerini ortadan kaldırmadığını dikkate al. Kullanılan kodların, fontların, görsellerin, filtre listelerinin ve diğer kaynakların lisanslarını kaydet.
+
+Başka eklentilerin özel kodunu, markasını veya arayüzünü izinsiz kopyalama. Açık kaynak bir bileşen kullanılırsa lisansına, atıf ve kaynak sağlama yükümlülüklerine uy.
+
+Aion görsellerinin yapay zekâyla benim isteğim üzerine üretildiğini kaynak kaydında belirt; hukuki kesinlik veya tescil garantisi verme.
+
+7. KULLANDIĞIM EKLENTİLERİN İŞLEVLERİ
+
+Önceki sohbette kullandığım eklentilerin ekran görüntüsünü paylaştım. Aşağıdaki işlevleri mümkün olduğunca tek eklentide istiyorum:
+
+- Bitwarden Password Manager:
+  Parola yönetimi ve otomatik doldurma ihtiyacı.
+  Bu, Bitwarden’ın güvenliğini kendiliğinden sağlayabildiğin anlamına gelmez. Bağımsız güvenlik incelemesi gerektiren bir parola kasasını aceleyle yazıp tamamlandı sayma. Güvenli entegrasyon veya ayrı kapsam seçeneklerini değerlendir.
+
+- DeepL:
+  Okurken metin çevirisi, seçili metin çevirisi ve uygun yazma yardımı.
+  Dış çeviri hizmetine hangi metnin gönderildiği anlaşılır olsun. Kullanıcı onayı olmadan sayfanın tamamını arka planda gönderme. Ücretli hizmeti ücretsiz ve sınırsızmış gibi sunma.
+
+- DuckDuckGo Search & Tracker Protection:
+  Arama sağlayıcısı seçimi ve takipten korunma ihtiyacı.
+  Firefox’un mevcut korumalarını bozma.
+
+- Enhancer for YouTube:
+  Video izleme deneyimini geliştiren uygun kontroller.
+
+- Firefox Multi-Account Containers:
+  Farklı hesaplar ve amaçlar için ayrı konteyner oturumları.
+
+- Global Speed:
+  Video ve ses hız kontrolü; uygun kısayollar ve site tercihleri.
+
+- Netflix 1080p UA:
+  Video kalitesi/çözünürlük tercihleri. Sonraki maddede ayrıntılandırdım.
+
+- Search by Image:
+  Görsel üzerinden arama ve kullanıcı tarafından seçilen arama sağlayıcısı.
+
+- Temporary Containers:
+  Geçici, yönetilebilir oturum konteynerleri; açık sekmeleri ve kullanıcının diğer konteynerlerini yanlışlıkla silme.
+
+- uBlock Origin:
+  Reklam ve takip engelleme ihtiyacı.
+  Birebir eşdeğerlik iddiasını doğrulama olmadan kullanma. Kod veya filtrelerden yararlanırsan ilgili lisansları koru; resmî imzalı paketi değiştirip hâlâ resmî imzalıymış gibi gösterme.
+
+Ekran görüntüsünde kapalı olan ama kapsamda değerlendirilmesini istediğim araçlar:
+- Dark Reader benzeri isteğe bağlı site karanlık modu.
+- QR kod oluşturma.
+
+Ekran görüntüsünün öneriler bölümünde ayrıca şunlar vardı:
+- Control Panel for YouTube.
+- Malwarebytes Browser Guard.
+- Media Downloader Unleashed.
+
+Öneriler bölümünde görünmelerini, bu ürünlerin bütün işlevlerini kesin istemişim gibi yorumlama. Tarayıcı kullanımına uygun işlevlerini değerlendirme listesine al; önceliği açıkça istediğim özelliklere ver.
+
+8. VİDEO KALİTESİ VE ALTYAZILAR
+
+Netflix 1080p örneğinde olduğu gibi kalite tercihi ayarlanabilsin.
+
+Sadece tek bir siteyi düşünme; desteklenebilen farklı video hizmetlerinde:
+- Otomatik kalite,
+- Tercih edilen çözünürlük,
+- Uygunsa desteklenen en yüksek kalite,
+- Hız kontrolü,
+- Altyazı ve çift altyazı
+seçenekleri olsun.
+
+Ancak DRM, abonelik, codec, sunucu, cihaz ve platform kısıtlarını ayırt et. Kullanılamayan bir çözünürlüğü varmış gibi gösterme. DRM aşma veya her serviste zorla 1080p/4K garantisi verme.
+
+Siteye özel adaptörler gerekiyorsa desteklenen ve desteklenmeyen siteleri açıkça kaydet. Video tam ekranında ve erişilebilen iframe’lerde davranışı test et. Kullanıcının Firefox korumalarını kapatmasını gerektirme.
+
+9. ÖZELLEŞTİRİLEBİLİR ARAYÜZ
+
+Kendi Firefox üst çubuğumun ekran görüntüsünü örnek olarak verdim. Sade, koyu ve kullanıcı tarafından düzenlenebilir bir deneyim istiyorum.
+
+Eklenti içinde:
+- Araç çubuğu popup’ı,
+- Yan panel,
+- Ayarlar sayfası,
+- İsteğe bağlı yeni sekme sayfası
+birbirini tamamlasın.
+
+Ekran görüntüsündeki tarayıcı üst çubuğunu, eklentiyle değiştirilebilecek bir HTML alanıymış gibi ele alma. Firefox’un kendi özelleştirme ekranı gereken yerde kullanıcıyı doğru yere yönlendir.
+
+Her modül için mantıklı varsayılanlar olsun; bütün seçenekleri ilk açılışta kullanıcının üstüne yığma.
+
+10. KARANLIK TEMA, SİTE TEMASI VE FONTLAR
+
+Eklentinin kendi arayüzü varsayılan olarak karanlık olsun.
+
+Siteler için son düzeltmem:
+- Normal bir siteye girince sitenin kendi teması varsayılan olarak korunsun.
+- Otomatik olarak bütün siteleri koyulaştırma.
+- Site sistem/tarayıcı renk tercihini takip ediyorsa mevcut Firefox ve işletim sistemi tercihlerine saygı göster.
+- Kullanıcı isterse desteklenen kapsamda siteye karanlık/aydınlık görünüm uygulayabilsin.
+- Siteye özel tercih ve geri alma seçeneği olsun.
+
+Yazı fontlarını değiştirme özelliği istiyorum. Özellikle disleksiye yardımcı seçenek olarak OpenDyslexic gibi fontlar olsun.
+
+Eklenti arayüzünün fontu ile izin verilen web sayfalarının fontunu ayrı düşün. Normal bir eklenti Firefox’un adres çubuğunun fontunu değiştiremiyorsa bunu açıkça belirt.
+
+OpenDyslexic gibi fontlar isteğe bağlı olsun; herkese tıbbi fayda sağladığı iddiasında bulunma. Lisanslarını dahil et.
+
+11. DİLLER, FIREFOX HESABI VE SENKRONİZASYON
+
+İlk isteğim Firefox’ta bulunan dillerin desteklenmesi ve kullanıcının istediği zaman dil değiştirebilmesiydi.
+
+Eklenti uyarlamasında:
+- Eklentinin arayüzünü çok dilli tasarla.
+- Önce düzgün çalışan Türkçe ve İngilizceyi tamamla.
+- Diğer Firefox dillerinin eklenebilmesi için altyapıyı hazırla ve hedefi takip et.
+- Çevrilmeyen dilleri tamamlanmış gibi gösterme.
+- Eklentinin dil seçimi Firefox’un ana arayüz dilinden ayrı olabilsin.
+
+Firefox hesabıyla giriş ve senkronizasyon isteğim de vardı.
+
+Eklenti Firefox’un kendi hesap oturumunu taklit etmesin ve hesap parolasını istemesin. Uygun ayarlar için desteklenen storage.sync mekanizmasını değerlendir. Yerel kalacak verileri, senkronize edilen verileri, kota sınırlarını ve varsa dış hizmetleri açıkça belirt.
+
+Firefox’un bütün özellikleri korunmalı isteğimi, artık mevcut Firefox’u bozmadan onunla uyumlu çalışma gereksinimi olarak uygula.
+
+Mozilla’ya telemetri/reklam verisi gitmesini istemiyorum; fakat sıradan bir eklentinin tarayıcının bütün telemetrisini kontrol edebileceğini iddia etme. Eklentinin kendi veri toplamaması ve Firefox ayarlarıyla yapılabilenlerin doğru açıklanması esastır. Sync ve güvenlik hizmetlerinin gerektirdiği bağlantıları reklam takibiyle aynı şeymiş gibi değerlendirme.
+
+12. KARAKTERLER VE KARE KARE ANİMASYONLAR
+
+Önceki sohbette başka uygulamaya ait ekranlar üzerinden karakter animasyonlarını eleştirmiştim. Tarayıcıya uygun karakter fikrini daha sonra açıkça korudum.
+
+Aion’un başının altına çubuk gibi bir gövde eklenmesini istemiyorum. Tam gövdeli, doğal oranlı, kendi cartoon tarzındaki karakteri istiyorum.
+
+Bu yalnızca Aion için değil:
+- Aion / axolotl.
+- Kurt.
+- Kuzu.
+- Baykuş.
+karakterlerinin hepsi için geçerli.
+
+Animasyonlar art arda gösterilen gerçek çizilmiş karelerden oluşsun. Hazır sprite sheet/kare dizisi mantığını kullan. Sadece tek resmi sallayıp döndürerek bütün animasyonları yapılmış sayma.
+
+ChatGPT Pet koleksiyonumdaki hazırlanmış animasyonların mantığını örnek göstermiştim; Dot’un animasyonlarını beğendiğimi söylemiştim. Dot’un varlıklarını kopyalama. Başka sohbetten Pet koleksiyonuma otomatik erişimin olduğunu varsayma.
+
+Eklediğim ZIP’te bu proje için mevcut tam gövdeli karakter paftaları ve kare koordinatları bulunuyor. Önce bunları kullan.
+
+Tarayıcı bağlamına uygun okuma, çalışma, bekleme, selamlama gibi animasyonlar olabilir. Karakter özelliği isteğe bağlı olsun. Kullanıcı:
+- Karakter seçebilsin.
+- Uygun yerel kare dizisi/PNG paftası ekleyebilsin.
+- Animasyonu durdurabilsin.
+- Karakteri gizleyebilsin veya silebilsin.
+- Tercihlerini dışa/İçe aktarabilsin.
+
+Kullanıcının hareket azaltma tercihini ve düşük kaynak tüketimini gözet.
+
+13. YANLIŞ PROJEYE AİT OLDUĞUNU DÜZELTTİĞİM TALEPLER
+
+Sohbette yanlışlıkla başka uygulamaya ait istekler yazdım, sonra bunu söyledim.
+
+Şunlar bu eklentinin aktif kapsamına DAHİL DEĞİL:
+- RPG/günlük yaşam uygulamasının sol menüsü.
+- O menüde Ayarlar’ın en alta taşınması.
+- Spor hareketleri, tüm kas grupları, izole ve bileşik hareket kataloğu.
+- Ders/spor uygulamasına özel karakter hareketleri.
+- Besinlerin meyve, sebze, baklagil şeklinde dallanması.
+- Beslenme, sağlık ve görev yönetimi ekranları.
+
+Bunlardan yalnızca tarayıcıya uygun isteğe bağlı karakter fikrini korudum.
+
+14. ÇALIŞMA ŞEKLİ VE SÜRÜM BEKLENTİSİ
+
+Defalarca “devam et, geliştir, denetle, kullanılabilir sürüme kadar forge et” dedim.
+
+İstediğim çalışma şekli:
+- Yalnızca plan yazıp bırakma.
+- Mevcut repoyu ve çalışan özellikleri incele.
+- İstekleri sırayla uygula.
+- Gerçek Firefox içinde test et.
+- Bulduğun hataları düzelt.
+- Ayarları ve kullanıcı verilerini koru.
+- Gerçek ekran görüntülerini göster.
+- Kurulabilir ve doğrulanmış eklenti paketi üret.
+- İmzalama/AMO yayınlama gereksinimlerini ayrıca tamamla.
+- Bitmeyen veya API nedeniyle yapılamayan şeyi açıkça kaydet.
+
+Yeni mesajlarımı otomatik olarak önceki işlerin iptali sayma. Açık bir düzeltme yaptığımda son düzeltmeyi esas al.
+
+Bu artık eklenti projesi olduğu için Windows Setup.exe, özel tarayıcı motoru derlemesi veya Firefox forku üretmek bu yeni reponun hedefi değil.
+
+15. YENİ SEKMEDE AION MİNİ OYUNU
+
+Yeni sekmede basit bir mini oyun istiyorum:
+
+- Kullanıcı tıklayıp başlatsın; kendiliğinden başlamasın.
+- Piksel art, 2D Aion/axolotl karakteri olsun.
+- Oyun alanı odaktayken Boşluk tuşuyla zıplasın.
+- Google’ın çevrimdışı dinozor oyunu gibi basit bir engelden atlama fikri olsun.
+- Google’ın kodunu, dinozorunu veya görsellerini kopyalama.
+- Buz ve ateş gibi engeller olsun.
+- Buza çarparsa donma animasyonu.
+- Ateşe çarparsa çizgi film tarzında yanıp kül olma animasyonu.
+- Aion’un referans paftasına uygun sprite sheet kullan.
+- Yeniden başlatma, skor/yerel rekor ve duraklatma gibi oyunu kullanılabilir yapan kontroller olsun.
+- Sekme arka plana geçince duraklasın.
+- Adres çubuğunda veya başka bir metin alanında Boşluk yazmak oyunu tetiklemesin.
+- Gereksiz ağ bağlantısı, reklam ve takip olmasın.
+- Oyun kapatılabilsin.
+
+Normal bir Firefox eklentisinin mevcut about:newtab içine ayrıcalıklı kod eklemesini varsayma. Desteklenen yeni sekme override mekanizmasını değerlendir; bu davranış kullanıcıya açık olsun. Başka bir yeni sekme eklentisiyle çakışmayı ele al.
+
+Önceki yeni sekme aramasını ve kısayolları koruma amacını, WebExtension sınırları içinde anlaşılır bir deneyime dönüştür.
+
+16. DRIVER BOOSTER / WINOPTIMIZER DÜZELTMESİ
+
+Sohbette Driver Booster, Steam, scan/fix ve sürücü güncellemesi gibi şeyler yazdım. Sonra bunların WinOptimizer adlı başka projeye ait olduğunu açıkça söyledim.
+
+Bunları bu eklentiye EKLEME:
+- Sürücü güncelleme.
+- Windows sistem taraması/onarımı.
+- Steam optimizasyonu.
+- İşletim sistemi temizleme/optimizasyon araçları.
+
+17. YEDEKLEME
+
+Önceki Fire Axolotl projesi için kaynak ZIP’i, tam Git geçmişi ve doğrulama makbuzunun özel Drive proje klasörüne yedeklenmesine onay verdim:
+
+[Özel Drive yedek hedefi bu genel kaynak kaydında gizlenmiştir.]
+
+Yeni eklenti reposunun yedeklerini eski tarayıcı kaynaklarıyla karıştırma; ayrı adlandır ve kaynağını açıkça kaydet. Önceki yedekleri koru. Gizli anahtarları, kullanıcı profillerini ve oturum bilgilerini arşive dahil etme.
+
+Bağlı Drive erişimin yoksa yedeklendi deme.
+
+18. MEVCUT GÖRSELLERİ VE KODU NASIL KULLANACAĞIN
+
+Eklediğim fire-axolotl-extension-gorseller.zip görsel paketini incele.
+
+Mevcut kaynakların sabit referansı:
+https://github.com/kaansavukduran/fire-axolotl/tree/2b739252a5ff66bfd870dfbe6a7e8f2b0ae106a2
+
+Önemli yollar:
+- branding/aion-master.png
+- branding/icon-*.png
+- branding/aion.ico
+- branding/PROVENANCE.md
+- browser/extension/characters/aion.png
+- browser/extension/characters/sheep.png
+- browser/extension/characters/wolf.png
+- browser/extension/characters/owl.png
+- browser/extension/characters/catalog.json
+- browser/extension/characters/PROVENANCE.json
+- browser/native/aion-runner/aion-runner.png
+- browser/native/aion-runner/PROVENANCE.json
+- docs/screenshots/
+
+Piksel koşu oyununun hazır paftası:
+1254 × 1254 piksel, 6 sütun × 8 satır, toplam 48 kare.
+
+Diğer karakterlerin karelerini tahmin ederek kesme; catalog.json içindeki koordinatları kullan.
+
+Görsel ZIP’inde orijinal Aion referansları references/ altında bulunuyor. Kaynak özetleri ASSET-MANIFEST.json içinde.
+
+Mevcut browser/extension dizinindeki kodu yeniden kullanım açısından inceleyebilirsin. Ancak fork içindeki privileged native kodları sıradan eklentide doğrudan çalışır sanma. Özellikle browser/native altındaki oyun entegrasyonu normal WebExtension mimarisine uyarlanmalı.
+
+Ekran görüntüleri önceki gerçek tarayıcı uygulamasını gösteriyor; yeni eklentinin bütün bu alanları değiştirebildiğinin kanıtı değiller.
+
+19. BAŞLARKEN BEKLEDİĞİM
+
+Önce repo ve görselleri incele. Sonra bu gereksinimleri sırayla izlenebilir bir uygulama listesine dönüştür ve çalışmaya başla.
+
+Firefox WebExtension sınırları içinde:
+- Yapılabilenleri uygula.
+- Ek izin veya dış hizmet isteyenleri açıkça göster.
+- Tarayıcı forku gerektirenleri ayrı kaydet.
+- Tamamlanmayanları tamamlandı diye sunma.
+- Gereksiz kapsam eklemek yerine açıkça istediğim özellikleri bitir.
+
+Sonuçta sade varsayılanlara sahip, özelleştirilebilir, çok modüllü, ücretsiz, açık kaynaklı ve gerçek Firefox üzerinde doğrulanmış Fire Axolotl eklentisini istiyorum.

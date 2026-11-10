@@ -1,0 +1,48 @@
+{
+  "id": "onnx-community/Qwen2.5-1.5B-Instruct",
+  "revision": "d54957e3af1be04546436e874a60fe386041b244",
+  "upstream": "Qwen/Qwen2.5-1.5B-Instruct",
+  "upstreamRevision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "license": "Apache-2.0",
+  "cache": "fire-axolotl-qwen-2.5-1.5b-v1",
+  "files": {
+    "config.json": {
+      "size": 809,
+      "sha256": "215eb99c4955b0c42ea9f6e0980d922c228950c5dbc09bde6dc451fbba4d21f3"
+    },
+    "generation_config.json": {
+      "size": 242,
+      "sha256": "f7e7ce458658b2d40d9eb213b91b77a8bf698845ab89360976722d7ac46928a3"
+    },
+    "tokenizer.json": {
+      "size": 7031673,
+      "sha256": "a8506e7111b80c6d8635951a02eab0f4e1a8e4e5772da83846579e97b16f61bf"
+    },
+    "tokenizer_config.json": {
+      "size": 7849,
+      "sha256": "6a14243f0ae04884e597b3f032c05e15de9f417318fdcac24ab4e2680e691430"
+    },
+    "special_tokens_map.json": {
+      "size": 613,
+      "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+    },
+    "onnx/model_q4f16.onnx": {
+      "size": 1221878940,
+      "sha256": "19dec9f63488016185ba997d5e4492b5ac5b4f7ef1abb45243a91de958838dcd"
+    },
+    "onnx/model_uint8.onnx": {
+      "size": 1578954395,
+      "sha256": "398728ae69ffe9cdfea5dccf20f12b2862c154c5c665c48be9512a19f900d98e"
+    }
+  },
+  "variants": {
+    "wasm": {
+      "dtype": "uint8",
+      "file": "onnx/model_uint8.onnx"
+    },
+    "webgpu": {
+      "dtype": "q4f16",
+      "file": "onnx/model_q4f16.onnx"
+    }
+  }
+}

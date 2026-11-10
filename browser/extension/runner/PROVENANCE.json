@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-10",
+  "source": "Original pixel-art sprite sheet generated for Fire Axolotl with OpenAI image generation from the user-authorized AI-created Aion primary reference and turnaround. No Chrome dinosaur artwork or code used.",
+  "creator_request": "User explicitly requested an Aion-specific pixel-art runner with frame animations, ice and fire collisions.",
+  "sha256": "215d90e9074dab317ad9ca947224c14cc02b06c2e7cef1626236cd1d4c2ba586",
+  "width": 1254,
+  "height": 1254,
+  "columns": 6,
+  "rows": 8,
+  "animations": [
+    "idle",
+    "run",
+    "jump",
+    "freeze",
+    "fire_poof",
+    "ash",
+    "ice_obstacle",
+    "fire_obstacle"
+  ],
+  "processing": "Original generated PNG, unmodified. Drawn using per-row source rectangles.",
+  "rights": "AI-generated original project artwork; supplied under the project MPL-2.0 license, subject to rights that can legally be granted. No claim of exclusive copyright in AI output."
+}

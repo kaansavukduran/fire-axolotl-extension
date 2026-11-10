@@ -1,0 +1,277 @@
+{
+  "date": "2026-11-09",
+  "pillow": "13.0.0",
+  "identity": "User-authorized AI-generated Aion/lamb/wolf/owl references; no built-in ChatGPT pet artwork copied.",
+  "sources": {
+    "aion.png": {
+      "source_sha256": "2bffee0a2dd747663caf2e1a8c85c2b152dad2862723f55da2d76bfd670a31b8",
+      "pet_id": "pet_6aad786b91808191b25c0836c76cbaa1",
+      "processing": "Unmodified existing user-owned custom Pet PNG",
+      "packaged_sha256": "2bffee0a2dd747663caf2e1a8c85c2b152dad2862723f55da2d76bfd670a31b8"
+    },
+    "sheep.png": {
+      "source_sha256": "dad5cc1ec7f16c953241d459b59bb4e2ac8165bca5c5863005fc50630ac7348d",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_rectangles": [
+        [
+          109,
+          17,
+          355,
+          305
+        ],
+        [
+          459,
+          17,
+          710,
+          305
+        ],
+        [
+          813,
+          17,
+          1062,
+          305
+        ],
+        [
+          1166,
+          17,
+          1413,
+          305
+        ],
+        [
+          106,
+          354,
+          355,
+          638
+        ],
+        [
+          459,
+          354,
+          707,
+          638
+        ],
+        [
+          815,
+          354,
+          1059,
+          638
+        ],
+        [
+          1170,
+          354,
+          1412,
+          638
+        ],
+        [
+          95,
+          685,
+          353,
+          994
+        ],
+        [
+          448,
+          685,
+          707,
+          994
+        ],
+        [
+          801,
+          685,
+          1060,
+          994
+        ],
+        [
+          1158,
+          685,
+          1414,
+          994
+        ]
+      ],
+      "shared_scale": 0.8543689320388349,
+      "cell_size": [
+        256,
+        288
+      ],
+      "processing": "green-matte removal, complete-pose registration, one shared scale, PNG encoding",
+      "packaged_sha256": "79d732d43f0d8adebeaac959e68ef3740635fe7b022fcf22e4d7395bebd0bc28"
+    },
+    "wolf.png": {
+      "source_sha256": "46ed45996d094715a6555d21cb559240dd9bebf94a934a5c23ea76cd98716514",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_rectangles": [
+        [
+          98,
+          18,
+          354,
+          295
+        ],
+        [
+          462,
+          18,
+          716,
+          295
+        ],
+        [
+          824,
+          18,
+          1079,
+          295
+        ],
+        [
+          1188,
+          18,
+          1442,
+          295
+        ],
+        [
+          97,
+          345,
+          337,
+          640
+        ],
+        [
+          461,
+          345,
+          702,
+          640
+        ],
+        [
+          824,
+          345,
+          1063,
+          640
+        ],
+        [
+          1189,
+          345,
+          1428,
+          640
+        ],
+        [
+          86,
+          681,
+          357,
+          990
+        ],
+        [
+          453,
+          681,
+          721,
+          990
+        ],
+        [
+          817,
+          681,
+          1086,
+          990
+        ],
+        [
+          1181,
+          681,
+          1452,
+          990
+        ]
+      ],
+      "shared_scale": 0.8543689320388349,
+      "cell_size": [
+        256,
+        288
+      ],
+      "processing": "green-matte removal, complete-pose registration, one shared scale, PNG encoding",
+      "packaged_sha256": "cd5004045b7e083bd2ea7d560e128d32e75a1ac5b437ca1d9fd181ec6397d3fc"
+    },
+    "owl.png": {
+      "source_sha256": "70aa9cc5ce4753b50662e8a0a8f8e18634e990b91c5bfe943746d96ee375b760",
+      "source_size": [
+        1536,
+        1024
+      ],
+      "source_rectangles": [
+        [
+          110,
+          21,
+          339,
+          316
+        ],
+        [
+          480,
+          21,
+          706,
+          316
+        ],
+        [
+          837,
+          21,
+          1066,
+          316
+        ],
+        [
+          1198,
+          21,
+          1427,
+          316
+        ],
+        [
+          106,
+          356,
+          340,
+          656
+        ],
+        [
+          474,
+          356,
+          707,
+          656
+        ],
+        [
+          825,
+          356,
+          1071,
+          656
+        ],
+        [
+          1200,
+          356,
+          1432,
+          656
+        ],
+        [
+          96,
+          690,
+          337,
+          1007
+        ],
+        [
+          467,
+          690,
+          705,
+          1007
+        ],
+        [
+          829,
+          690,
+          1070,
+          1007
+        ],
+        [
+          1194,
+          690,
+          1442,
+          1007
+        ]
+      ],
+      "shared_scale": 0.832807570977918,
+      "cell_size": [
+        256,
+        288
+      ],
+      "processing": "green-matte removal, complete-pose registration, one shared scale, PNG encoding",
+      "packaged_sha256": "52792c990f816ce3e387ae271fb91947d0c4610dd6c2ff67a5f4c98ba26787bf"
+    }
+  }
+}

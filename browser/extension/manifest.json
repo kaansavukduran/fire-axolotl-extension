@@ -1,0 +1,69 @@
+{
+  "manifest_version": 2,
+  "name": "Fire Axolotl Extension",
+  "version": "0.1.0",
+  "description": "Aion, containers, video, dual captions, translation, tabs, offline game and integrated content blocking for Firefox.",
+  "default_locale": "tr",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "fire-axolotl-extension@kaansavukduran.github.io",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": [
+          "websiteContent",
+          "websiteActivity",
+          "searchTerms"
+        ]
+      }
+    }
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextualIdentities",
+    "cookies",
+    "menus",
+    "tabs",
+    "theme",
+    "search"
+  ],
+  "optional_permissions": [
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": [
+      "shared.js",
+      "background.js",
+      "image-search.js"
+    ],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_area": "navbar",
+    "default_title": "Fire Axolotl \u00b7 Aion",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "icons/32.png",
+      "64": "icons/64.png"
+    }
+  },
+  "icons": {
+    "48": "icons/48.png",
+    "96": "icons/96.png"
+  },
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
+  "sidebar_action": {
+    "default_title": "__MSG_characterTitle__",
+    "default_panel": "characters.html",
+    "default_icon": "icons/32.png",
+    "open_at_install": false,
+    "browser_style": false
+  },
+  "content_security_policy": "script-src 'self'; object-src 'none'; base-uri 'none'",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  }
+}

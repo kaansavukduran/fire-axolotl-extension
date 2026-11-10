@@ -1,0 +1,15 @@
+{
+  "version": "0.1.0",
+  "unsigned": true,
+  "model_weights_embedded": false,
+  "packages": {
+    "fire-axolotl-extension-0.1.0-native-newtab-unsigned.xpi": {
+      "bytes": 21107942,
+      "sha256": "2cbd21a6fdc3d30f874e11b0fd2673ab5500a172bea1966fdfe6baf088999d64"
+    },
+    "fire-axolotl-extension-0.1.0-unsigned.xpi": {
+      "bytes": 21107967,
+      "sha256": "3369e24cc87899051686e2beee3a08d3b3c7328a66445946e039c1bddbabc0c3"
+    }
+  }
+}

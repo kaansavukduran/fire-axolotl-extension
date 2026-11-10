@@ -1,0 +1,12 @@
+{
+  "firefox": {
+    "url": "https://archive.mozilla.org/pub/firefox/releases/153.6.0esr/linux-x86_64/en-US/firefox-153.6.0esr.tar.xz",
+    "sha512": "b2ed0f8d5dd1f363aae0e5d09554eee00c6beb980d5ea40db2a5dd7cc478b01b4f7059f0c981d97aec8af2ef64629de4349aedf075be8ebdd39cc3d814a6a17f",
+    "binary": "firefox/firefox"
+  },
+  "geckodriver": {
+    "url": "https://github.com/mozilla/geckodriver/releases/download/v0.37.1/geckodriver-v0.37.1-linux64.tar.gz",
+    "sha256": "e815130ea95983e162ae91843b48d3a3ce991735635fce83a647afde21e09f7e",
+    "binary": "geckodriver"
+  }
+}

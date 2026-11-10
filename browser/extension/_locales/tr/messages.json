@@ -1,0 +1,944 @@
+{
+  "companion": {
+    "message": "Aion ile gezin"
+  },
+  "settings": {
+    "message": "Ayarlar"
+  },
+  "prototype": {
+    "message": "Geliştirici önizlemesi · Kurulum paketi ve güvenlik denetimi henüz tamamlanmadı."
+  },
+  "containers": {
+    "message": "Konteynerler"
+  },
+  "separateCookies": {
+    "message": "Ayrı çerezler"
+  },
+  "containerHelp": {
+    "message": "Hesaplarını ayrı alanlarda kullan. Bu işlem IP adresini gizlemez. Mevcut sekmen açık kalır."
+  },
+  "containerChoice": {
+    "message": "Konteyner seç"
+  },
+  "openContainer": {
+    "message": "Sayfayı burada aç"
+  },
+  "newContainer": {
+    "message": "Yeni konteyner adı"
+  },
+  "containerPlaceholder": {
+    "message": "İş, Kişisel, Öğrenme…"
+  },
+  "create": {
+    "message": "Oluştur"
+  },
+  "noContainers": {
+    "message": "Önce bir konteyner oluştur"
+  },
+  "video": {
+    "message": "Video kumandası"
+  },
+  "videoHelp": {
+    "message": "Erişilebilen ana belge ve iframe’lerdeki video/ses için hız kontrolü. Korumalı Firefox ekranları ve erişim verilmeyen oynatıcılar desteklenmez."
+  },
+  "speed": {
+    "message": "Oynatma hızı"
+  },
+  "applyVideo": {
+    "message": "Videoya uygula"
+  },
+  "normalSpeed": {
+    "message": "1× hıza dön"
+  },
+  "dualSubtitles": {
+    "message": "Çift altyazı dosyası"
+  },
+  "subtitleHelp": {
+    "message": "Orijinal ve çevrilmiş VTT veya SRT dosyalarını seç. Altyazılar video zamanıyla eşleşir ve cihazda kalır. Bu araç dosyaları kendiliğinden çevirmez."
+  },
+  "originalSubtitle": {
+    "message": "Orijinal altyazı · isteğe bağlı"
+  },
+  "translatedSubtitle": {
+    "message": "Çevrilmiş altyazı · isteğe bağlı"
+  },
+  "showSubtitles": {
+    "message": "Altyazıları göster"
+  },
+  "hideSubtitles": {
+    "message": "Altyazıları kapat"
+  },
+  "translate": {
+    "message": "Metin ve altyazı çevirisi"
+  },
+  "translationHelp": {
+    "message": "Seçili metni veya mevcut altyazı satırını buraya al. Göndermeden önce metni incele. Sayfa içindeki açılır kutularda seçilebilen yazılar da kullanılabilir."
+  },
+  "readSelection": {
+    "message": "Seçili metni al"
+  },
+  "readCaption": {
+    "message": "Altyazı satırını al"
+  },
+  "sourceText": {
+    "message": "Gönderilecek metin · en fazla 5.000 karakter"
+  },
+  "provider": {
+    "message": "Gönderim adresi ve hedef dil"
+  },
+  "noProvider": {
+    "message": "Çeviri hizmeti seçilmedi. Ayarlar → Çeviri bölümünde güvendiğin bir hizmet ekle. Metin henüz hiçbir hizmete gönderilmedi."
+  },
+  "sendTranslation": {
+    "message": "Bu metni gönder ve çevir"
+  },
+  "translationResult": {
+    "message": "Çeviri"
+  },
+  "saveWord": {
+    "message": "Metni kelime defterime ekle"
+  },
+  "discovery": {
+    "message": "Aion ile keşfet"
+  },
+  "progressHelp": {
+    "message": "3 keşif: bir konteyner oluştur veya aç, video hızını uygula, kelime defterine bir metin ekle. Her eylem bir kez sayılır; ara vermek ilerlemeyi silmez."
+  },
+  "localScope": {
+    "message": "Bu cihazda ve bu tarayıcı profilinde saklanır."
+  },
+  "language": {
+    "message": "Dil"
+  },
+  "interfaceLanguage": {
+    "message": "Aion arayüz dili"
+  },
+  "deviceLanguage": {
+    "message": "Cihaz dili · desteklenmiyorsa Türkçe"
+  },
+  "languageScope": {
+    "message": "Dil seçimi eklentinin Aion ekranlarına uygulanır. Firefox dili kendi Ayarlar bölümünden değiştirilir."
+  },
+  "appearance": {
+    "message": "Görünüm ve Erişilebilirlik"
+  },
+  "theme": {
+    "message": "Tema"
+  },
+  "system": {
+    "message": "Sistem"
+  },
+  "light": {
+    "message": "Açık"
+  },
+  "dark": {
+    "message": "Koyu"
+  },
+  "contrast": {
+    "message": "Yüksek kontrast"
+  },
+  "scale": {
+    "message": "Arayüz ölçeği · %80–%200"
+  },
+  "reset": {
+    "message": "Sıfırla"
+  },
+  "textSize": {
+    "message": "Bağımsız yazı boyutu · %80–%200"
+  },
+  "font": {
+    "message": "Yazı tipi"
+  },
+  "systemFont": {
+    "message": "Sistem yazı tipi"
+  },
+  "fontHelp": {
+    "message": "OpenDyslexic ve Lexend, farklı okuma tercihlerine yönelik alternatiflerdir. Türkçe karakterleri desteklerler. Sana en rahat gelen yazı tipini seç."
+  },
+  "advanced": {
+    "message": "Gelişmiş yazı ayarları"
+  },
+  "lineHeight": {
+    "message": "Satır aralığı"
+  },
+  "letterSpacing": {
+    "message": "Harf aralığı"
+  },
+  "preview": {
+    "message": "Canlı önizleme"
+  },
+  "previewText": {
+    "message": "Öğren, keşfet, özgürce gezin. Çığ, ışık, şüphe, öğüt: Türkçe karakterler burada. Ayarların hemen uygulanır."
+  },
+  "previewButton": {
+    "message": "Örnek düğme"
+  },
+  "appearanceScope": {
+    "message": "Ölçek, yazı tipi ve yazı boyutu Aion yüzeylerine uygulanır. Firefox araç çubuğu yalnızca renk temasını alır; yerel araç çubuğu fontu ve ölçeği eklentiyle değiştirilemez."
+  },
+  "translationSettings": {
+    "message": "Çeviri"
+  },
+  "nativeTranslation": {
+    "message": "Firefox’un yerleşik sayfa çevirisi korunur ve desteklenen dillerde cihazda çalışır. Aion içindeki seçili metin çevirisi aşağıdaki isteğe bağlı hizmeti kullanır."
+  },
+  "targetLanguage": {
+    "message": "Çeviri hedef dili · hizmet desteğine bağlı"
+  },
+  "endpoint": {
+    "message": "LibreTranslate uyumlu HTTPS çeviri adresi"
+  },
+  "endpointHelp": {
+    "message": "LibreTranslate uyumlu HTTPS adresini kendin seç. Reklam engelleme tüm sitelere erişim gerektirir; burada kaydetmek bu hizmeti açıkça seçmen demektir. Metin yalnızca Çevir düğmesiyle gönderilir. API anahtarı gerektiren hizmetler desteklenmez."
+  },
+  "saveEndpoint": {
+    "message": "Adresi kaydet ve izin ver"
+  },
+  "revokeEndpoint": {
+    "message": "Hizmeti ve iznini kaldır"
+  },
+  "enableProgress": {
+    "message": "Keşif ilerlemesini göster"
+  },
+  "animations": {
+    "message": "Hareketli geri bildirime izin ver"
+  },
+  "silentFeedback": {
+    "message": "Bu sürümün geri bildirimi sessiz ve sabittir. Sistemin azaltılmış hareket tercihi her zaman uygulanır."
+  },
+  "resetProgress": {
+    "message": "Yalnızca keşif ilerlemesini sıfırla"
+  },
+  "confirmResetProgress": {
+    "message": "Keşif ilerlemesi sıfırlanacak. Konteynerler ve kelime defteri korunacak. Devam edilsin mi?"
+  },
+  "data": {
+    "message": "Veri ve yedek"
+  },
+  "dataHelp": {
+    "message": "Yedek; Aion ayarlarını, kelimeleri, taslağı, site görünüm/hız tercihlerini ve oyun rekorunu içerir. Özel olabilir. Model dosyaları ve karakter PNG’leri ayrı tutulur; karakter için kendi dışa aktarma düğmesini kullan."
+  },
+  "export": {
+    "message": "Yedeği indir"
+  },
+  "import": {
+    "message": "Yedekten geri yükle"
+  },
+  "wordList": {
+    "message": "Kelime defterim"
+  },
+  "savedWords": {
+    "message": "kayıtlı metin"
+  },
+  "confirmImport": {
+    "message": "Aion ayarları, kelime defteri ve ilerleme dosyadaki kayıtlarla değiştirilecek. Önce mevcut yedeği indirmen önerilir. Çeviri adresi değişmez. Devam edilsin mi?"
+  },
+  "updates": {
+    "message": "Güncellemeler"
+  },
+  "installedVersion": {
+    "message": "Yüklü Aion sürümü:"
+  },
+  "developmentVersion": {
+    "message": "imzasız geliştirici önizlemesi"
+  },
+  "updateHelp": {
+    "message": "Bu eklentinin sürümleri kontrol edilir. Kalıcı kurulum ve otomatik güncelleme için Mozilla imzası ve ayrı bir dağıtım kanalı gerekir. Tarayıcı güncellemelerini Firefox yönetir."
+  },
+  "checkUpdates": {
+    "message": "Güncellemeleri kontrol et"
+  },
+  "releases": {
+    "message": "GitHub sürüm sayfasını aç"
+  },
+  "checkingUpdates": {
+    "message": "GitHub sürümleri kontrol ediliyor…"
+  },
+  "latestPublished": {
+    "message": "Son yayımlanan sürüm"
+  },
+  "noRelease": {
+    "message": "Henüz kararlı bir tarayıcı sürümü yayımlanmadı."
+  },
+  "securityNote": {
+    "message": "Hiçbir tarayıcı virüs bulaşmayacağını garanti edemez. Güvenlik, güncel motor ve doğrulanmış dağıtım gerektirir."
+  },
+  "saved": {
+    "message": "Kaydedildi."
+  },
+  "created": {
+    "message": "Konteyner oluşturuldu."
+  },
+  "opened": {
+    "message": "Sayfa yeni konteyner sekmesinde açıldı."
+  },
+  "applied": {
+    "message": "Videoya uygulandı."
+  },
+  "selectionRead": {
+    "message": "Metin alındı. Göndermeden önce inceleyebilirsin."
+  },
+  "translating": {
+    "message": "Seçtiğin metin çeviri hizmetine gönderiliyor…"
+  },
+  "translated": {
+    "message": "Çeviri hazır."
+  },
+  "wordSaved": {
+    "message": "Kelime defterine kaydedildi. Aynı metin ikinci kez eklenmez."
+  },
+  "exported": {
+    "message": "Yedek indirmesi başlatıldı."
+  },
+  "imported": {
+    "message": "Yedek geri yüklendi."
+  },
+  "restrictedPage": {
+    "message": "Bu sayfada işlem yapılamıyor. Normal bir http veya https sekmesi açıp yeniden dene."
+  },
+  "unauthorized": {
+    "message": "Bu işlem yalnızca Aion panelinden başlatılabilir."
+  },
+  "nameRequired": {
+    "message": "Konteyner için bir ad yaz."
+  },
+  "containerMissing": {
+    "message": "Konteyner bulunamadı. Paneli yeniden açıp seçimini yenile."
+  },
+  "noVideo": {
+    "message": "Bu sayfada erişilebilir video bulunamadı. Videonun bulunduğu sekmede yeniden dene. Başka kaynaktan gömülü oynatıcılar desteklenmeyebilir."
+  },
+  "invalidSpeed": {
+    "message": "0,25× ile 4× arasında bir hız gir."
+  },
+  "invalidCaptions": {
+    "message": "Altyazı okunamadı. Zaman damgaları olan geçerli bir VTT veya SRT dosyası seç."
+  },
+  "chooseSubtitle": {
+    "message": "En az bir altyazı dosyası seç."
+  },
+  "noCaptions": {
+    "message": "Şu anda erişilebilir altyazı satırı yok. Videoda altyazıyı açıp yeniden dene veya metni elle yapıştır."
+  },
+  "textRequired": {
+    "message": "Çevirmek veya kaydetmek için önce metin seç ya da yapıştır."
+  },
+  "invalidEndpoint": {
+    "message": "Geçerli bir HTTPS adresi gir. Kullanıcı adı, parola, sorgu, IP adresi veya özel port kullanma."
+  },
+  "permissionRequired": {
+    "message": "Çeviri alan adı izni verilmedi. Ayarlar bölümünden hizmeti yeniden etkinleştir."
+  },
+  "translationFailed": {
+    "message": "Hizmet çeviriyi tamamlayamadı. Adresi ve hedef dil desteğini kontrol edip yeniden dene."
+  },
+  "updateFailed": {
+    "message": "GitHub’a ulaşılamadı. Bağlantını kontrol edip yeniden dene; diğer özellikleri kullanmaya devam edebilirsin."
+  },
+  "invalidScale": {
+    "message": "%80 ile %200 arasında bir değer gir."
+  },
+  "fileTooLarge": {
+    "message": "Dosya çok büyük. Altyazı için en fazla 2 MB, yedek için 3 MB kullan."
+  },
+  "invalidBackup": {
+    "message": "Bu dosya desteklenen bir Aion yedeği değil. Sürüm 1 JSON yedeği seç."
+  },
+  "operationFailed": {
+    "message": "İşlem tamamlanamadı. Normal bir web sekmesinde yeniden dene; çeviri için bağlantıyı ve hizmet ayarlarını kontrol et."
+  },
+  "tabLayout": {
+    "message": "Sekme yerleşimi"
+  },
+  "tabLayoutHelp": {
+    "message": "Sekmeler üstte, solda veya sağda olabilir. Seçimin bu profilde saklanır ve açık pencerelere uygulanır."
+  },
+  "tabPosition": {
+    "message": "Sekmelerin konumu"
+  },
+  "tabsTop": {
+    "message": "Üstte"
+  },
+  "tabsLeft": {
+    "message": "Solda"
+  },
+  "tabsRight": {
+    "message": "Sağda"
+  },
+  "temporaryContainer": {
+    "message": "Geçici konteynerde aç"
+  },
+  "temporary": {
+    "message": "geçici"
+  },
+  "temporaryHelp": {
+    "message": "Bu alandaki son sekme kapanınca konteyner ve site verileri silinir. İndirilen dosyalar ve geçmiş silinmez."
+  },
+  "preferredQuality": {
+    "message": "Tercih edilen video kalitesi"
+  },
+  "qualityAuto": {
+    "message": "Otomatik"
+  },
+  "qualityBest": {
+    "message": "Sunulan en yüksek kalite"
+  },
+  "qualityHelp": {
+    "message": "İlk kalite bağdaştırıcısı YouTube içindir ve site değişikliklerinden etkilenebilir. Netflix ve diğer hizmetler için kalite zorlama henüz desteklenmez. Hesap, DRM ve cihaz sınırları geçerlidir. Tercihin kaydedilir; bu önizlemede her videoya düğmeyle uygulanır."
+  },
+  "applyQuality": {
+    "message": "Kaliteyi iste"
+  },
+  "readResolution": {
+    "message": "Gerçek çözünürlüğü oku"
+  },
+  "actualResolution": {
+    "message": "Oynatılan videonun gerçek çözünürlüğü"
+  },
+  "resolutionUnknown": {
+    "message": "Çözünürlük henüz okunamıyor. Videoyu başlatıp yeniden dene."
+  },
+  "unsupportedQuality": {
+    "message": "Bu oynatıcıda kalite seçimi desteklenmiyor. Sitenin kendi kalite menüsünü kullanabilirsin."
+  },
+  "unavailableQuality": {
+    "message": "İstediğin kalite bu oynatıcıda sunulmuyor. Farklı bir kalite veya sunulan en yüksek kaliteyi seç."
+  },
+  "qualityRequested": {
+    "message": "Kalite tercihi oynatıcıya iletildi. Sonucu gerçek çözünürlük düğmesiyle kontrol et; oynatıcı tercihi değiştirebilir."
+  },
+  "unsupportedSpeed": {
+    "message": "Bu video kaynağı hız değişikliğini kabul etmiyor. Canlı medya akışları sabit hızda olabilir."
+  },
+  "customizeToolbar": {
+    "message": "Araç çubuğunu özelleştir"
+  },
+  "customizationHelp": {
+    "message": "Düğmeleri, arama kutusunu ve boşlukları Firefox’un yerleşik düzenleyicisinde sürükleyerek ekle, çıkar veya taşı. Düzenleyicide varsayılan düzeni geri yükleyebilirsin."
+  },
+  "websiteTheme": {
+    "message": "Sitelerin alacağı renk tercihi"
+  },
+  "websiteThemeAuto": {
+    "message": "Tarayıcı temasını takip et · site tasarımı korunur"
+  },
+  "websiteThemeHelp": {
+    "message": "Sitelerin kendi renklerine veya kaydettiğin tema seçimine müdahale edilmez. Yalnızca tarayıcının renk tercihini soran siteler bu seçimi alır. Varsayılan koyu tarayıcıda bu tercih koyudur. Sayfalar zorla karartılmaz."
+  },
+  "browserFont": {
+    "message": "Tarayıcı arayüzü yazı tipi"
+  },
+  "browserFontHelp": {
+    "message": "Araç çubukları, sekme yazıları ve yerel ayarlara uygulanır. Sitelerin yazı tipi korunur. Aion panelinin yazı ayarları ayrıca değiştirilebilir."
+  },
+  "imageSearch": {
+    "message": "Görselle arama"
+  },
+  "enableImageSearch": {
+    "message": "Görsel sağ tık menüsünü göster"
+  },
+  "imageSearchHelp": {
+    "message": "Bir görsele sağ tıklayıp Google Lens, Bing, TinEye veya Yandex’i seç. Görselin adresi yalnızca bu seçimle seçtiğin arama hizmetine gönderilir."
+  },
+  "characterTitle": {
+    "message": "Yol arkadaşları"
+  },
+  "characterScope": {
+    "message": "İstersen açtığın yerel bir yan panel. Sayfalara karakter eklemez; karakter dosyalarını bir sunucuya göndermez."
+  },
+  "characterOpen": {
+    "message": "Karakter panelini aç"
+  },
+  "characterChoose": {
+    "message": "Karakter seç"
+  },
+  "characterActivity": {
+    "message": "Animasyon"
+  },
+  "characterPreview": {
+    "message": "Seçilen karakterin kare animasyonu"
+  },
+  "characterPause": {
+    "message": "Hareketi durdur"
+  },
+  "characterPlay": {
+    "message": "Hareketi oynat"
+  },
+  "characterWave": {
+    "message": "El salla"
+  },
+  "characterReduced": {
+    "message": "Azaltılmış hareket tercihi açık; karakter sabit gösterilir."
+  },
+  "characterActivity-idle": {
+    "message": "Dinleniyor"
+  },
+  "characterActivity-read": {
+    "message": "Kitap okuyor"
+  },
+  "characterActivity-work": {
+    "message": "Çalışıyor"
+  },
+  "characterActivity-wave": {
+    "message": "El sallıyor"
+  },
+  "characterAdd": {
+    "message": "Kendi karakterini ekle"
+  },
+  "characterImportHelp": {
+    "message": "PNG görseli veya daha önce dışa aktardığın karakter dosyasını seç. En fazla 8 özel karakter bu profilde saklanır. Karakter yedeği aşağıdaki dışa aktarma düğmesiyle ayrı alınır."
+  },
+  "characterName": {
+    "message": "Karakter adı"
+  },
+  "characterFile": {
+    "message": "Dosya seç"
+  },
+  "characterGrid": {
+    "message": "Kare animasyonu ayarları"
+  },
+  "characterGridHelp": {
+    "message": "Tek resim için sütun ve satır 1 kalsın. Kare şeridinde sütun/satır sayısını, oynatılacak satırı ve o satırdaki kare sayısını belirt. PNG en fazla 6 MB olabilir."
+  },
+  "characterColumns": {
+    "message": "Sütun"
+  },
+  "characterRows": {
+    "message": "Satır sayısı"
+  },
+  "characterRow": {
+    "message": "Oynatılacak satır"
+  },
+  "characterFrames": {
+    "message": "Kare sayısı"
+  },
+  "characterFps": {
+    "message": "Hız (kare/saniye)"
+  },
+  "characterImport": {
+    "message": "Karakteri kaydet ve seç"
+  },
+  "characterExport": {
+    "message": "Karakteri dışa aktar"
+  },
+  "characterDelete": {
+    "message": "Bu karakteri kaldır"
+  },
+  "characterDeleteConfirm": {
+    "message": "Bu özel karakter bu profilden kaldırılacak. Devam edilsin mi?"
+  },
+  "characterTooLarge": {
+    "message": "PNG en fazla 6 MB, kenar başına 8192 piksel ve toplam 16 milyon piksel olabilir. Daha küçük bir dosya seç."
+  },
+  "characterInvalid": {
+    "message": "Dosya geçerli bir PNG veya Fire Axolotl karakter yedeği değil. Başka bir dosya seç."
+  },
+  "characterAnimatedPNG": {
+    "message": "Bu dosya APNG. Hareketi durdurabilmek için normal PNG kare şeridi kullan."
+  },
+  "characterGridInvalid": {
+    "message": "Kare ayarları görselle uyuşmuyor. Sütun/satır 1–16, kare sayısı sütun sayısını aşmamalı ve görsel eşit bölünmeli."
+  },
+  "characterStorageFailed": {
+    "message": "Karakter yüklenemedi veya saklanamadı. Paneli yeniden açıp tekrar dene."
+  },
+  "characterLibraryFull": {
+    "message": "8 özel karakter sınırına ulaşıldı. Birini dışa aktarıp kaldırabilir, sonra yenisini ekleyebilirsin."
+  },
+  "newtabGame": {
+    "message": "Yeni sekmede Aion Koşusu’nu göster"
+  },
+  "newtabGameHelp": {
+    "message": "Çevrimdışı mini oyun. Yalnızca Başlat’a basınca çalışır. İstediğin zaman gizleyebilirsin; arama ve kısayollar kullanılabilir. Değişiklikler yeni sekmelere uygulanır."
+  },
+  "newtabGameLanguage": {
+    "message": "Yeni sekme oyununun dili"
+  },
+  "newtabGameReset": {
+    "message": "Bu cihazdaki oyun rekorunu sıfırla"
+  },
+  "extensionWelcome": {
+    "message": "Firefox için tek eklenti: Aion ve araçları bu cihazda."
+  },
+  "browserTheme": {
+    "message": "Firefox araç çubuğuna Aion temasını uygula"
+  },
+  "enableRunner": {
+    "message": "Yeni sekmede Aion Koşusu kartını göster"
+  },
+  "resetRunner": {
+    "message": "Yalnızca oyun rekorunu sıfırla"
+  },
+  "blocker": {
+    "message": "Reklam ve izleyici engelleme"
+  },
+  "blockerHelp": {
+    "message": "Bu tek eklenti uBlock Origin 1.76.0 motorunu içerir. Filtreler, site istisnaları ve engellemeyi durdurma için paneli aç. İlişkili olmayan bağımsız bir birleşik dağıtımdır."
+  },
+  "openBlocker": {
+    "message": "Engelleme ayarlarını aç"
+  },
+  "openTools": {
+    "message": "Sayfa ve QR araçlarını aç"
+  },
+  "findTab": {
+    "message": "Açık sekmelerde ara"
+  },
+  "newTab": {
+    "message": "Yeni sekme"
+  },
+  "noTabs": {
+    "message": "Bu aramaya uyan açık sekme yok."
+  },
+  "sidebarScope": {
+    "message": "Firefox yan panelini sağa veya sola yerleştirebilirsin. Üst sekme çubuğu Firefox tarafından yönetilir. Kapatılan sekmeyi Ctrl+Shift+T ile geri aç."
+  },
+  "moveUp": {
+    "message": "Sekmeyi yukarı taşı"
+  },
+  "moveDown": {
+    "message": "Sekmeyi aşağı taşı"
+  },
+  "pin": {
+    "message": "Sekmeyi sabitle"
+  },
+  "unpin": {
+    "message": "Sabitlemeyi kaldır"
+  },
+  "closeTab": {
+    "message": "Sekmeyi kapat"
+  },
+  "searchFirefox": {
+    "message": "Firefox varsayılan arama motoruyla ara"
+  },
+  "search": {
+    "message": "Ara"
+  },
+  "newtabScope": {
+    "message": "Bu sayfa eklentinin yeni sekmesidir. Firefox araması seçili arama motorunu kullanır. Oyun ve rekor çevrimdışı çalışır."
+  },
+  "pageTools": {
+    "message": "Seçtiğin sayfaya uygula"
+  },
+  "pageDark": {
+    "message": "Sayfayı koyulaştır"
+  },
+  "pageOriginal": {
+    "message": "Sayfanın görünümünü geri al"
+  },
+  "pageDarkHelp": {
+    "message": "Dark Reader seçtiğin ana belgeye açık eylemle uygulanır. Hatırla seçilmezse yeniden yüklemede sıfırlanır. Görünümü geri al düğmesi bu siteye ait kayıtlı tercihi de kaldırır. Firefox korumalı sayfaları desteklenmez. Tarayıcı teması ve sayfa fontu ayrı tercihlerdir."
+  },
+  "qrTitle": {
+    "message": "Yerel QR kodu"
+  },
+  "qrHelp": {
+    "message": "Metin veya adres bu cihazda QR koduna dönüşür. Bir hizmete gönderilmez. En fazla 1000 karakter."
+  },
+  "qrText": {
+    "message": "QR koduna dönüştürülecek metin"
+  },
+  "qrTab": {
+    "message": "Seçili sekmenin adresini al"
+  },
+  "qrCreate": {
+    "message": "QR kodu oluştur"
+  },
+  "qrDownload": {
+    "message": "QR görselini indir"
+  },
+  "refreshTabs": {
+    "message": "Sekme listesini yenile"
+  },
+  "targetTab": {
+    "message": "İşlem yapılacak sekme"
+  },
+  "tabs": {
+    "message": "Sekmeler"
+  },
+  "tools": {
+    "message": "Araçlar"
+  },
+  "localAI": {
+    "message": "Yerel yapay zekâ ve altyazı"
+  },
+  "aiLocalHelp": {
+    "message": "Deneysel Qwen 2.5 1.5B bu cihazda çalışır. CPU Türkçe çeviri doğruluk testini geçmedi; güvenilir çeviri için kullanma. Metnin bir yapay zekâ sunucusuna gönderilmez."
+  },
+  "aiModelTitle": {
+    "message": "Gömülü çalışma motoru · yerel model"
+  },
+  "aiModelSize": {
+    "message": "Model ilk kullanımda ayrıca indirilir: CPU yaklaşık 1,59 GB; WebGPU yaklaşık 1,23 GB. XPI model ağırlıklarını içermez. CPU için 8 GB veya daha fazla kullanılabilir bellek önerilir; hız cihaza bağlıdır. Tam dosyalar saklanır; yarım kalan model dosyası yeniden indirilir."
+  },
+  "aiBackend": {
+    "message": "Çalıştırma yöntemi"
+  },
+  "aiCPU": {
+    "message": "CPU / WASM · geniş uyumluluk"
+  },
+  "aiDownload": {
+    "message": "Modeli indir ve cihazda yükle"
+  },
+  "aiLoadCached": {
+    "message": "İndirmeden yerel modeli yükle"
+  },
+  "aiCancel": {
+    "message": "İşlemi iptal et"
+  },
+  "aiUnload": {
+    "message": "Modeli bellekten çıkar"
+  },
+  "aiOfflineImport": {
+    "message": "Çevrimdışı model dosyaları"
+  },
+  "aiImportHelp": {
+    "message": "Sabitlenmiş model sürümünün config.json, generation_config.json, tokenizer.json, tokenizer_config.json, special_tokens_map.json ve seçilen yöntemin model_uint8.onnx veya model_q4f16.onnx dosyasını birlikte seç. SHA-256 doğrulaması yapılır."
+  },
+  "aiImport": {
+    "message": "Yerel model dosyalarını doğrula ve yükle"
+  },
+  "aiDelete": {
+    "message": "Yalnızca model dosyalarını sil"
+  },
+  "aiConfirmDelete": {
+    "message": "İndirilmiş Qwen model dosyaları silinsin mi? Aion ayarların, kelimelerin ve oyun rekorun korunur."
+  },
+  "aiTranslation": {
+    "message": "Cihazda çeviri"
+  },
+  "sourceLanguage": {
+    "message": "Kaynak dil"
+  },
+  "autoDetect": {
+    "message": "Otomatik algıla"
+  },
+  "aiTranslate": {
+    "message": "Qwen ile cihazda çevir"
+  },
+  "aiGeneral": {
+    "message": "Aynı modelle başka bir soru sor"
+  },
+  "aiGeneralHelp": {
+    "message": "Bu ortak yerel motor sonraki özelliklerde de kullanılabilir. Burada yalnızca yazdığın metni görür; sekmelerini okuyamaz veya senin adına işlem yapamaz. Yanıtlar hata içerebilir."
+  },
+  "aiPrompt": {
+    "message": "Qwen için komut veya soru"
+  },
+  "aiGenerate": {
+    "message": "Yerel yanıt üret"
+  },
+  "aiVideoTitle": {
+    "message": "Çift altyazı çeviri modu"
+  },
+  "aiVideoHelp": {
+    "message": "Kaynak ve hedef dili yukarıdan seç. Hazır Qwen modeli, okunabilen video altyazılarını veya yerel VTT/SRT dosyanı çevirir. Orijinal ve çeviri aynı zaman damgalarında gösterilir."
+  },
+  "captionTrack": {
+    "message": "Videonun kaynak altyazısı"
+  },
+  "aiLiveMode": {
+    "message": "Video altyazı çevirisini aç"
+  },
+  "aiLiveLimit": {
+    "message": "Deneysel: yalnızca tarayıcıya metin altyazısı sunan oynatıcılar desteklenir. YouTube/Netflix gibi özel oynatıcılar altyazıyı paylaşmayabilir. Altyazısız sesi dinlemez; ayrı konuşma tanıma modeli yoktur. Çeviri gecikebilir; en tutarlı sonuç için dosyayı önceden çevir."
+  },
+  "aiTranslateFile": {
+    "message": "Altyazı dosyasını çevir"
+  },
+  "aiStopVideo": {
+    "message": "Video çevirisini durdur"
+  },
+  "aiDownloadVTT": {
+    "message": "Çevrilen altyazıyı indir"
+  },
+  "captionAppearance": {
+    "message": "Altyazı görünümü"
+  },
+  "captionSize": {
+    "message": "Altyazı boyutu"
+  },
+  "captionOpacity": {
+    "message": "Altyazı arka plan opaklığı"
+  },
+  "captionColor": {
+    "message": "Orijinal yazı rengi"
+  },
+  "captionTranslationColor": {
+    "message": "Çeviri yazı rengi"
+  },
+  "captionPosition": {
+    "message": "Altyazı konumu"
+  },
+  "bottom": {
+    "message": "Altta"
+  },
+  "top": {
+    "message": "Üstte"
+  },
+  "showOriginal": {
+    "message": "Orijinal altyazıyı göster"
+  },
+  "showTranslation": {
+    "message": "Çeviri altyazısını göster"
+  },
+  "dyslexicCaption": {
+    "message": "OpenDyslexic · Disleksi dostu yazı tipi"
+  },
+  "aiState-unloaded": {
+    "message": "Model bellekte değil. İndir, çevrimdışı dosya seç veya daha önce kaydettiğin modeli yükle."
+  },
+  "aiState-downloading": {
+    "message": "Model dosyaları doğrulanıp bu cihaza kaydediliyor."
+  },
+  "aiState-loading": {
+    "message": "Yerel çalışma motoru ve model hazırlanıyor. Büyük modelde bu işlem birkaç dakika sürebilir."
+  },
+  "aiState-ready": {
+    "message": "Qwen 2.5 1.5B hazır · işlem bu cihazda"
+  },
+  "aiState-running": {
+    "message": "Qwen bu cihazda yanıt üretiyor. İstersen işlemi iptal edebilirsin."
+  },
+  "aiState-error": {
+    "message": "Model hazırlanamadı. Yerel dosyaları, boş alanı ve kullanılabilir belleği kontrol edip yeniden dene."
+  },
+  "aiModelMissing": {
+    "message": "Yerel model hazır değil. Önce modeli indir veya doğru çevrimdışı dosyaları seçip yükle."
+  },
+  "aiGPUUnavailable": {
+    "message": "Bu Firefox/cihaz shader-f16 destekli WebGPU sunmuyor. CPU / WASM seçeneğini kullan."
+  },
+  "aiImportMissing": {
+    "message": "Gerekli model dosyaları eksik. Açıklamada listelenen dosyaları birlikte seç."
+  },
+  "aiDownloadFailed": {
+    "message": "Model dosyası indirilemedi, doğrulanamadı veya kaydedilemedi. Bağlantıyı, boş alanı ve dosya sürümünü kontrol edip yeniden dene."
+  },
+  "aiHashMismatch": {
+    "message": "Model dosyasının sürümü veya SHA-256 özeti uyuşmuyor. Sabitlenmiş sürümün doğru dosyasını kullan."
+  },
+  "aiBusy": {
+    "message": "Yerel model başka bir işlem yapıyor. Bitmesini bekle veya işlemi iptal et."
+  },
+  "aiCancelled": {
+    "message": "Yerel işlem iptal edildi. Tamamlanmış model dosyaları korunur."
+  },
+  "aiRuntimeFailed": {
+    "message": "Yerel motor bu cihazda çalıştırılamadı. Boş belleği ve Firefox sürümünü kontrol et; farklı çalışma yöntemini deneyebilirsin."
+  },
+  "aiInferenceFailed": {
+    "message": "Model kullanılabilir bir yanıt üretmedi. Daha kısa bir metinle yeniden dene."
+  },
+  "aiVideoStopped": {
+    "message": "Video çeviri modu kapalı."
+  },
+  "aiVideoActive": {
+    "message": "Çift altyazı açık. Çeviri bu cihazda hazırlanıyor."
+  },
+  "aiWaitingCaption": {
+    "message": "Okunabilir altyazı satırı bekleniyor. Videoyu oynatıp bir altyazı parçası seçebilirsin."
+  },
+  "aiNoReadableCaptions": {
+    "message": "Oynatıcıdan okunabilir altyazı gelmiyor. Videoda altyazıyı aç veya bir VTT/SRT dosyası seç."
+  },
+  "firefoxControls": {
+    "message": "Firefox sekme düzeni, diller ve hesap"
+  },
+  "firefoxControlsHelp": {
+    "message": "Firefox yerleşik sekme/yan panel ayarlarıyla üst veya dikey sekmeleri ve panelin tarafını seçebilirsin. Eklenti yerel sekme çubuğunu, yazı tipini, dil paketlerini veya hesap/Sync ekranını değiştiremez. Bu ayarlar Firefox içinde yönetilir."
+  },
+  "openFirefoxSettings": {
+    "message": "Firefox ayarlarını aç"
+  },
+  "moduleLayout": {
+    "message": "Araçlar ve sıralama"
+  },
+  "moduleLayoutHelp": {
+    "message": "İstemediğin aracı kapat; açılır penceredeki sırasını yukarı/aşağı düğmeleriyle değiştir. Reklam engelleme ayarları kendi panelinde, görsel arama ve oyun kendi anahtarlarında yönetilir."
+  },
+  "resetModules": {
+    "message": "Yalnızca araç sırasını sıfırla"
+  },
+  "module-containers": {
+    "message": "Konteynerler"
+  },
+  "module-video": {
+    "message": "Video araçları"
+  },
+  "module-translation": {
+    "message": "Hizmetle metin çevirisi"
+  },
+  "module-ai": {
+    "message": "Yerel Qwen ve altyazı"
+  },
+  "module-characters": {
+    "message": "Yol arkadaşları"
+  },
+  "moduleDisabled": {
+    "message": "Bu araç ayarlardan kapatılmış. Kullanmak için Ayarlar → Araçlar bölümünden aç."
+  },
+  "settingsSync": {
+    "message": "İsteğe bağlı ayar eşitleme"
+  },
+  "syncScope": {
+    "message": "Firefox storage.sync kullanılır; Firefox hesabını ve Sync bağlantısını Firefox yönetir. Yalnızca dil, görünüm, araç düzeni ve altyazı tercihleri gönderilir; kelimeler, taslaklar, model, çerezler, site adresleri ve hizmet adresi gönderilmez. Her aktarım düğmeye basınca olur. Tek kayıt 8 KB altındadır; Firefox kota ve bağlantı sınırları geçerlidir."
+  },
+  "syncEnable": {
+    "message": "Ayarları storage.sync ile aktarmaya izin ver"
+  },
+  "syncPush": {
+    "message": "Bu cihazın ayarlarını Sync’e gönder"
+  },
+  "syncPull": {
+    "message": "Sync ayarlarını bu cihaza al"
+  },
+  "openFirefoxSync": {
+    "message": "Firefox hesabı ve Sync ayarlarını aç"
+  },
+  "syncDisabled": {
+    "message": "Önce ayar eşitlemesine izin ver."
+  },
+  "syncTooLarge": {
+    "message": "Ayar kaydı Sync kotasına sığmıyor. Yerel JSON yedeğini kullan."
+  },
+  "syncEmpty": {
+    "message": "Bu eklenti için Sync ayarı bulunamadı. Önce bir cihazdan ayar gönder."
+  },
+  "syncSaved": {
+    "message": "Ayarlar Firefox storage.sync alanına kaydedildi. Diğer cihaza ulaşması Firefox Sync bağlantısına bağlıdır."
+  },
+  "syncRestored": {
+    "message": "Sync tercihleri uygulandı; yerel içeriklerin korundu."
+  },
+  "pageLight": {
+    "message": "Sayfayı aydınlat"
+  },
+  "rememberSiteStyle": {
+    "message": "Bu site için renk ve yazı tipi tercihini bu cihazda hatırla"
+  },
+  "siteFont": {
+    "message": "Web sayfası metninin yazı tipi"
+  },
+  "siteFontOriginal": {
+    "message": "Sitenin kendi yazı tipi"
+  },
+  "applySiteFont": {
+    "message": "Yalnızca sayfa yazı tipini uygula"
+  },
+  "siteRuleLimit": {
+    "message": "En fazla 200 site tercihi saklanabilir. Eski bir site tercihini geri alıp yeniden dene."
+  },
+  "rememberSpeed": {
+    "message": "Bu site için hızı bu cihazda hatırla"
+  },
+  "forgetSpeed": {
+    "message": "Bu sitenin hız tercihini kaldır"
+  },
+  "speedShortcuts": {
+    "message": "Video ve ses desteklenir. Firefox → Eklentiler → dişli menüsü → Eklenti kısayollarını yönet bölümünden hız artır/azalt/sıfırla kısayollarını seçebilirsin."
+  },
+  "openGame": {
+    "message": "Aion Koşusu"
+  }
+}

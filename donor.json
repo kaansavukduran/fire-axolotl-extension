@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/kaansavukduran/fire-axolotl",
+  "commit": "2b739252a5ff66bfd870dfbe6a7e8f2b0ae106a2",
+  "imported": [
+    "browser/extension",
+    "browser/native/aion-runner",
+    "tests: companion unit tests and video fixture",
+    "scripts: pinned component/runtime fetchers",
+    "scripts/backup.py: adapted commit-matched archive helper"
+  ],
+  "excluded": [
+    "Firefox engine/source overlay",
+    "native installers",
+    "native policies",
+    "native chrome modifications"
+  ],
+  "strategy": "Independent extension; donor is read-only. MPL notices retained; combined uBO distribution GPL-3.0-or-later."
+}

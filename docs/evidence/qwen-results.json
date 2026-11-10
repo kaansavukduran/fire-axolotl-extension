@@ -1,0 +1,16 @@
+{
+  "passed": [
+    "Actual SHA-256-verified Qwen 2.5 1.5B uint8 model loaded in the extension WASM worker",
+    "Actual model produces text with browser networking offline; quality is recorded separately",
+    "Real local model output is overlaid offline at paired caption timestamps and original tracks restore; this is a transport check, not a quality pass",
+    "Unloading the shared AI worker releases model memory without deleting model files"
+  ],
+  "quality_checks": [
+    {
+      "input": "The cat is sleeping.",
+      "target": "tr",
+      "output": "Ateş.",
+      "passed": false
+    }
+  ]
+}

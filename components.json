@@ -1,0 +1,19 @@
+{
+  "ublock-origin": {
+    "version": "1.76.0",
+    "id": "uBlock0@raymondhill.net",
+    "license": "GPL-3.0-or-later",
+    "url": "https://github.com/gorhill/uBlock/releases/download/1.76.0/uBlock0_1.76.0.firefox.signed.xpi",
+    "sha256": "6f20ff6749193599548770539103069c20948dfcd3e61c3089a67da7bfc3be39",
+    "sources": {
+      "uBlock": {"url": "https://github.com/gorhill/uBlock.git", "commit": "aa9236cb351e369cbb68113dbe8175b87f3cd134"},
+      "uAssets/main": {"url": "https://github.com/uBlockOrigin/uAssets.git", "commit": "4c19477447674abcde789b072c2b318bdda91b87"},
+      "uAssets/prod": {"url": "https://github.com/uBlockOrigin/uAssets.git", "commit": "18f95f8e3a5bf667633766c31ad2d103a2051840"}
+    },
+    "submodules": {
+      "platform/mv3/extension/lib/codemirror/codemirror-ubol": "a9762d064abb81c24a83de7f36507b7c0f2cbb70",
+      "platform/mv3/extension/lib/s14e-serializer": "1f028eb315c14bb11f23f0ef6c4bf6c339d3b0b1",
+      "publish-extension": "e45c4c9b9deff033ceabf5b6717967ebca2dce67"
+    }
+  }
+}

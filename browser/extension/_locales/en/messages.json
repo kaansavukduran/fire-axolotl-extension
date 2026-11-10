@@ -1,0 +1,944 @@
+{
+  "companion": {
+    "message": "Browse with Aion"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "prototype": {
+    "message": "Developer preview · Browser installers and security review are not complete."
+  },
+  "containers": {
+    "message": "Containers"
+  },
+  "separateCookies": {
+    "message": "Separate cookies"
+  },
+  "containerHelp": {
+    "message": "Keep accounts in separate spaces. This does not hide your IP address. Your current tab stays open."
+  },
+  "containerChoice": {
+    "message": "Choose a container"
+  },
+  "openContainer": {
+    "message": "Open page here"
+  },
+  "newContainer": {
+    "message": "New container name"
+  },
+  "containerPlaceholder": {
+    "message": "Work, Personal, Learning…"
+  },
+  "create": {
+    "message": "Create"
+  },
+  "noContainers": {
+    "message": "Create a container first"
+  },
+  "video": {
+    "message": "Video controls"
+  },
+  "videoHelp": {
+    "message": "Speed control for accessible main-document and iframe video/audio. Protected Firefox pages and inaccessible players are excluded."
+  },
+  "speed": {
+    "message": "Playback speed"
+  },
+  "applyVideo": {
+    "message": "Apply to video"
+  },
+  "normalSpeed": {
+    "message": "Reset to 1×"
+  },
+  "dualSubtitles": {
+    "message": "Dual subtitle files"
+  },
+  "subtitleHelp": {
+    "message": "Choose original and translated VTT or SRT files. Captions follow video time and stay on your device. This tool does not automatically translate files."
+  },
+  "originalSubtitle": {
+    "message": "Original subtitles · optional"
+  },
+  "translatedSubtitle": {
+    "message": "Translated subtitles · optional"
+  },
+  "showSubtitles": {
+    "message": "Show subtitles"
+  },
+  "hideSubtitles": {
+    "message": "Close subtitles"
+  },
+  "translate": {
+    "message": "Text and caption translation"
+  },
+  "translationHelp": {
+    "message": "Bring selected text or the current caption line here. Review the text before sending. Selectable text in page popups also works."
+  },
+  "readSelection": {
+    "message": "Get selected text"
+  },
+  "readCaption": {
+    "message": "Get caption line"
+  },
+  "sourceText": {
+    "message": "Text to send · up to 5,000 characters"
+  },
+  "provider": {
+    "message": "Destination and target language"
+  },
+  "noProvider": {
+    "message": "No translation service selected. Add a trusted service in Settings → Translation. No text has been sent to a service."
+  },
+  "sendTranslation": {
+    "message": "Send this text and translate"
+  },
+  "translationResult": {
+    "message": "Translation"
+  },
+  "saveWord": {
+    "message": "Add text to my vocabulary"
+  },
+  "discovery": {
+    "message": "Explore with Aion"
+  },
+  "progressHelp": {
+    "message": "3 discoveries: create or open a container, apply a video speed, and save text to your vocabulary. Each action counts once; taking a break keeps your progress."
+  },
+  "localScope": {
+    "message": "Saved on this device in this browser profile."
+  },
+  "language": {
+    "message": "Language"
+  },
+  "interfaceLanguage": {
+    "message": "Aion interface language"
+  },
+  "deviceLanguage": {
+    "message": "Device language · Turkish if unsupported"
+  },
+  "languageScope": {
+    "message": "Language selection applies to the extension’s Aion screens. Change Firefox’s own language in Firefox Settings."
+  },
+  "appearance": {
+    "message": "Appearance and Accessibility"
+  },
+  "theme": {
+    "message": "Theme"
+  },
+  "system": {
+    "message": "System"
+  },
+  "light": {
+    "message": "Light"
+  },
+  "dark": {
+    "message": "Dark"
+  },
+  "contrast": {
+    "message": "High contrast"
+  },
+  "scale": {
+    "message": "Interface scale · 80%–200%"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "textSize": {
+    "message": "Independent text size · 80%–200%"
+  },
+  "font": {
+    "message": "Font"
+  },
+  "systemFont": {
+    "message": "System font"
+  },
+  "fontHelp": {
+    "message": "OpenDyslexic and Lexend offer alternatives for different reading preferences, with Turkish character support. Choose whichever feels most comfortable."
+  },
+  "advanced": {
+    "message": "Advanced text settings"
+  },
+  "lineHeight": {
+    "message": "Line spacing"
+  },
+  "letterSpacing": {
+    "message": "Letter spacing"
+  },
+  "preview": {
+    "message": "Live preview"
+  },
+  "previewText": {
+    "message": "Learn, explore, browse freely. Turkish characters: Çç Ğğ Iı İi Öö Şş Üü. Your settings apply immediately."
+  },
+  "previewButton": {
+    "message": "Example button"
+  },
+  "appearanceScope": {
+    "message": "Scale, font and text size apply to Aion surfaces. The Firefox toolbar can receive the color theme; its native font and scale cannot be changed by an extension."
+  },
+  "translationSettings": {
+    "message": "Translation"
+  },
+  "nativeTranslation": {
+    "message": "Firefox’s built-in page translation is preserved and runs on-device for supported languages. Aion selected-text translation uses the optional service below."
+  },
+  "targetLanguage": {
+    "message": "Translation target language · depends on service support"
+  },
+  "endpoint": {
+    "message": "LibreTranslate-compatible HTTPS translation endpoint"
+  },
+  "endpointHelp": {
+    "message": "Choose your own LibreTranslate-compatible HTTPS endpoint. Content blocking already requires all-site access; saving here explicitly selects this service. Text is sent only when you press Translate. Services requiring API keys are not supported."
+  },
+  "saveEndpoint": {
+    "message": "Save endpoint and grant access"
+  },
+  "revokeEndpoint": {
+    "message": "Remove service and permission"
+  },
+  "enableProgress": {
+    "message": "Show discovery progress"
+  },
+  "animations": {
+    "message": "Allow animated feedback"
+  },
+  "silentFeedback": {
+    "message": "Feedback in this version is silent and static. Your system’s reduced-motion preference is always respected."
+  },
+  "resetProgress": {
+    "message": "Reset discovery progress only"
+  },
+  "confirmResetProgress": {
+    "message": "Discovery progress will be reset. Containers and vocabulary will be kept. Continue?"
+  },
+  "data": {
+    "message": "Data and backup"
+  },
+  "dataHelp": {
+    "message": "Backup includes Aion settings, words, draft, site appearance/speed rules and game record. It may contain private data. Model files and custom character PNGs are separate; use character export for those."
+  },
+  "export": {
+    "message": "Download backup"
+  },
+  "import": {
+    "message": "Restore backup"
+  },
+  "wordList": {
+    "message": "My vocabulary"
+  },
+  "savedWords": {
+    "message": "saved entries"
+  },
+  "confirmImport": {
+    "message": "Aion settings, vocabulary and progress will be replaced with the backup. Download your current backup first if needed. The translation endpoint stays unchanged. Continue?"
+  },
+  "updates": {
+    "message": "Updates"
+  },
+  "installedVersion": {
+    "message": "Installed Aion version:"
+  },
+  "developmentVersion": {
+    "message": "unsigned developer preview"
+  },
+  "updateHelp": {
+    "message": "Checks this extension’s releases. Permanent installation and automatic updates require Mozilla signing and a distribution channel. Firefox manages browser updates."
+  },
+  "checkUpdates": {
+    "message": "Check for updates"
+  },
+  "releases": {
+    "message": "Open GitHub releases"
+  },
+  "checkingUpdates": {
+    "message": "Checking GitHub releases…"
+  },
+  "latestPublished": {
+    "message": "Latest published release"
+  },
+  "noRelease": {
+    "message": "No stable browser release has been published yet."
+  },
+  "securityNote": {
+    "message": "No browser can guarantee protection from every infection. Security requires an updated engine and verified distribution."
+  },
+  "saved": {
+    "message": "Saved."
+  },
+  "created": {
+    "message": "Container created."
+  },
+  "opened": {
+    "message": "Page opened in a new container tab."
+  },
+  "applied": {
+    "message": "Applied to video."
+  },
+  "selectionRead": {
+    "message": "Text captured. Review it before sending."
+  },
+  "translating": {
+    "message": "Sending your chosen text to the translation service…"
+  },
+  "translated": {
+    "message": "Translation ready."
+  },
+  "wordSaved": {
+    "message": "Saved to vocabulary. Duplicate text is not added twice."
+  },
+  "exported": {
+    "message": "Backup download started."
+  },
+  "imported": {
+    "message": "Backup restored."
+  },
+  "restrictedPage": {
+    "message": "This page cannot be accessed. Open a regular HTTP or HTTPS tab and try again."
+  },
+  "unauthorized": {
+    "message": "This action must be started from the Aion panel."
+  },
+  "nameRequired": {
+    "message": "Enter a container name."
+  },
+  "containerMissing": {
+    "message": "Container not found. Reopen the panel and select it again."
+  },
+  "noVideo": {
+    "message": "No accessible video was found. Try again in the tab containing the video. Cross-origin embedded players may not be supported."
+  },
+  "invalidSpeed": {
+    "message": "Enter a speed between 0.25× and 4×."
+  },
+  "invalidCaptions": {
+    "message": "Could not read subtitles. Choose a valid VTT or SRT file with timestamps."
+  },
+  "chooseSubtitle": {
+    "message": "Choose at least one subtitle file."
+  },
+  "noCaptions": {
+    "message": "No caption line is accessible now. Enable video captions and try again, or paste text manually."
+  },
+  "textRequired": {
+    "message": "Select or paste text to translate or save."
+  },
+  "invalidEndpoint": {
+    "message": "Enter a valid HTTPS endpoint without credentials, query parameters, IP addresses or custom ports."
+  },
+  "permissionRequired": {
+    "message": "Translation domain permission was not granted. Enable the service again in Settings."
+  },
+  "translationFailed": {
+    "message": "The service could not complete translation. Check the endpoint and target language support, then retry."
+  },
+  "updateFailed": {
+    "message": "Could not reach GitHub. Check your connection and retry; other features remain available."
+  },
+  "invalidScale": {
+    "message": "Enter a value between 80% and 200%."
+  },
+  "fileTooLarge": {
+    "message": "File is too large. Use subtitles up to 2 MB or backups up to 3 MB."
+  },
+  "invalidBackup": {
+    "message": "This is not a supported Aion backup. Choose a version 1 JSON backup."
+  },
+  "operationFailed": {
+    "message": "The action could not be completed. Retry on a regular web tab; for translation, check your connection and service settings."
+  },
+  "tabLayout": {
+    "message": "Tab layout"
+  },
+  "tabLayoutHelp": {
+    "message": "Place tabs at the top, left or right. Your choice is saved in this profile and applies to open windows."
+  },
+  "tabPosition": {
+    "message": "Tab position"
+  },
+  "tabsTop": {
+    "message": "Top"
+  },
+  "tabsLeft": {
+    "message": "Left"
+  },
+  "tabsRight": {
+    "message": "Right"
+  },
+  "temporaryContainer": {
+    "message": "Open in a temporary container"
+  },
+  "temporary": {
+    "message": "temporary"
+  },
+  "temporaryHelp": {
+    "message": "The container and its site data are removed when its last tab closes. Downloads and browsing history are not deleted."
+  },
+  "preferredQuality": {
+    "message": "Preferred video quality"
+  },
+  "qualityAuto": {
+    "message": "Automatic"
+  },
+  "qualityBest": {
+    "message": "Highest available"
+  },
+  "qualityHelp": {
+    "message": "The first quality adapter targets YouTube and may be affected by site changes. Quality forcing on Netflix and other services is not supported yet. Account, DRM and device limits apply. Your preference is saved; apply it to each video with the button in this preview."
+  },
+  "applyQuality": {
+    "message": "Request quality"
+  },
+  "readResolution": {
+    "message": "Read actual resolution"
+  },
+  "actualResolution": {
+    "message": "Actual decoded video resolution"
+  },
+  "resolutionUnknown": {
+    "message": "Resolution is not available yet. Start the video and try again."
+  },
+  "unsupportedQuality": {
+    "message": "Quality selection is not supported on this player. Use the site’s own quality menu."
+  },
+  "unavailableQuality": {
+    "message": "This player does not offer the requested quality. Choose another quality or highest available."
+  },
+  "qualityRequested": {
+    "message": "Quality preference sent to the player. Check the result with actual resolution; the player may override the request."
+  },
+  "unsupportedSpeed": {
+    "message": "This video source does not accept speed changes. Live media streams may have a fixed playback rate."
+  },
+  "customizeToolbar": {
+    "message": "Customize the toolbar"
+  },
+  "customizationHelp": {
+    "message": "Drag buttons, the search box and spacers in the built-in editor to add, remove or rearrange them. Restore the default layout from that editor."
+  },
+  "websiteTheme": {
+    "message": "Color preference exposed to websites"
+  },
+  "websiteThemeAuto": {
+    "message": "Follow browser theme · preserve site design"
+  },
+  "websiteThemeHelp": {
+    "message": "Site colors and your saved site theme are left untouched. Only sites that ask for your browser color preference use this choice. The default dark browser reports a dark preference. Pages are not forcibly recolored."
+  },
+  "browserFont": {
+    "message": "Browser interface font"
+  },
+  "browserFontHelp": {
+    "message": "Applies to toolbars, tab labels and native settings. Website fonts are preserved. Aion panel text settings can be adjusted separately."
+  },
+  "imageSearch": {
+    "message": "Search by image"
+  },
+  "enableImageSearch": {
+    "message": "Show the image context menu"
+  },
+  "imageSearchHelp": {
+    "message": "Right-click an image and choose Google Lens, Bing, TinEye or Yandex. The image URL is sent to your chosen search service only when you select it."
+  },
+  "characterTitle": {
+    "message": "Companions"
+  },
+  "characterScope": {
+    "message": "An optional local sidebar. It does not add characters to webpages or send character files to a server."
+  },
+  "characterOpen": {
+    "message": "Open companion sidebar"
+  },
+  "characterChoose": {
+    "message": "Choose character"
+  },
+  "characterActivity": {
+    "message": "Animation"
+  },
+  "characterPreview": {
+    "message": "Frame animation of the selected character"
+  },
+  "characterPause": {
+    "message": "Pause animation"
+  },
+  "characterPlay": {
+    "message": "Play animation"
+  },
+  "characterWave": {
+    "message": "Wave"
+  },
+  "characterReduced": {
+    "message": "Reduced motion is enabled; the character stays still."
+  },
+  "characterActivity-idle": {
+    "message": "Resting"
+  },
+  "characterActivity-read": {
+    "message": "Reading"
+  },
+  "characterActivity-work": {
+    "message": "Working"
+  },
+  "characterActivity-wave": {
+    "message": "Waving"
+  },
+  "characterAdd": {
+    "message": "Add your own character"
+  },
+  "characterImportHelp": {
+    "message": "Choose a PNG image or an exported character file. Up to 8 custom characters stay in this profile. Use the separate export button to back up a character."
+  },
+  "characterName": {
+    "message": "Character name"
+  },
+  "characterFile": {
+    "message": "Choose file"
+  },
+  "characterGrid": {
+    "message": "Sprite animation settings"
+  },
+  "characterGridHelp": {
+    "message": "For a still image, leave columns and rows at 1. For a sprite sheet, enter its columns/rows, the row to play and its frame count. PNG files can be up to 6 MB."
+  },
+  "characterColumns": {
+    "message": "Columns"
+  },
+  "characterRows": {
+    "message": "Rows"
+  },
+  "characterRow": {
+    "message": "Row to play"
+  },
+  "characterFrames": {
+    "message": "Frame count"
+  },
+  "characterFps": {
+    "message": "Speed (frames/second)"
+  },
+  "characterImport": {
+    "message": "Save and select character"
+  },
+  "characterExport": {
+    "message": "Export character"
+  },
+  "characterDelete": {
+    "message": "Remove this character"
+  },
+  "characterDeleteConfirm": {
+    "message": "Remove this custom character from this profile?"
+  },
+  "characterTooLarge": {
+    "message": "Choose a smaller PNG: up to 6 MB, 8192 pixels per side and 16 million pixels total."
+  },
+  "characterInvalid": {
+    "message": "Choose a valid PNG or Fire Axolotl character backup."
+  },
+  "characterAnimatedPNG": {
+    "message": "This file is APNG. Use a regular PNG sprite sheet so animation can be paused."
+  },
+  "characterGridInvalid": {
+    "message": "Check the sprite grid: use 1–16 columns/rows, no more frames than columns, and equally divisible image dimensions."
+  },
+  "characterStorageFailed": {
+    "message": "The character could not be loaded or saved. Reopen the panel and try again."
+  },
+  "characterLibraryFull": {
+    "message": "The 8-character limit is reached. Export and remove one before adding another."
+  },
+  "newtabGame": {
+    "message": "Show Aion Run on new tabs"
+  },
+  "newtabGameHelp": {
+    "message": "A small offline game. Starts only when you press Start. Hide it at any time; search and shortcuts stay available. Changes apply to new tabs."
+  },
+  "newtabGameLanguage": {
+    "message": "New-tab game language"
+  },
+  "newtabGameReset": {
+    "message": "Reset the local game record"
+  },
+  "extensionWelcome": {
+    "message": "One Firefox extension: Aion and tools on this device."
+  },
+  "browserTheme": {
+    "message": "Apply the Aion theme to the Firefox toolbar"
+  },
+  "enableRunner": {
+    "message": "Show Aion Run on the extension new tab"
+  },
+  "resetRunner": {
+    "message": "Reset only the game record"
+  },
+  "blocker": {
+    "message": "Ad and tracker blocking"
+  },
+  "blockerHelp": {
+    "message": "This single extension includes the uBlock Origin 1.76.0 engine. Open its panel for lists, site exceptions and blocking controls. This is an independent combined distribution."
+  },
+  "openBlocker": {
+    "message": "Open blocking settings"
+  },
+  "openTools": {
+    "message": "Open page and QR tools"
+  },
+  "findTab": {
+    "message": "Search open tabs"
+  },
+  "newTab": {
+    "message": "New tab"
+  },
+  "noTabs": {
+    "message": "No open tabs match this search."
+  },
+  "sidebarScope": {
+    "message": "Place the Firefox sidebar on either side using Firefox sidebar settings. Firefox controls the top tab strip. Reopen a closed tab with Ctrl+Shift+T."
+  },
+  "moveUp": {
+    "message": "Move tab up"
+  },
+  "moveDown": {
+    "message": "Move tab down"
+  },
+  "pin": {
+    "message": "Pin tab"
+  },
+  "unpin": {
+    "message": "Unpin tab"
+  },
+  "closeTab": {
+    "message": "Close tab"
+  },
+  "searchFirefox": {
+    "message": "Search with the Firefox default search engine"
+  },
+  "search": {
+    "message": "Search"
+  },
+  "newtabScope": {
+    "message": "This is the extension new tab. Search uses your Firefox default search engine. The game and record work offline."
+  },
+  "pageTools": {
+    "message": "Apply to your chosen page"
+  },
+  "pageDark": {
+    "message": "Darken page"
+  },
+  "pageOriginal": {
+    "message": "Restore page appearance"
+  },
+  "pageDarkHelp": {
+    "message": "Dark Reader is applied explicitly to the chosen main document. Without Remember it resets on reload. Restore appearance also removes this site’s saved rule. Protected Firefox pages are excluded. Browser theme and page font are separate preferences."
+  },
+  "qrTitle": {
+    "message": "Local QR code"
+  },
+  "qrHelp": {
+    "message": "Text or an address becomes a QR code on this device, without sending it to a service. Up to 1000 characters."
+  },
+  "qrText": {
+    "message": "Text to encode as a QR code"
+  },
+  "qrTab": {
+    "message": "Use selected tab address"
+  },
+  "qrCreate": {
+    "message": "Create QR code"
+  },
+  "qrDownload": {
+    "message": "Download QR image"
+  },
+  "refreshTabs": {
+    "message": "Refresh tab list"
+  },
+  "targetTab": {
+    "message": "Tab to act on"
+  },
+  "tabs": {
+    "message": "Tabs"
+  },
+  "tools": {
+    "message": "Tools"
+  },
+  "localAI": {
+    "message": "Local AI and subtitles"
+  },
+  "aiLocalHelp": {
+    "message": "Experimental Qwen 2.5 1.5B runs on this device. CPU Turkish translation failed the accuracy test; do not rely on it for translation. Your text is not sent to an AI server."
+  },
+  "aiModelTitle": {
+    "message": "Built-in runtime · local model"
+  },
+  "aiModelSize": {
+    "message": "Model weights download separately on first use: CPU about 1.59 GB; WebGPU about 1.23 GB. Weights are not inside the XPI. 8 GB or more available RAM is recommended for CPU; speed depends on hardware. Completed files are cached; interrupted model files restart."
+  },
+  "aiBackend": {
+    "message": "Execution backend"
+  },
+  "aiCPU": {
+    "message": "CPU / WASM · broader compatibility"
+  },
+  "aiDownload": {
+    "message": "Download and load model locally"
+  },
+  "aiLoadCached": {
+    "message": "Load cached model without downloading"
+  },
+  "aiCancel": {
+    "message": "Cancel operation"
+  },
+  "aiUnload": {
+    "message": "Unload model from memory"
+  },
+  "aiOfflineImport": {
+    "message": "Offline model files"
+  },
+  "aiImportHelp": {
+    "message": "Select config.json, generation_config.json, tokenizer.json, tokenizer_config.json, special_tokens_map.json and model_uint8.onnx or model_q4f16.onnx for the selected backend from the pinned revision. SHA-256 is verified."
+  },
+  "aiImport": {
+    "message": "Verify and load local model files"
+  },
+  "aiDelete": {
+    "message": "Delete only cached model files"
+  },
+  "aiConfirmDelete": {
+    "message": "Delete downloaded Qwen model files? Aion settings, words and game records are preserved."
+  },
+  "aiTranslation": {
+    "message": "On-device translation"
+  },
+  "sourceLanguage": {
+    "message": "Source language"
+  },
+  "autoDetect": {
+    "message": "Auto-detect"
+  },
+  "aiTranslate": {
+    "message": "Translate locally with Qwen"
+  },
+  "aiGeneral": {
+    "message": "Ask the same model another question"
+  },
+  "aiGeneralHelp": {
+    "message": "This shared local engine can support future features. Here it only sees what you type; it cannot read tabs or take actions. Responses may contain errors."
+  },
+  "aiPrompt": {
+    "message": "Prompt or question for Qwen"
+  },
+  "aiGenerate": {
+    "message": "Generate a local response"
+  },
+  "aiVideoTitle": {
+    "message": "Dual-subtitle translation mode"
+  },
+  "aiVideoHelp": {
+    "message": "Choose source and target languages above. The loaded Qwen model translates readable video captions or a local VTT/SRT file. Original and translation use the same timestamps."
+  },
+  "captionTrack": {
+    "message": "Video source subtitle track"
+  },
+  "aiLiveMode": {
+    "message": "Enable video caption translation"
+  },
+  "aiLiveLimit": {
+    "message": "Experimental: requires player captions exposed as browser text tracks. Custom players such as YouTube/Netflix may not expose them. It does not transcribe audio; no speech-recognition model is included. Translation can lag; pretranslate a subtitle file for more consistent timing."
+  },
+  "aiTranslateFile": {
+    "message": "Translate subtitle file"
+  },
+  "aiStopVideo": {
+    "message": "Stop video translation"
+  },
+  "aiDownloadVTT": {
+    "message": "Download translated captions"
+  },
+  "captionAppearance": {
+    "message": "Subtitle appearance"
+  },
+  "captionSize": {
+    "message": "Subtitle size"
+  },
+  "captionOpacity": {
+    "message": "Subtitle background opacity"
+  },
+  "captionColor": {
+    "message": "Original text color"
+  },
+  "captionTranslationColor": {
+    "message": "Translation text color"
+  },
+  "captionPosition": {
+    "message": "Subtitle position"
+  },
+  "bottom": {
+    "message": "Bottom"
+  },
+  "top": {
+    "message": "Top"
+  },
+  "showOriginal": {
+    "message": "Show original captions"
+  },
+  "showTranslation": {
+    "message": "Show translated captions"
+  },
+  "dyslexicCaption": {
+    "message": "OpenDyslexic · Dyslexia-friendly font"
+  },
+  "aiState-unloaded": {
+    "message": "Model is not loaded. Download, select offline files, or load an existing cached model."
+  },
+  "aiState-downloading": {
+    "message": "Model files are being verified and saved on this device."
+  },
+  "aiState-loading": {
+    "message": "Preparing the local runtime and model. This may take several minutes for a large model."
+  },
+  "aiState-ready": {
+    "message": "Qwen 2.5 1.5B ready · on-device processing"
+  },
+  "aiState-running": {
+    "message": "Qwen is generating a response on this device. You can cancel the operation."
+  },
+  "aiState-error": {
+    "message": "Model preparation failed. Check local files, free storage and available memory, then retry."
+  },
+  "aiModelMissing": {
+    "message": "Local model is not ready. Download it or load the correct offline files first."
+  },
+  "aiGPUUnavailable": {
+    "message": "This Firefox/device does not provide WebGPU with shader-f16. Choose CPU / WASM."
+  },
+  "aiImportMissing": {
+    "message": "Model files are missing. Select all files listed in the instructions."
+  },
+  "aiDownloadFailed": {
+    "message": "A model file could not be downloaded, verified or saved. Check connectivity, free space and file revision, then retry."
+  },
+  "aiHashMismatch": {
+    "message": "Model revision or SHA-256 does not match. Use the correct file from the pinned revision."
+  },
+  "aiBusy": {
+    "message": "The local model is busy. Wait for completion or cancel the operation."
+  },
+  "aiCancelled": {
+    "message": "Local operation cancelled. Completed model files are retained."
+  },
+  "aiRuntimeFailed": {
+    "message": "Local runtime failed on this device. Check available memory and Firefox version, or try the other backend."
+  },
+  "aiInferenceFailed": {
+    "message": "The model produced no usable response. Retry with shorter text."
+  },
+  "aiVideoStopped": {
+    "message": "Video translation mode is off."
+  },
+  "aiVideoActive": {
+    "message": "Dual captions enabled. Translation is processed on this device."
+  },
+  "aiWaitingCaption": {
+    "message": "Waiting for a readable caption. Play the video and select a subtitle track."
+  },
+  "aiNoReadableCaptions": {
+    "message": "No readable captions are exposed by the player. Enable player captions or choose a VTT/SRT file."
+  },
+  "firefoxControls": {
+    "message": "Firefox tab layout, languages and account"
+  },
+  "firefoxControlsHelp": {
+    "message": "Use Firefox’s built-in tab/sidebar settings to choose top or vertical tabs and the sidebar side. An extension cannot rewrite the native tab strip, fonts, language packs or account/Sync screens. Firefox manages these settings."
+  },
+  "openFirefoxSettings": {
+    "message": "Open Firefox settings"
+  },
+  "moduleLayout": {
+    "message": "Tools and order"
+  },
+  "moduleLayoutHelp": {
+    "message": "Disable unused tools and reorder popup sections with Move up/down. Blocking has its own dashboard; image search and the game have separate switches."
+  },
+  "resetModules": {
+    "message": "Reset only tool order"
+  },
+  "module-containers": {
+    "message": "Containers"
+  },
+  "module-video": {
+    "message": "Video tools"
+  },
+  "module-translation": {
+    "message": "Service-based text translation"
+  },
+  "module-ai": {
+    "message": "Local Qwen and captions"
+  },
+  "module-characters": {
+    "message": "Companions"
+  },
+  "moduleDisabled": {
+    "message": "This tool is disabled. Enable it in Settings → Tools to use it."
+  },
+  "settingsSync": {
+    "message": "Optional preference sync"
+  },
+  "syncScope": {
+    "message": "Uses Firefox storage.sync; Firefox manages your account and Sync connection. Only language, appearance, tool order and caption preferences are sent. Words, drafts, model, cookies, site addresses and service endpoint are excluded. Each transfer requires a button press. The item stays below 8 KB; Firefox quotas/connectivity apply."
+  },
+  "syncEnable": {
+    "message": "Allow preference transfer through storage.sync"
+  },
+  "syncPush": {
+    "message": "Send this device’s preferences to Sync"
+  },
+  "syncPull": {
+    "message": "Apply synced preferences on this device"
+  },
+  "openFirefoxSync": {
+    "message": "Open Firefox account and Sync settings"
+  },
+  "syncDisabled": {
+    "message": "Allow preference sync first."
+  },
+  "syncTooLarge": {
+    "message": "Preferences exceed the Sync item quota. Use a local JSON backup."
+  },
+  "syncEmpty": {
+    "message": "No synced preferences exist for this extension. Send them from a device first."
+  },
+  "syncSaved": {
+    "message": "Preferences saved to Firefox storage.sync. Delivery to another device depends on Firefox Sync connectivity."
+  },
+  "syncRestored": {
+    "message": "Synced preferences applied; local content preserved."
+  },
+  "pageLight": {
+    "message": "Lighten page"
+  },
+  "rememberSiteStyle": {
+    "message": "Remember color and font preferences for this site on this device"
+  },
+  "siteFont": {
+    "message": "Webpage text font"
+  },
+  "siteFontOriginal": {
+    "message": "Site’s own font"
+  },
+  "applySiteFont": {
+    "message": "Apply only the page text font"
+  },
+  "siteRuleLimit": {
+    "message": "Up to 200 site preferences can be stored. Reset an old site preference and retry."
+  },
+  "rememberSpeed": {
+    "message": "Remember this site’s speed on this device"
+  },
+  "forgetSpeed": {
+    "message": "Forget this site’s speed preference"
+  },
+  "speedShortcuts": {
+    "message": "Supports video and audio. In Firefox → Add-ons → gear menu → Manage Extension Shortcuts, assign increase/decrease/reset speed shortcuts."
+  },
+  "openGame": {
+    "message": "Aion Run"
+  }
+}

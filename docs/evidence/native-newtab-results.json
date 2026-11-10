@@ -1,0 +1,6 @@
+{
+  "passed": [
+    "Native-newtab build preserves the normal Firefox new-tab entry point",
+    "Aion Run remains accessible explicitly from the toolbar popup"
+  ]
+}
