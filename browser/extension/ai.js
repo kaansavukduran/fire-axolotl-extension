@@ -12,9 +12,13 @@ const studyTrack = () => $('caption-track').value === 'local' ? 'local' : $('cap
 function renderModel(state) {
   modelState = state;
   if (state.phase === 'ready') $('aiModel').value = state.modelKind || 'qwen';
-  $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value === 'm2m';
-  if ($('aiModel').value === 'm2m') $('aiBackend').value = 'wasm';
+  const embedded=$('aiModel').value==='bergamot';
+  $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value !== 'qwen';
+  if ($('aiModel').value !== 'qwen') $('aiBackend').value = 'wasm';
   else $('aiBackend').value = UI.settings.aiBackend;
+  $('model-download').hidden=embedded;$('model-files-details').hidden=embedded;
+  $('model-load').textContent=UI.t(embedded?'aiLoadPackaged':'aiLoadCached');
+  $('ai-model-help').textContent=UI.t(embedded?'aiBergamotHelp':$('aiModel').value==='qwen'?'aiQwenHelp':'aiM2MHelp');
   $('ai-state').textContent = UI.t(state.error || 'aiState-' + state.phase);
   if (state.phase === 'ready') $('ai-state').textContent += ` · ${state.backend === 'webgpu' ? 'WebGPU' : 'CPU / WASM'}`;
   $('ai-detail').textContent = state.detail || '';
@@ -22,10 +26,12 @@ function renderModel(state) {
   $('model-progress').hidden = state.phase !== 'downloading';
   if (state.total > 0) {
     $('model-progress').max = state.total; $('model-progress').value = state.loaded || 0;
-    $('model-bytes').textContent = `${new Intl.NumberFormat(UI.locale, {maximumFractionDigits: 1}).format((state.loaded || 0) / 1e9)} / ${new Intl.NumberFormat(UI.locale, {maximumFractionDigits: 2}).format(state.total / 1e9)} GB · ${state.file || ''}`;
+    const unit=state.total<1e9?'MB':'GB',factor=unit==='MB'?1e6:1e9;
+    const number=new Intl.NumberFormat(UI.locale,{maximumFractionDigits:unit==='MB'?1:2});
+    $('model-bytes').textContent = `${number.format((state.loaded || 0) / factor)} / ${number.format(state.total / factor)} ${unit}${state.file?' · '+state.file:''}`;
   } else $('model-bytes').textContent='';
   for (const id of ['model-download', 'model-load', 'model-import', 'aiModel']) $(id).disabled = busy || pageRunning;
-  $('ai-generate').disabled = state.modelKind === 'm2m' || state.phase !== 'ready' || live || fileRunning || pageRunning;
+  $('ai-generate').disabled = state.modelKind !== 'qwen' || state.phase !== 'ready' || live || fileRunning || pageRunning;
   for (const id of ['ai-translate', 'translate-file']) $(id).disabled = state.phase !== 'ready' || live || fileRunning || pageRunning;
   $('live-mode').disabled = !live && (state.phase !== 'ready' || pageRunning);
   $('page-translate').disabled = !pageSnapshot?.items.length || pageSnapshot.used || state.phase !== 'ready' || live || fileRunning || pageRunning;
@@ -39,8 +45,8 @@ function render() {
     const value = UI.settings[element.dataset.setting];
     if (element.type === 'checkbox') element.checked = value; else element.value = value;
   }
-  $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value === 'm2m';
-  if ($('aiModel').value === 'm2m') $('aiBackend').value = 'wasm';
+  $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value !== 'qwen';
+  if ($('aiModel').value !== 'qwen') $('aiBackend').value = 'wasm';
   $('captionOffset-value').value = new Intl.NumberFormat(UI.locale, {maximumFractionDigits:1,signDisplay:'always'}).format(UI.settings.captionOffset) + ' s';
   for (const name of ['captionSize', 'captionOpacity']) $(name + '-value').value = UI.settings[name];
   const preview = $('caption-preview');
@@ -176,11 +182,11 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
     if (element.dataset.setting==='captionOffset' && loopTargetId) {loopGeneration++;await video({action:'captionLoopStop'},loopTargetId).catch(()=>{});loopTargetId=undefined;}
     await UI.save({[element.dataset.setting]: value});
   }));
-  $('aiModel').onchange = () => UI.run(async () => {const selected = $('aiModel').value; stopPage();await stopVideo(); const state = await callAI('unload'); $('aiModel').value = selected; renderModel(state); if (selected === 'm2m') await UI.save({aiBackend:'wasm'}); render();});
+  $('aiModel').onchange = () => UI.run(async () => {const selected = $('aiModel').value; stopPage();await stopVideo(); const state = await callAI('unload'); $('aiModel').value = selected; renderModel(state); if (selected !== 'qwen') await UI.save({aiBackend:'wasm'}); render();});
   action('reset-caption-offset', () => UI.save({captionOffset:0}));
-  action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value});});
-  action('model-load', () => callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value}));
-  action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value, files: [...$('model-files').files]});});
+  action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: $('aiModel').value !== 'qwen' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value});});
+  action('model-load', () => callAI('load', {backend: $('aiModel').value !== 'qwen' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value}));
+  action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: $('aiModel').value !== 'qwen' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value, files: [...$('model-files').files]});});
   action('model-cancel', async () => {stopPage();await stopVideo(); await callAI('cancel');});
   action('model-unload', async () => {stopPage();await stopVideo(); await callAI('unload');});
   action('model-delete', async () => {if (confirm(UI.t('aiConfirmDelete'))) {stopPage();await stopVideo(); await callAI('clear', {modelKind: $('aiModel').value});}});

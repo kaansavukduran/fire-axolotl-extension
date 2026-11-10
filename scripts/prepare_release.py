@@ -15,7 +15,7 @@ if stage.exists():shutil.rmtree(stage)
 stage.mkdir(parents=True)
 version = json.loads((ROOT/'browser/extension/manifest.json').read_text())['version']
 packages = [ROOT/f'dist/fire-axolotl-extension-{version}-unsigned.xpi', ROOT/f'dist/fire-axolotl-extension-{version}-native-newtab-unsigned.xpi']
-for p in [*packages, ROOT/'work/components/ublock-origin-1.76.0-corresponding-source.tar.gz',ROOT/'work/components/ublock-origin.json',ROOT/'work/ai-support/eigen-mpl-corresponding-source.zip',ROOT/'work/ai-support/AI-SUPPORT-SOURCES.json']:
+for p in [*packages, ROOT/'work/components/ublock-origin-1.76.0-corresponding-source.tar.gz',ROOT/'work/components/ublock-origin.json',ROOT/'work/ai-support/eigen-mpl-corresponding-source.zip',ROOT/'work/ai-support/AI-SUPPORT-SOURCES.json',ROOT/'work/bergamot-support/bergamot-corresponding-source.tar.gz',ROOT/'work/bergamot-support/BERGAMOT-SOURCES.json']:
     shutil.copyfile(p,stage/p.name)
 assert len(list(stage.glob('*.xpi')))==2
 source=stage/f'fire-axolotl-extension-{commit[:12]}-source.zip'

@@ -79,3 +79,15 @@ for name in ['model.json', 'translation-model.json']:
     if pin.get('kind') == 'm2m':
         assert len(pin['languages']) == len(set(pin['languages'])) == 100
 print('PASS: packaged model manifests, SHA-256 pins and 100 supported translation codes')
+
+bergamot=json.loads((SOURCE/'ai/bergamot-model.json').read_text())
+with zipfile.ZipFile(package) as archive:
+    assert archive.read('aion/ai/bergamot-model.json')==(SOURCE/'ai/bergamot-model.json').read_bytes()
+    for name,record in bergamot['files'].items():
+        value=archive.read('aion/ai/bergamot/'+name)
+        assert len(value)==record['size'] and hashlib.sha256(value).hexdigest()==record['sha256'],name
+    assert 'eval.call' not in archive.read('aion/ai/bergamot/binding.js').decode()
+    assert archive.read('aion/ai/bergamot/worker.js')==(SOURCE/'ai/bergamot/worker.js').read_bytes()
+    assert 'aion/ai/bergamot/MODEL-LICENSE.txt' in archive.namelist()
+    assert 'aion/ai/bergamot/ENGINE-NOTICES.txt' in archive.namelist()
+print('PASS: bundled Bergamot EN/TR weights, pinned hashes, browser-only binding and source notices')

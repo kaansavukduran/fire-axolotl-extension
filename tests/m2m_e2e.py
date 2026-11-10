@@ -73,7 +73,7 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.7.0-unsigned.xpi'), temporary=True)
+    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.8.0-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
@@ -82,6 +82,7 @@ try:
     Select(driver.find_element(By.ID,'aiModel')).select_by_value('m2m')
     assert len(driver.find_element(By.ID,'aiTarget').find_elements(By.TAG_NAME,'option')) == 100
     assert not driver.find_element(By.CSS_SELECTOR,'#aiBackend option[value=webgpu]').is_enabled()
+    wait.until(lambda d:d.find_element(By.ID,'model-files-details').is_displayed())
     pin = json.loads((ROOT / 'browser/extension/ai/translation-model.json').read_text())
     model_dir = Path(os.environ['AION_TRANSLATION_MODEL_DIR'])
     files = [model_dir / name for name in pin['files'] ]

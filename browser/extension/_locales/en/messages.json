@@ -663,13 +663,13 @@
     "message": "Local AI and subtitles"
   },
   "aiLocalHelp": {
-    "message": "Local translation and Qwen run on this device; text is not sent to an AI server. Qwen failed the Turkish translation test; try M2M100 for translation."
+    "message": "Text is processed on this device, without sending it to an AI server. Choose packaged Bergamot for English↔Turkish, M2M100 for other languages and Qwen for general text. Results can contain errors."
   },
   "aiModelTitle": {
     "message": "Built-in runtime · local model"
   },
   "aiModelSize": {
-    "message": "Qwen model weights download separately on first use: CPU about 1.59 GB; WebGPU about 1.23 GB. Weights are not inside the XPI. 8 GB or more available RAM is recommended for CPU; speed depends on hardware. Completed files are cached; interrupted model files restart."
+    "message": "Bergamot EN ↔ TR model data is packaged (~44 MB). Qwen CPU needs ~1.59 GB / WebGPU ~1.23 GB; M2M100 needs ~0.64 GB as a separate download/import. One engine is kept in memory at a time."
   },
   "aiBackend": {
     "message": "Execution backend"
@@ -1117,5 +1117,26 @@
   },
   "captionLoopStopped": {
     "message": "Line loop stopped."
+  },
+  "aiLoadPackaged": {
+    "message": "Load packaged model"
+  },
+  "aiBergamotHelp": {
+    "message": "Bergamot English ↔ Turkish: the engine and about 44 MB of model data are inside this extension; no download or account is needed. Translations can be wrong, especially idioms. Choose M2M100 for other languages and Qwen for general prompts."
+  },
+  "aiBergamotPairUnsupported": {
+    "message": "Packaged Bergamot supports English and Turkish only. Change the source/target language or choose M2M100."
+  },
+  "aiTextTooLong": {
+    "message": "Text for the local model must be at most 4,000 characters."
+  },
+  "aiTargetLanguage": {
+    "message": "Translation target language"
+  },
+  "aiSourceText": {
+    "message": "Text to translate · up to 4,000 characters"
+  },
+  "aiQwenHelp": {
+    "message": "Qwen 2.5 1.5B is separately loaded for general text tasks. Its Turkish translation check produced a wrong result; Bergamot/M2M100 are other translation choices. This model has no browser tools."
   }
 }

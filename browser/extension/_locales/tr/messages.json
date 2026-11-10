@@ -663,13 +663,13 @@
     "message": "Yerel yapay zekâ ve altyazı"
   },
   "aiLocalHelp": {
-    "message": "Yerel çeviri ve Qwen bu cihazda çalışır; metnin yapay zekâ sunucusuna gönderilmez. Qwen’in Türkçe çeviri testi başarısızdır; çeviri için M2M100’ü dene."
+    "message": "Metin bu cihazda işlenir; AI sunucusuna gönderilmez. İngilizce↔Türkçe için paket içi Bergamot, diğer diller için M2M100 ve genel metin için Qwen seçilebilir. Sonuçlar hata içerebilir."
   },
   "aiModelTitle": {
     "message": "Gömülü çalışma motoru · yerel model"
   },
   "aiModelSize": {
-    "message": "Qwen model verisi ilk kullanımda ayrıca indirilir: CPU yaklaşık 1,59 GB; WebGPU yaklaşık 1,23 GB. XPI model ağırlıklarını içermez. CPU için 8 GB veya daha fazla kullanılabilir bellek önerilir; hız cihaza bağlıdır. Tam dosyalar saklanır; yarım kalan model dosyası yeniden indirilir."
+    "message": "Bergamot EN ↔ TR modelleri pakettedir (~44 MB). Qwen CPU modeli ~1,59 GB / WebGPU ~1,23 GB; M2M100 ~0,64 GB veriyi ayrıca indirir veya içe aktarır. Bir seferde bir motor bellekte tutulur."
   },
   "aiBackend": {
     "message": "Çalıştırma yöntemi"
@@ -1117,5 +1117,26 @@
   },
   "captionLoopStopped": {
     "message": "Satır döngüsü durduruldu."
+  },
+  "aiLoadPackaged": {
+    "message": "Paket içindeki modeli çalıştır"
+  },
+  "aiBergamotHelp": {
+    "message": "Bergamot İngilizce ↔ Türkçe: motor ve yaklaşık 44 MB model verisi bu eklentinin içindedir; indirme veya hesap gerekmez. Çeviri hataları olabilir, özellikle deyimleri kontrol et. Diğer diller için M2M100, genel sorular için Qwen seç."
+  },
+  "aiBergamotPairUnsupported": {
+    "message": "Paket içindeki Bergamot yalnız İngilizce ve Türkçe destekler. Kaynak/hedef dili değiştir veya M2M100 seç."
+  },
+  "aiTextTooLong": {
+    "message": "Yerel model için metin en fazla 4.000 karakter olabilir."
+  },
+  "aiTargetLanguage": {
+    "message": "Çeviri hedef dili"
+  },
+  "aiSourceText": {
+    "message": "Çevrilecek metin · en fazla 4.000 karakter"
+  },
+  "aiQwenHelp": {
+    "message": "Qwen 2.5 1.5B genel metin görevleri için ayrıca yüklenir. Türkçe çeviri kontrolünde yanlış çıktı verdi; çeviri için Bergamot/M2M100 de seçilebilir. Bu modelin tarayıcı araçlarına erişimi yoktur."
   }
 }

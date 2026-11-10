@@ -10,6 +10,7 @@ import hashlib
 import json
 import zipfile
 from fetch_components import fetch_xpi, fetch_all, PIN
+from fetch_bergamot import prepare as prepare_bergamot
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -25,6 +26,7 @@ def package(with_sources=False, native_newtab=False):
     if with_sources:
         _, source = fetch_all()
         print('Corresponding source:', source)
+        prepare_bergamot(with_sources=True)
     with zipfile.ZipFile(xpi) as upstream:
         files = {n: upstream.read(n) for n in upstream.namelist()
                  if not n.startswith('META-INF/') and n != 'mozilla-recommendation.json' and not n.endswith('/')}
@@ -84,6 +86,14 @@ def package(with_sources=False, native_newtab=False):
     for path in sorted(runtime.rglob('*')):
         if path.is_file():
             files['aion/ai/' + path.relative_to(runtime).as_posix()] = path.read_bytes()
+    bergamot=ROOT/'work/bergamot-runtime'
+    bergamot_receipt=json.loads((bergamot/'RUNTIME.json').read_text())
+    if bergamot_receipt['bridge_sha256']!=hashlib.sha256((source/'ai/bergamot/worker.js').read_bytes()).hexdigest() or bergamot_receipt['model_manifest_sha256']!=hashlib.sha256((source/'ai/bergamot-model.json').read_bytes()).hexdigest():
+        raise ValueError('Bergamot build is stale: run npm run build:ai')
+    if set(path.name for path in bergamot.iterdir())!=set(bergamot_receipt['runtime_files'])|{'RUNTIME.json'}:raise ValueError('Unexpected Bergamot runtime file')
+    for path in sorted(bergamot.iterdir()):
+        if path.name!='RUNTIME.json' and hashlib.sha256(path.read_bytes()).hexdigest()!=bergamot_receipt['runtime_files'][path.name]:raise ValueError('Bergamot runtime hash mismatch: '+path.name)
+        files['aion/ai/bergamot/'+path.name]=path.read_bytes()
     files['THIRD_PARTY_NOTICES.md'] = (ROOT / 'THIRD_PARTY_NOTICES.md').read_bytes()
     files['aion/LICENSE-MPL-2.0'] = (ROOT / 'LICENSE-MPL-2.0').read_bytes()
     files['aion/DONOR.json'] = (ROOT / 'donor.json').read_bytes()

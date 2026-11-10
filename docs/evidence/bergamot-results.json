@@ -1,0 +1,44 @@
+{
+  "passed": [
+    "One combined XPI cold-loads its bundled EN/TR model through the normal local-translate popup while Firefox networking is already offline; no model cache/import/download is used",
+    "Packaged model works in both directions and with local automatic detection; unsupported language pairs fail explicitly; idiom quality is recorded separately",
+    "Reviewed page and website-dialog text translate with the actual bundled engine offline and can be restored",
+    "Bundled local translation reaches live dual captions and native video fullscreen at paired timestamps; stopping restores the player track",
+    "A real local VTT file translates offline with the bundled model and exports its unchanged timestamps",
+    "Unloading releases the worker; Qwen remains separately selectable with its import and backend controls"
+  ],
+  "quality_checks": [
+    {
+      "input": "The cat is sleeping. (cold popup)",
+      "output": "Kedi uyuyor.",
+      "passed": true
+    },
+    {
+      "input": "Please close the door.",
+      "output": "Lütfen kapıyı kapat.",
+      "passed": true
+    },
+    {
+      "input": "We visited the museum yesterday.",
+      "output": "Dün müzeyi ziyaret ettik.",
+      "passed": true
+    },
+    {
+      "input": "Merhaba, nasılsın?",
+      "output": "Hi, how are you?",
+      "passed": true
+    },
+    {
+      "input": "The cat is sleeping. (auto)",
+      "output": "Kedi uyuyor.",
+      "passed": true
+    }
+  ],
+  "observations": [
+    {
+      "input": "I was about to give up.",
+      "output": "- Vermek için çok ilgiliydim.",
+      "note": "Known idiom-quality failure is recorded, not counted as a quality pass."
+    }
+  ]
+}

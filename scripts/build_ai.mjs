@@ -2,6 +2,7 @@
 import {build} from 'esbuild';
 import {mkdir, rm, copyFile, readFile, writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
 const output = new URL('../work/ai-runtime/', import.meta.url);
 await rm(output,{recursive:true,force:true});
 await mkdir(new URL('ort/', output), {recursive: true});
@@ -19,4 +20,6 @@ for (const [pkg, license] of [['@huggingface/transformers','LICENSE'], ['@huggin
   await copyFile(new URL(`../node_modules/${pkg}/${license}`, import.meta.url), new URL('licenses/' + pkg.replaceAll('/', '-') + '.txt', output));
 }
 await writeFile(new URL('RUNTIME.json', output), JSON.stringify({workerSourceSHA256:createHash('sha256').update(await readFile('browser/extension/ai/worker.mjs')).digest('hex'),lockSHA256:createHash('sha256').update(await readFile('package-lock.json')).digest('hex'),transformers: '3.7.2', onnxruntimeWeb: '1.22.0', files: records}, null, 2) + '\n');
-console.log('Built local AI worker and packaged WASM/WebGPU runtime; model weights remain a separate verified local cache.');
+const bergamot=spawnSync('python3',['scripts/fetch_bergamot.py'],{stdio:'inherit'});
+if(bergamot.status!==0)process.exit(bergamot.status||1);
+console.log('Built local AI runtime; EN/TR Bergamot weights are packaged, Qwen/M2M weights use a separate verified cache.');

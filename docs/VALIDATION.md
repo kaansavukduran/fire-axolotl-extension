@@ -4,7 +4,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 32 geçti |
+| Node birim/izin/veri doğrulama | 36 geçti |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
 | 0.1.0 → 0.7.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
@@ -12,7 +12,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | web-ext 10.8.0 | 0 hata, 11 uyarı; [rapor](evidence/web-ext-lint.json) |
 | npm audit | 0 açık; [rapor](evidence/npm-audit.json); kapsamlı güvenlik garantisi değildir |
-| Gerçek M2M100 418M CPU · 0.7.0 | 9 teknik akış ve 4 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
+| Gerçek M2M100 418M CPU · 0.8.0 | 9 teknik akış ve 4 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
 | Gerçek Qwen 2.5 1.5B CPU · 0.2.0 | 6 teknik kontrol geçti (dosya SHA, yükleme, sayfayı yeniden açma, çevrimdışı genel soru/çeviri çıktısı ve altyazı aktarımı, bellekten çıkarma); [rapor](evidence/qwen-results.json); **Türkçe çeviri kalite kapısı başarısız** |
 | WebGPU, Windows/macOS/Android, gerçek hesapla cihazlar arası Sync | Doğrulanmadı |
 
@@ -101,3 +101,20 @@ Qwen [tanı denemeleri](evidence/qwen-diagnostics-0.7.json) farklı komutların 
 ![Dosya altyazısında öğrenme ve döngü kontrolleri](evidence/caption-learning.png)
 
 0.7.0’ın ilk CI koşusu [42817434523](https://github.com/kaansavukduran/fire-axolotl-extension/actions/runs/42817434523), popup’ta metin görünürken dinleyiciler henüz bağlanmadan konteyner formuna tıklama yarışı nedeniyle durdu. Popup başlangıçta `inert`/`aria-busy` olur; hazırlık tamamlanınca açılır. Testler placeholder/başlık yerine gerçek `data-ready` işaretini bekler. Düzeltmeden sonra yerel ana akışın 42 kontrolü ve gerçek 0.1.0→0.7.0 yükseltmesi geçti. İlk başarısız koşu korunur; bu olay yeni altyazı testinden önceydi.
+
+
+## 0.8.0: motor ve modeller XPI içinde, ilk kullanım çevrimdışı
+
+[Bergamot gerçek Firefox raporu](evidence/bergamot-results.json): yalnız birleşik XPI kuruldu. Firefox ağı ilk AI ekranı ve ilk model worker’ı açılmadan önce kapatıldı. Popup’ın gerçek yerel çeviri düğmesi, ayrıca model indirme/dosya seçimi veya model CacheStorage’ı olmadan `The cat is sleeping.` → `Kedi uyuyor.` üretti. İki dil yönü, yerel otomatik algılama ve desteklenmeyen dilde açık hata; normal sayfa/web diyaloğu önizle-çevir-geri al; gerçek çift video altyazısı ve native video tam ekranında eş zamanlar; gerçek VTT dosyasında aynı dışa aktarma zamanları; worker’ı bellekten çıkarma ve ayrı Qwen seçimi geçti. Beş dar metin kontrolü geçti; bunlar bütün dil kullanımının kalite onayı değildir.
+
+Ters örnekte `Hi, how are you?` doğru çıktısı, ilk dar denetimin yalnız `Hello` sözcüğünü kabul etmesi nedeniyle yanlışlıkla başarısız sayılmıştı; denetim iki geçerli selamlamayı kabul edecek şekilde düzeltildi. **Gerçek bilinen hata korunur:** `I was about to give up.` → `- Vermek için çok ilgiliydim.` deyimin anlamını kaybeder. Bu sonuç kalite geçişi sayılmaz.
+
+Başlangıç hatası ayrı sınandı: Firefox offline modunda ana eklenti bağlamından aynı paket WASM’ı okunurken classic worker `fetch` isteği `NetworkError` verdi. Paket byte’ları ana bağlamdan aktarılıp worker’da WASM/model SHA-256’sı doğrulanarak düzeltildi; ağ/TLS/sandbox/imza denetimi gevşetilmedi. Worker çıkarımındaki fetch yalnız aktarılmış in-memory asset yanıtları verebilir. Dört yeni birim testi varsayılan paket motoru için yükleme/çeviri, desteklenmeyen dil, iptal/eskimiş callback, veri aktarımı başlamadan hazırlığı iptal ve boş/uzun metnin worker oluşturmadan reddini kapsar.
+
+Ayrı M2M100 regresyonunda dokuz teknik akış ve dört sınırlı kalite kontrolü yine geçti; eski anlam/zaman hatası değişmedi. Qwen’in önceki Türkçe başarısızlığı çözülmüş sayılmaz. Windows/macOS/Android ve WebGPU doğrulaması eklenmedi.
+
+![İlk çevrimdışı kullanımda paket içindeki model](evidence/bergamot-offline-model.png)
+
+![Paket içi motorla canlı çift altyazı](evidence/bergamot-live-dual-captions.png)
+
+![Paket içi motorla sayfa ve web diyaloğu](evidence/bergamot-offline-page.png)

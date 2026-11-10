@@ -1,23 +1,24 @@
 # Cihazda yapay zekâ ve çeviri
 
-Eklentinin ortak çalışma motoru iki ayrı yerel modeli destekler:
+Eklentinin ortak servisi, aynı anda birini bellekte tutarak üç yerel motor/model seçeneği sunar:
 
-- **M2M100 418M:** çeviri için varsayılan seçenek. CPU/WASM sürümü ilk kullanımda yaklaşık **640 MB** model verisi indirir veya kullanıcının seçtiği yerel dosyalardan içe aktarılır. Modelin kapsadığı 100 dil seçeneği vardır; kalite dile ve metne göre değişir.
-- **Qwen 2.5 1.5B Instruct:** genel metin görevleri ve deneysel çeviri. CPU yaklaşık **1,59 GB**, WebGPU yaklaşık **1,23 GB** model verisi ister. Qwen’in Türkçe çeviri kalite testi başarısızdır; Türkçe çeviride M2M100’ü dene.
+- **Bergamot EN ↔ TR:** varsayılan hızlı İngilizce/Türkçe çeviri. Motor ve yaklaşık **43,8 MB model verisi XPI’nin içindedir**; ilk kullanımda indirme, dosya seçimi veya hesap gerekmez. Deyimlerde ve başka metinlerde hata yapabilir.
+- **M2M100 418M:** diğer diller için seçilebilen çeviri modeli. CPU/WASM sürümü ilk kullanımda yaklaşık **640 MB** model verisi indirir veya kullanıcının seçtiği yerel dosyalardan içe aktarılır. Modelin kapsadığı 100 dil seçeneği vardır; kalite dile ve metne göre değişir.
+- **Qwen 2.5 1.5B Instruct:** genel metin görevleri ve deneysel çeviri. CPU yaklaşık **1,59 GB**, WebGPU yaklaşık **1,23 GB** model verisi ister. Qwen’in Türkçe çeviri kalite testi başarısızdır; Çeviri için Bergamot veya M2M100 denenebilir; ikisi de hatasız değildir.
 
-Çalışma kodu ve WASM XPI içindedir; **model ağırlıkları XPI’ye gömülü değildir**. İndirme kullanıcı düğmesine basınca başlar. Her dosyanın sabit revizyonu, boyutu ve SHA-256 özeti doğrulanır; tamamlanan dosyalar modelin ayrı yerel önbelleğinde saklanır. Çıkarım sırasında metin bir AI sunucusuna gönderilmez; otomatik uzak çıkarım alternatifi yoktur. `ai/model.json` ve `ai/translation-model.json` kaynakları sabitler.
+Bergamot’un çalışma kodu, WASM’ı ve EN↔TR model ağırlıkları XPI’ye gömülüdür. **Qwen/M2M100 ağırlıkları ayrıca alınır**. İndirme kullanıcı düğmesine basınca başlar. Her dosyanın sabit revizyonu, boyutu ve SHA-256 özeti doğrulanır; tamamlanan dosyalar modelin ayrı yerel önbelleğinde saklanır. Çıkarım sırasında metin bir AI sunucusuna gönderilmez; otomatik uzak çıkarım alternatifi yoktur. `ai/bergamot-model.json`, `ai/model.json` ve `ai/translation-model.json` kaynakları sabitler.
 
 ## Kullanım
 
 1. Eklenti menüsünden **Yerel yapay zekâ ve altyazı** sayfasını aç.
-2. M2M100 veya Qwen’i seç; **Modeli indir ve cihazda yükle** düğmesine bas. Kayıtlı model için **İndirmeden yerel modeli yükle** yeterlidir. İndirmenin çalışmadığı ortamlarda doğrulanmış model dosyalarını **Çevrimdışı model dosyaları** altında seçebilirsin.
-3. Kaynak ve hedef dili seç, metni gir ve **Yerel modelle çevir** düğmesine bas. M2M100 otomatik kaynak seçiminde önce video altyazısının dil bilgisini, diğer metinlerde Firefox’un dil algılamasını kullanır. Firefox yeterince emin değilse kaynak dili elle seçmeni ister.
+2. İngilizce/Türkçe için Bergamot ve **Paket içindeki modeli çalıştır** seçeneğini kullan. İlk yerel popup çevirisi de paket motorunu kendisi başlatabilir. Diğer motorlar için M2M100 veya Qwen’i seç; **Modeli indir ve cihazda yükle** düğmesine bas. Kayıtlı model için **İndirmeden yerel modeli yükle** yeterlidir. İndirmenin çalışmadığı ortamlarda doğrulanmış model dosyalarını **Çevrimdışı model dosyaları** altında seçebilirsin.
+3. Kaynak ve hedef dili seç, metni gir ve **Yerel modelle çevir** düğmesine bas. Bergamot/M2M100 otomatik kaynak seçiminde önce video altyazısının dil bilgisini, diğer metinlerde Firefox’un dil algılamasını kullanır. Firefox yeterince emin değilse kaynak dili elle seçmeni ister.
 4. Video için sekmeyi seç, videonun altyazısını aç ve **Video altyazı çevirisini aç** anahtarını kullan. Yazı boyutu, font, renk, arka plan, konum ve iki satırın görünürlüğü ayarlanabilir. Yerel VTT/SRT çevirip VTT olarak indirme de vardır.
-5. Genel soru için Qwen’i seç ve yükle. M2M100 bir çeviri modelidir; genel soru düğmesi Qwen’de kullanılabilir. Bellekten çıkar önbelleği korur, sil yalnız seçili modelin önbelleğini kaldırır.
+5. Genel soru için Qwen’i seç ve yükle. Bergamot ve M2M100 çeviri motorlarıdır; genel soru düğmesi Qwen’de kullanılabilir. Bellekten çıkar önbelleği korur, sil yalnız seçili indirilen modelin önbelleğini kaldırır. Paket içindeki modeller ayrı silinmez; devre dışı bırakma/bellekten çıkarma çalışma kaynaklarını bırakır.
 
 Video modu standart HTML TextTrack altyazılarını okur. Bazı YouTube, Netflix veya özel oynatıcılar altyazılarını bu yolla sunmaz. Sesin otomatik yazıya dökülmesi yoktur; gerçek zamanlı çeviri cihaz hızına bağlıdır. Netflix çözünürlüğü veya her hizmette altyazı desteği garanti edilmez. Firefox arayüzü ve kendi dil paketleri ayrı yönetilir; 100 çeviri dili, eklenti arayüzünün 100 dilde çevrildiği anlamına gelmez.
 
-M2M100 CPU, Qwen CPU/WebGPU destekler. Qwen WebGPU yolu Firefox/platform desteği ve `shader-f16` gerektirir; bu yol henüz donanımda doğrulanmadı. Büyük modeller için kullanılabilir bellek ve disk alanı gerekir. Firefox güvenlik ve imza kontrolleri kapatılmaz.
+Bergamot ve M2M100 CPU, Qwen CPU/WebGPU destekler. Qwen WebGPU yolu Firefox/platform desteği ve `shader-f16` gerektirir; bu yol henüz donanımda doğrulanmadı. Büyük modeller için kullanılabilir bellek ve disk alanı gerekir. Firefox güvenlik ve imza kontrolleri kapatılmaz.
 
 ## Altyazı zamanını düzeltme
 
@@ -49,7 +50,7 @@ M2M100 temel modelinin kartı MIT bildirir; ONNX dönüşüm deposunun ayrı lis
 
 ## English
 
-M2M100 418M is a local CPU translation model with 100 language choices; Qwen 2.5 1.5B remains available for general prompts. Model weights are separately downloaded or imported, hash checked and cached. Inference is offline. Qwen failed the Turkish translation check; M2M100 passed the small English/Turkish examples documented in the validation report. Caption availability and translation quality vary. Firefox language detection may ask for a manual source language when uncertain.
+Bergamot EN↔TR CPU engine and weights are packaged for offline first use without a download. M2M100 418M is a separately downloaded local CPU model with 100 language choices; Qwen 2.5 1.5B remains available for general prompts. Qwen/M2M weights are separately downloaded/imported, hash checked and cached. Inference is offline. Qwen failed the Turkish translation check; M2M100 passed the small English/Turkish examples documented in the validation report. Caption availability and translation quality vary. Firefox language detection may ask for a manual source language when uncertain.
 
 ## Altyazıyla öğrenme · 0.4.0
 
@@ -72,3 +73,14 @@ Videoyu seçip **Altyazı kaynaklarını yenile** düğmesine bas. Yerel oynatı
 **Bu satırı döngüye al** o anki satırı (satırlar arasındaysa önceki satırı) tekrarlar. Video duraklatılabilir ve kaldığı yerden devam edebilir. **Satır döngüsünü durdur**, satır dışına elle gitmek, kaynak/video değiştirmek veya paneli kapatmak döngüyü sonlandırır. Gecikme ayarı değişince eski zaman aralığındaki döngü durur; yeniden başlatmak yeni gecikmeyi kullanır. Döngü, videonun kendi tamamını tekrarlama tercihini geçici bırakır ve durunca geri yükler. Son satırın bitişi video süresine kırpılır. Native `timeupdate`/`ended` olayları kullanıldığından sınırlar örnek hassasiyetinde ses kesimi değildir.
 
 Dosya kaynağı seçiliyken canlı oynatıcı çevirisi başlamaz; dosya çevirisi kullanılmalıdır. Hatalı seçim mevcut dosya katmanını silmez. Konuşma tanıma, kapalı servis altyazı API’leri veya korumalı Firefox ekranları bu özellik değildir.
+
+
+## Paket içi çeviri · 0.8.0
+
+Bergamot, Firefox’un ayrıcalıklı native çeviri API’sini kullanmaz; bu tek eklentideki WASM motorudur. Mozilla’nın dağıttığı tiny İngilizce/Türkçe model dosyaları ve lisansları aynen kullanılır. Dosyalar ana eklenti bağlamından okunup worker’a aktarılır; WASM ve her modelin SHA-256’sı doğrulanır. Worker’ın metin işleme aşamasında ağ isteği yapacak yolu yoktur. Bu düzen, Firefox’un çevrimdışı modunda classic worker’dan yapılan paket `fetch` isteğinin başarısız olması sorununu da giderir.
+
+İki dil yönü dışında açık hata verilir; gizlice başka modele veya uzak servise geçilmez. Genel sorular için Qwen seçilip ayrıca yüklenir. Bir modeli durdurma, henüz paket verisi hazırlanırken bile işlemi iptal eder. Yerel metin en fazla 4.000 karakterdir; sınır aşımı modeli başlatmadan açıklanır.
+
+Gerçek çevrimdışı testte `The cat is sleeping.` → `Kedi uyuyor.`, `Please close the door.` → `Lütfen kapıyı kapat.`, `We visited the museum yesterday.` → `Dün müzeyi ziyaret ettik.`, `Merhaba, nasılsın?` → `Hi, how are you?` geçti. **Bilinen hata:** `I was about to give up.` → `- Vermek için çok ilgiliydim.`; deyimin anlamını korumaz. Bu yanlış sonuç kalite geçişi sayılmaz; önemli metinleri kontrol et.
+
+Bergamot için model indirme ortam değişkeni gerekmeden `python3 tests/bergamot_e2e.py` çalıştırılabilir; Firefox/geckodriver yolları önceki örnekteki gibidir. Test ilk model açılmadan önce Firefox ağını kapatır ve gerçek popup/sayfa/video/VTT akışlarını sınar.

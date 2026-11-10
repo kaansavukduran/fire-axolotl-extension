@@ -41,13 +41,14 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.7.0-unsigned.xpi'), temporary=True)
+    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.8.0-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
     driver.get(f'moz-extension://{uuid}/aion/ai.html')
     wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     Select(driver.find_element(By.ID,'aiModel')).select_by_value('qwen')
+    wait.until(lambda d:d.find_element(By.ID,'model-files-details').is_displayed())
     pin = json.loads((ROOT / 'browser/extension/ai/model.json').read_text())
     model_dir = Path(os.environ['AION_MODEL_DIR'])
     files = [model_dir / name for name in pin['files'] if not name.endswith('model_q4f16.onnx')]

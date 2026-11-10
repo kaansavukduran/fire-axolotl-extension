@@ -6,14 +6,53 @@
     "url": "https://github.com/gorhill/uBlock/releases/download/1.76.0/uBlock0_1.76.0.firefox.signed.xpi",
     "sha256": "6f20ff6749193599548770539103069c20948dfcd3e61c3089a67da7bfc3be39",
     "sources": {
-      "uBlock": {"url": "https://github.com/gorhill/uBlock.git", "commit": "aa9236cb351e369cbb68113dbe8175b87f3cd134"},
-      "uAssets/main": {"url": "https://github.com/uBlockOrigin/uAssets.git", "commit": "4c19477447674abcde789b072c2b318bdda91b87"},
-      "uAssets/prod": {"url": "https://github.com/uBlockOrigin/uAssets.git", "commit": "18f95f8e3a5bf667633766c31ad2d103a2051840"}
+      "uBlock": {
+        "url": "https://github.com/gorhill/uBlock.git",
+        "commit": "aa9236cb351e369cbb68113dbe8175b87f3cd134"
+      },
+      "uAssets/main": {
+        "url": "https://github.com/uBlockOrigin/uAssets.git",
+        "commit": "4c19477447674abcde789b072c2b318bdda91b87"
+      },
+      "uAssets/prod": {
+        "url": "https://github.com/uBlockOrigin/uAssets.git",
+        "commit": "18f95f8e3a5bf667633766c31ad2d103a2051840"
+      }
     },
     "submodules": {
       "platform/mv3/extension/lib/codemirror/codemirror-ubol": "a9762d064abb81c24a83de7f36507b7c0f2cbb70",
       "platform/mv3/extension/lib/s14e-serializer": "1f028eb315c14bb11f23f0ef6c4bf6c339d3b0b1",
       "publish-extension": "e45c4c9b9deff033ceabf5b6717967ebca2dce67"
+    }
+  },
+  "bergamot": {
+    "version": "0.4.9",
+    "url": "https://registry.npmjs.org/@browsermt/bergamot-translator/-/bergamot-translator-0.4.9.tgz",
+    "integrity": "sha512-bNuuCwM/JnsIYQCKXcYKFT4Qc5vLMoB8Nbvz8ReIgs7xzebK8Sa+R8iEK8mLvNBe/WaZ6zrPaUQilLsRT/ea8Q==",
+    "license": "MPL-2.0",
+    "sources": {
+      "url": "https://github.com/browsermt/bergamot-translator.git",
+      "commit": "8cc5d0495479c9ec56eafafd6bcd7fb5b929ca98"
+    },
+    "files": {
+      "worker/bergamot-translator-worker.js": {
+        "size": 80474,
+        "sha256": "748b2418418a2ffc6e70721aeb10098d8e6fb589ea156b91f4ae8bc3490d8f7a"
+      },
+      "worker/bergamot-translator-worker.wasm": {
+        "size": 5174294,
+        "sha256": "95a2b58dd6773bf1b3f345d71f9149928b9f75f4ec9c9064c0b3e42c298671b2"
+      },
+      "worker/translator-worker.js": {
+        "size": 17191,
+        "sha256": "90257af9ee0758983501bdce77ca7ec168cd7360d4689298c20a81b0251d6b62"
+      }
+    },
+    "emscripten_runtime_license": {
+      "commit": "3ff7eff373d31d8c0179895165462019221f192e",
+      "url": "https://raw.githubusercontent.com/emscripten-core/emscripten/3ff7eff373d31d8c0179895165462019221f192e/LICENSE",
+      "size": 5093,
+      "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86"
     }
   }
 }
