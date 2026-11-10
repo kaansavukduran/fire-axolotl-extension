@@ -1,10 +1,10 @@
-# Gerçek Firefox doğrulaması · 2026-11-10
+# Gerçek Firefox doğrulaması · 2026-11-11
 
 Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve geckodriver 0.37.1 kullanıldı. Tek geçici eklenti kuruldu; ayrıca uBO veya yardımcı native uygulama kurulmadı. Kişisel profil kullanılmadı. TLS doğrulaması, Firefox sandbox ve imza denetimi kapatılmadı. Geçici kurulum Firefox’un desteklenen geliştirici arayüzüyledir. Selenium dosya seçimi için yalnız ilgili dosya oluşturma otomasyon tercihi kullanılır.
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama · 0.13.0 | 58 geçti |
+| Node birim/izin/veri doğrulama · 0.13.1 | 61 geçti |
 | Gerçek popup, geniş panel, sağ tık konteyner ve AI başlangıcı · 0.13.0 | 6 geçti; [rapor](evidence/usability-results.json). |
 | Aion runtime simgesi ve YouTube biçiminde yerel HTTPS oyuncu · 0.12.0 | 5 geçti; [kapsam ve rapor](evidence/youtube-results.json). Gerçek kamu videosuna erişim 403 ile engellendi. |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
@@ -204,3 +204,11 @@ Aşağıdaki görüntüler gerçek toolbar popup’ı ve yerel HTTPS oynatıcıd
 ![Popup kapalıyken otomatik iki satır](evidence/automatic-dual-captions.png)
 
 Yerel regresyon denemesinde Firefox’un ilk 288 px popup görünümünün gövdeye geri yazılmasıyla panelin bazen dar kaldığı yakalandı. Tercih edilen genişlik artık tarayıcı penceresinden hesaplanır; geçici viewport değeri geri beslenmez. Sağ tık testinde Firefox’un asenkron uzantı grubu görünmeden kontrol edilmesi yarışı da giderildi; test gerçek görünür grup/öğeyi bekler ve headless hover yerine görünür XUL alt menüsünün kendi açma komutunu kullanır.
+
+## 0.13.1 · Kurulumdan sonra etkinleştirme yok
+
+Gerçek Firefox’ta yeni kurulumdan sonra hiçbir popup/AI sayfası açılmadan video oynatıldı; CC ve gerçek paketli model otomatik başlatılıp iki satır gösterildi. İlk açılan gerçek toolbar popup’ı zaten işaretliydi. Sonraki video, kapatma ve native TextTrack kontrolleri aynı akışta geçti. [Güncel rapor](evidence/auto-captions-results.json).
+
+Eski elle medya araçlarının bağımsız regresyon testleri, kullanıcının kayıtlı kapatma yoluyla otomatik modu önce kapatır; yeni varsayılanı bu testlerden çıkarımla doğrulanmış saymaz. Varsayılan başlangıç ayrı gerçek testte doğrulanır. Yeni geçiş testi 0.13.0 paketinin SHA-256’sını doğrular, kaydedilmiş eski false değerini gerçek yükseltmede açık bulur ve sonraki kapalı/açık tercihlerinin aynı kimlikle gerçek yeniden kurulumdan sonra korunduğunu sınar. [Geçiş raporu](evidence/caption-defaults-upgrade-results.json).
+
+Güncelleme testi, kapatma kaydedildiği halde bir storage olayı açık durumunu kısa süreli döndürebildiğini yakaladı. Geçilen ayar okuması artık en yeni okumanın tamamlanmasını bekler; stale yanıtla kutunun yeniden işaretlenmesi önlenir. Bu sıralama ayrıca birim testinde sınanır.

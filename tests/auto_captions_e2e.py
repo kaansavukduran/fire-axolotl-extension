@@ -68,19 +68,19 @@ def close_popup():
 try:
     d.set_window_size(1280,1050);version=json.loads((ROOT/'browser/extension/manifest.json').read_text())['version'];addon=d.install_addon(str(ROOT/f'dist/fire-axolotl-extension-{version}-unsigned.xpi'),temporary=True)
     d.set_context('chrome');uuid=d.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]",addon);d.set_context('content');base=f'moz-extension://{uuid}/aion/';url=f'https://www.youtube.com:{server.server_port}/watch?v=AION-LOCAL-FIXTURE'
-    # Privileged inspection harness only; the user opens no AI controller.
-    d.get(base+'popup.html');ready();harness=d.current_window_handle
-    toolbar();popup('p.document.getElementById("auto-captions").click();')
-    w.until(lambda _:popup('return p.document.getElementById("auto-captions").checked&&!p.document.getElementById("auto-captions").disabled;'))
-    assert 'Video' in popup('return p.document.getElementById("auto-caption-status").textContent;') or 'video' in popup('return p.document.getElementById("auto-caption-status").textContent;')
-    close_popup();assert request({'type':'settings'})['autoCaptions'] is True
-    passed.append('One checkbox in the actual toolbar popup persists on with no video; no manual target, model-load or AI controller is needed')
-    d.switch_to.new_window('tab');page=d.current_window_handle;d.get(url);control('play').click()
+    # No popup, AI controller, checkbox or settings action before first playback.
+    d.get(url);page=d.current_window_handle;control('play').click()
     w.until(lambda _:bool(d.find_elements(By.CSS_SELECTOR,'[data-aion-captions]')))
     w.until(lambda _:any('kedi' in x.text.lower() for x in lines()));assert any('The cat' in x.text for x in lines())
     assert control('movie_player').find_element(By.CSS_SELECTOR,'.ytp-subtitles-button').get_attribute('aria-pressed')=='true'
     d.save_screenshot(str(out/'automatic-dual-captions.png'))
-    passed.append('Opening a video later automatically enables YouTube CC and cold-starts real bundled EN/TR inference, showing both lines after the popup has closed')
+    passed.append('Fresh installation automatically finds the video, enables CC and cold-starts real bundled EN/TR dual subtitles without opening any extension UI or checking any box')
+    # This page is only the privileged WebDriver inspection harness.
+    d.switch_to.new_window('tab');harness=d.current_window_handle;d.get(base+'popup.html');ready()
+    assert request({'type':'settings'})['autoCaptions'] is True
+    toolbar();assert popup('return p.document.getElementById("auto-captions").checked;');close_popup()
+    passed.append('The actual toolbar popup is already checked on its first opening; no manual target, model load or activation step is needed')
+    d.switch_to.window(page)
     control('door').click();w.until(lambda _:any('kapı' in x.text.lower() for x in lines()));assert any('Please close' in x.text for x in lines())
     control('navigate').click();w.until(lambda _:any('A new video.' in x.text for x in lines()));w.until(lambda _:any(x.text and 'A new video.' not in x.text for x in lines()))
     assert not any('kapı' in x.text.lower() for x in lines())
@@ -92,7 +92,8 @@ try:
     # Stop with the same single control, then verify native CC restoration.
     popup('p.document.getElementById("auto-captions").click();');w.until(lambda _:not popup('return p.document.getElementById("auto-captions").checked;'));close_popup()
     d.switch_to.window(page);w.until(lambda _:not d.find_elements(By.CSS_SELECTOR,'[data-aion-captions]'));assert d.execute_script('return getComputedStyle(document.querySelector(".ytp-caption-window-container")).opacity')=='1'
-    passed.append('Reopening the actual popup shows the persistent checked state; its checkbox is above the fold, the tab chooser is hidden, and switching off removes Aion and restores native captions')
+    d.switch_to.window(harness);toolbar();assert not popup('return p.document.getElementById("auto-captions").checked;');close_popup()
+    passed.append('Reopening the popup retains on state before stopping and off state afterward; its control is above the fold, no target chooser is shown, and switching off restores native captions')
     d.switch_to.window(harness);toolbar();popup('p.document.getElementById("auto-captions").click();');close_popup();d.switch_to.window(page)
     w.until(lambda _:bool(d.find_elements(By.CSS_SELECTOR,'[data-aion-captions]')));root().find_element(By.CSS_SELECTOR,'section > button').click();w.until(lambda _:not d.find_elements(By.CSS_SELECTOR,'[data-aion-captions]'))
     d.switch_to.window(harness);w.until(lambda _:request({'type':'settings'})['autoCaptions'] is False)

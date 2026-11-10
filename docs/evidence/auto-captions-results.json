@@ -1,9 +1,9 @@
 {
   "passed": [
-    "One checkbox in the actual toolbar popup persists on with no video; no manual target, model-load or AI controller is needed",
-    "Opening a video later automatically enables YouTube CC and cold-starts real bundled EN/TR inference, showing both lines after the popup has closed",
+    "Fresh installation automatically finds the video, enables CC and cold-starts real bundled EN/TR dual subtitles without opening any extension UI or checking any box",
+    "The actual toolbar popup is already checked on its first opening; no manual target, model load or activation step is needed",
     "Caption changes and SPA video navigation automatically continue without re-enabling the switch or showing the previous caption translation",
-    "Reopening the actual popup shows the persistent checked state; its checkbox is above the fold, the tab chooser is hidden, and switching off removes Aion and restores native captions",
+    "Reopening the popup retains on state before stopping and off state afterward; its control is above the fold, no target chooser is shown, and switching off restores native captions",
     "Closing subtitles on the video also switches the persistent automatic mode off without resurrecting its overlay",
     "The same automatic switch detects a second native TextTrack player and renders both original and real local translation without tab selection"
   ],

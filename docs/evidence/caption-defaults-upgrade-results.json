@@ -1,0 +1,8 @@
+{
+  "passed": [
+    "Real upgrade from 0.13.0 opens its former saved-off default automatically while preserving vocabulary, language, appearance and caption preferences",
+    "Explicitly turning captions off survives actual add-on reinstallation/background restart; the new default is not reapplied",
+    "Re-enabling also survives real reinstallation without resetting unrelated data"
+  ],
+  "scope": "Stock Firefox temporary add-on upgrades; not an AMO signed install/update"
+}

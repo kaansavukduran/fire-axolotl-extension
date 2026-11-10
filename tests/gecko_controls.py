@@ -12,3 +12,16 @@ def choose_option(driver, element_id, value):
                 option.click()
             return
     raise AssertionError(f'No option {value} in {element_id}')
+
+
+def disable_automatic_captions(driver, base):
+    """Keep manual-media regressions independent of the default-on service.
+
+    Fresh-install automatic behavior has its own actual-toolbar/model test.
+    This setup exercises the same persisted off choice available to users.
+    """
+    from selenium.webdriver.support.ui import WebDriverWait
+    driver.get(base + 'popup.html')
+    WebDriverWait(driver, 45).until(lambda _: driver.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
+    state = driver.execute_async_script('browser.runtime.sendMessage({type:"autoCaptions",action:"set",enabled:false}).then(arguments[0]);')
+    assert state['enabled'] is False

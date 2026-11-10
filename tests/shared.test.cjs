@@ -3,6 +3,16 @@ const {test} = require('node:test');
 const assert = require('node:assert/strict');
 const Aion = require('../browser/extension/shared.js');
 
+test('ready-on-install captions migrate the former default once and retain later choices', () => {
+  const fresh=Aion.normalize();
+  assert.equal(fresh.autoCaptions,true);assert.equal(fresh.captionOriginal,true);assert.equal(fresh.captionTranslated,true);
+  assert.equal(fresh.aiSource,'auto');assert.equal(fresh.aiTarget,'tr');
+  const migrated=Aion.normalize({autoCaptions:false,vocabulary:['Işık'],theme:'light',captionOriginal:false});
+  assert.equal(migrated.autoCaptions,true);assert.deepEqual(migrated.vocabulary,['Işık']);assert.equal(migrated.theme,'light');assert.equal(migrated.captionOriginal,false);
+  const off=Aion.normalize({...migrated,autoCaptions:false});
+  assert.equal(Aion.normalize(JSON.parse(JSON.stringify(off))).autoCaptions,false);
+});
+
 test('subtitle appearance clamps numeric values and never accepts CSS or remote font input', () => {
   assert.deepEqual(Aion.captionStyle({captionSize:999,captionOpacity:-5,captionFont:'https://tracker/font',captionPosition:'left',captionColor:'red;display:none'}),
     {offset:0,size:48,opacity:0,font:'system',position:'bottom',color:'#ffffff',translationColor:'#85e7ff'});

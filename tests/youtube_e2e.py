@@ -11,6 +11,7 @@ import json,os,ssl,subprocess,tempfile
 from pathlib import Path
 from threading import Thread
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+from gecko_controls import disable_automatic_captions
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select,WebDriverWait
@@ -56,6 +57,7 @@ def label(key):return d.find_element(By.CSS_SELECTOR,'[data-setting="'+key+'"]')
 try:
     d.set_window_size(1280,1050);version=json.loads((ROOT/'browser/extension/manifest.json').read_text())['version'];addon=d.install_addon(str(ROOT/f'dist/fire-axolotl-extension-{version}-unsigned.xpi'),temporary=True)
     d.set_context('chrome');uuid=d.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]",addon);d.set_context('content');base=f'moz-extension://{uuid}/aion/';url=f'https://www.youtube.com:{server.server_port}/watch?v=AION-LOCAL-FIXTURE'
+    disable_automatic_captions(d,base)
     d.get(url);page=d.current_window_handle;control('play').click();w.until(lambda _:d.execute_script('return document.querySelector("video").videoWidth')==320);assert d.execute_script('return document.querySelector("video").textTracks.length')==0
     d.switch_to.new_window('tab');controller=d.current_window_handle;d.get(base+'popup.html');ready();request({'type':'save','patch':{'language':'tr','aiSource':'auto','aiTarget':'tr'}})
     d.execute_async_script('browser.runtime.getBackgroundPage().then(bg=>{bg.__mediaEvents=[];const log=x=>{bg.__mediaEvents.push(x);if(bg.__mediaEvents.length>60)bg.__mediaEvents.shift()};const real=bg.AionMedia.command;bg.AionMedia.command=(id,c)=>{log({event:"command",id,action:c.action});return real(id,c).then(r=>{log({event:"done",id,action:c.action});return r;},e=>{log({event:"error",id,action:c.action,error:e.message});throw e;});};bg.browser.runtime.onConnect.addListener(p=>{if(p.name!=="aion-ai-video")return;log({event:"port",url:p.sender.url});p.onMessage.addListener(m=>log({event:"portMessage",...m}));p.onDisconnect.addListener(()=>log({event:"disconnect"}));});bg.browser.tabs.onRemoved.addListener(id=>log({event:"removed",id}));arguments[0](true);});')

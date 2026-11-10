@@ -1431,7 +1431,7 @@
     "message": "Automatically show dual subtitles"
   },
   "autoCaptionHelp": {
-    "message": "Turn on once. Aion finds the video and shows original captions with their translation. You can close this popup."
+    "message": "Dual subtitles are ready and on by default. Open a video and watch original captions with their translation. You can turn them off here."
   },
   "autoCaptionOptions": {
     "message": "Language and caption visibility"

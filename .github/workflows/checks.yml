@@ -37,6 +37,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libnss3-tools
       - run: python3 tests/youtube_e2e.py
       - run: python3 tests/auto_captions_e2e.py
+      - run: python3 tests/caption_defaults_upgrade_e2e.py
       - run: python3 scripts/fetch_previous_preview.py
       - name: Preserve settings and blocker data on temporary developer upgrade
         env:
@@ -60,6 +61,7 @@ jobs:
             work/usability-test-artifacts/
             work/youtube-test-artifacts/
             work/auto-captions-test-artifacts/
+            work/caption-defaults-upgrade-test-artifacts/
             work/bergamot-support/
             work/components/*corresponding-source.tar.gz
             work/ai-support/

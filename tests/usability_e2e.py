@@ -10,6 +10,7 @@ import base64,json,os,html
 from pathlib import Path
 from threading import Thread
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+from gecko_controls import disable_automatic_captions
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
@@ -60,6 +61,7 @@ def menu(kind,label):
 try:
     d.set_window_size(1400,1000);version=json.loads((ROOT/'browser/extension/manifest.json').read_text())['version'];addon=d.install_addon(str(ROOT/f'dist/fire-axolotl-extension-{version}-unsigned.xpi'),temporary=True)
     d.set_context('chrome');uuid=d.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]",addon);d.set_context('content');base=f'moz-extension://{uuid}/aion/';url=f'http://127.0.0.1:{server.server_port}/'
+    disable_automatic_captions(d,base)
     d.get(url);source=d.current_window_handle;control('login').click();control('play').click();w.until(lambda _:d.execute_script('return document.querySelector("video").videoWidth')==320)
     d.switch_to.new_window('tab');controller=d.current_window_handle;d.get(base+'popup.html');ready();request({'type':'save','patch':{'language':'tr','aiSource':'en','aiTarget':'tr'}})
     source_id=d.execute_async_script('const [url,done]=arguments;browser.tabs.query({}).then(t=>done(t.find(x=>x.url===url).id));',url)

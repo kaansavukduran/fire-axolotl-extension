@@ -1431,7 +1431,7 @@
     "message": "Videoları otomatik çift altyazıyla izle"
   },
   "autoCaptionHelp": {
-    "message": "Bir kez açman yeterli. Videoyu bulur, orijinal altyazı ile çevirisini birlikte gösterir. Bu pencereyi kapatabilirsin."
+    "message": "Çift altyazı hazır ve otomatik açık. Videoyu açıp izle; orijinal altyazı ile çevirisi birlikte gösterilir. İstersen buradan kapatabilirsin."
   },
   "autoCaptionOptions": {
     "message": "Dil ve altyazı görünümü"

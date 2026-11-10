@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 // The background page owns this session. Closing the toolbar popup is harmless.
 globalThis.AionAutoCaptions = (() => {
-  let settings, signature, session, generation=0, settingsRevision=0, running=false, pending=false, lastProbe=0;
+  let settings, signature, session, latestReconcile, generation=0, settingsRevision=0, running=false, pending=false, lastProbe=0;
   let state={enabled:false,key:'autoCaptionOff',title:''};
   const cache=new Map();
   const status=()=>({...state});
@@ -23,15 +23,21 @@ globalThis.AionAutoCaptions = (() => {
     }
     lastProbe=0;
   }
-  async function reconcile() {
+  function reconcile() {
     const revision=++settingsRevision;
-    const next=await readSettings();
-    if(revision!==settingsRevision)return status();
-    const nextSignature=JSON.stringify([next.autoCaptions,next.disabledModules,next.aiSource,next.aiTarget,Aion.captionStyle(next),next.captionOriginal,next.captionTranslated,next.language]);
-    settings=next;
-    if(signature!==nextSignature){signature=nextSignature;reset();report(next.autoCaptions?'autoCaptionWaiting':'autoCaptionOff','');}
-    if(next.autoCaptions && next.disabledModules.some(x=>['ai','video','translation'].includes(x)))report('moduleDisabled','');
-    return status();
+    const work=(async()=>{
+      const next=await readSettings();
+      // A storage event can overtake the explicit toggle's refresh. All callers
+      // must await the newest refresh instead of returning the old checked state.
+      if(revision!==settingsRevision)return latestReconcile;
+      const nextSignature=JSON.stringify([next.autoCaptions,next.disabledModules,next.aiSource,next.aiTarget,Aion.captionStyle(next),next.captionOriginal,next.captionTranslated,next.language]);
+      settings=next;
+      if(signature!==nextSignature){signature=nextSignature;reset();report(next.autoCaptions?'autoCaptionWaiting':'autoCaptionOff','');}
+      if(next.autoCaptions && next.disabledModules.some(x=>['ai','video','translation'].includes(x)))report('moduleDisabled','');
+      return status();
+    })();
+    latestReconcile=work;
+    return work;
   }
   async function set(enabled) {
     if(typeof enabled!=='boolean')throw new Error('unknownAction');

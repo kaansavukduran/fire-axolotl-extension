@@ -5,12 +5,12 @@ const vm=require('node:vm');
 const fs=require('node:fs');
 const Aion=require('../browser/extension/shared.js');
 const turn=()=>new Promise(r=>setImmediate(r));
-function fixture() {
-  let settings=Aion.normalize(),tabs=[],timer,inference,reply={language:'en',cues:[{start:0,end:10,text:'The cat is sleeping.'}]};
-  const calls=[],events={};
+function fixture(seed={autoCaptions:false,autoCaptionsDefaultVersion:1}) {
+  let settings=Aion.normalize(seed),tabs=[],timer,inference,reply={language:'en',cues:[{start:0,end:10,text:'The cat is sleeping.'}]};
+  const calls=[],events={};let deferredReads;
   const event=name=>({addListener:fn=>{events[name]=fn;}});
   const context=vm.createContext({Aion,Date,JSON,Map,console,setInterval:fn=>timer=fn,
-    readSettings:async()=>settings,writeSettings:async patch=>{settings=Aion.normalize({...settings,...patch});},
+    readSettings:async()=>deferredReads?new Promise(resolve=>deferredReads.push(resolve)):settings,writeSettings:async patch=>{settings=Aion.normalize({...settings,...patch});},
     decorateMediaCommand:async command=>command,
     browser:{tabs:{query:async()=>tabs,get:async id=>tabs.find(t=>t.id===id),onActivated:event('active'),onUpdated:event('updated'),onRemoved:event('removed')},storage:{onChanged:event('storage')}},
     AionMedia:{command:async(id,command,guard=()=>true)=>{
@@ -22,17 +22,31 @@ function fixture() {
     AionLocalAI:{call:message=>new Promise((resolve,reject)=>{inference={message,resolve,reject};})}});
   vm.runInContext(fs.readFileSync('browser/extension/auto-captions.js','utf8'),context);
   return {service:context.AionAutoCaptions,calls,events,setTabs:v=>tabs=v,setReply:v=>reply=v,inference:()=>inference,prefs:()=>settings,
+    deferReads:()=>{deferredReads=[];},resolveRead:(index,value)=>deferredReads[index](Aion.normalize(value)),
     tick:async()=>{timer();await turn();await turn();},patch:async patch=>{settings=Aion.normalize({...settings,...patch});await context.AionAutoCaptions.reconcile();}};
 }
 const video=(id=1)=>({id,url:'https://example.org/video',title:'Video',active:true,info:{kind:'video',paused:false}});
-test('one persistent switch waits for a video without reverting and discovers it automatically',async()=>{
-  const f=fixture();await turn();await f.service.set(true);await f.tick();
+test('fresh installation starts enabled and discovers a video without any UI activation',async()=>{
+  const f=fixture({});await turn();await f.tick();
   assert.equal(f.service.status().enabled,true);assert.equal(f.service.status().key,'autoCaptionWaiting');
   f.setTabs([video()]);f.events.active();await f.tick();
   assert.equal(f.inference().message.source,'en');assert.equal(f.inference().message.target,'tr');
   f.inference().resolve({text:'Kedi uyuyor.'});await f.tick();
   assert.equal(f.calls.filter(c=>c.action==='overlay').at(-1).translated[0].text,'Kedi uyuyor.');
   assert.equal(f.prefs().autoCaptions,true);
+});
+test('an overtaken preference refresh waits for the latest state instead of rechecking the toggle',async()=>{
+  const f=fixture({});await turn();f.deferReads();
+  let settled=false;const first=f.service.reconcile().then(state=>{settled=true;return state;});
+  const latest=f.service.reconcile();f.resolveRead(0,{autoCaptions:true,autoCaptionsDefaultVersion:1});await turn();
+  assert.equal(settled,false);
+  f.resolveRead(1,{autoCaptions:false,autoCaptionsDefaultVersion:1});
+  assert.equal((await first).enabled,false);assert.equal((await latest).enabled,false);
+});
+test('a saved off choice stays off when the background service starts again',async()=>{
+  const first=fixture({});await turn();await first.service.set(false);
+  const restored=fixture(structuredClone(first.prefs()));await turn();restored.setTabs([video()]);await restored.tick();
+  assert.equal(restored.service.status().enabled,false);assert.equal(restored.inference(),undefined);
 });
 test('switching off while inference is pending cleans up and rejects late output',async()=>{
   const f=fixture();await turn();f.setTabs([video()]);await f.service.set(true);await f.tick();

@@ -31,3 +31,5 @@ Qwen 2.5 1.5B yerel metin/altyazı motoru ve kullanım sınırları: [LOCAL_AI.m
 0.12.0: YouTube görünür CC okuyucusu ve kaynak/hedef/iki satır görünürlüğü aynı video ekranındadır. CC yoksa konuşma tanıma yapılmaz; DOM kaynağı tam video transkripti değildir. Gerçek kamu videosu erişimi bu ortamda 403 ile engellendi; yerel HTTPS oynatıcı ve gerçek model testi hizmetin bütün sürümleri için garanti değildir.
 
 0.13.0: popup’ın ilk kartındaki tek kutu otomatik video seçimini ve arka plan çift altyazısını yönetir. Ayrı kontrol sekmesi gerekmez; tercih sonraki videolarda sürer. Paket motoru EN↔TR; erişilebilir CC gerekir.
+
+0.13.1: Kurulumdan sonra videoyu açmak yeterli; otomatik çift altyazı varsayılan açık. Eski kapalı varsayılan bir kere geçirilir, sonraki kapatma tercihi korunur. EN↔TR paket motoru ve okunabilir CC sınırları geçerlidir.

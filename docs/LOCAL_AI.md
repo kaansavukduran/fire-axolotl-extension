@@ -16,7 +16,7 @@ Bergamot’un çalışma kodu, WASM’ı ve EN↔TR model ağırlıkları XPI’
 4. Video için sekmeyi seç, videonun altyazısını aç ve **Video altyazı çevirisini aç** anahtarını kullan. Yazı boyutu, font, renk, arka plan, konum ve iki satırın görünürlüğü ayarlanabilir. Yerel VTT/SRT çevirip VTT olarak indirme de vardır.
 5. Genel soru için Qwen’i seç ve yükle. Bergamot ve M2M100 çeviri motorlarıdır; genel soru düğmesi Qwen’de kullanılabilir. Bellekten çıkar önbelleği korur, sil yalnız seçili indirilen modelin önbelleğini kaldırır. Paket içindeki modeller ayrı silinmez; devre dışı bırakma/bellekten çıkarma çalışma kaynaklarını bırakır.
 
-Video için Aion popup’ındaki **Videoları otomatik çift altyazıyla izle** kutusunu bir kez işaretle. Video otomatik bulunur; popup veya ayrı AI sekmesi açık kalmaz. İngilizce ↔ Türkçe paket motoru ilk kullanımda başlar, kaynak dil varsayılan olarak otomatik algılanır. YouTube CC varsa açılır; standart HTML TextTrack altyazıları da okunur. Sonraki video ve YouTube SPA gezinmesinde otomatik devam eder. Kutuyu kaldırmak veya video üzerindeki × durdurur ve yerel altyazıyı geri getirir. Dil/satır görünürlüğü aynı kartın isteğe bağlı bölümündedir. Okunabilir altyazı gerekir; ses yazıya dökülmez, Netflix veya her oynatıcı desteği garanti edilmez. **Gelişmiş altyazı ve dosya araçları** eski elle hedef seçilen AI panelini açar; bu gelişmiş oturum açık kontrol sekmesine bağlıdır ve otomatik oturumdan ayrıdır.
+Video için eklentiyi kurup videoyu açman yeterli. **Videoları otomatik çift altyazıyla izle** varsayılan açıktır; popup açıp kutu işaretlemek gerekmez. Video otomatik bulunur; popup veya ayrı AI sekmesi açık kalmaz. İngilizce ↔ Türkçe paket motoru ilk kullanımda başlar, kaynak dil varsayılan olarak otomatik algılanır. YouTube CC varsa açılır; standart HTML TextTrack altyazıları da okunur. Sonraki video ve YouTube SPA gezinmesinde otomatik devam eder. Kutuyu kaldırmak veya video üzerindeki × durdurur ve yerel altyazıyı geri getirir. Dil/satır görünürlüğü aynı kartın isteğe bağlı bölümündedir. Okunabilir altyazı gerekir; ses yazıya dökülmez, Netflix veya her oynatıcı desteği garanti edilmez. **Gelişmiş altyazı ve dosya araçları** eski elle hedef seçilen AI panelini açar; bu gelişmiş oturum açık kontrol sekmesine bağlıdır ve otomatik oturumdan ayrıdır.
 
 Bergamot ve M2M100 CPU, Qwen CPU/WebGPU destekler. Qwen WebGPU yolu Firefox/platform desteği ve `shader-f16` gerektirir; bu yol henüz donanımda doğrulanmadı. Büyük modeller için kullanılabilir bellek ve disk alanı gerekir. Firefox güvenlik ve imza kontrolleri kapatılmaz.
 
@@ -118,8 +118,10 @@ Firefox araç çubuğu popup’ı en fazla yaklaşık 800×600 CSS piksel olabil
 
 **Video altyazısını çevir** ve **Sayfa / popup yazılarını çevir** kaynak sekmeyi AI ekranına taşır. Erişilebilir TextTrack ve gözden geçirilmiş DOM çevirisi sınırları aynen sürer; her serviste altyazı erişimi veya native Firefox arayüzü çevirisi garantisi yoktur.
 
-## YouTube için tek anahtar
+## YouTube için hazır başlangıç
 
-Aion simgesi → **Videoları otomatik çift altyazıyla izle**. Sekme veya model seçme; ilk İngilizce↔Türkçe kullanımında motor kendisi başlar. Popup’ı kapatıp izlemeye devam et. Video henüz açık değilse işaret açık kalır ve video bekler. **Dil ve altyazı görünümü** içinden hedef dili veya iki satırı ayrı ayrı değiştirebilirsin. Okunabilir CC yoksa aynı kartta neden gösterilir.
+Eklentiyi kur → videoyu aç ve izle. Çift altyazı otomatik açıktır. Sekme veya model seçme; ilk İngilizce↔Türkçe kullanımında motor kendisi başlar. Popup’ı kapatıp izlemeye devam et. Video henüz açık değilse işaret açık kalır ve video bekler. **Dil ve altyazı görünümü** içinden hedef dili veya iki satırı ayrı ayrı değiştirebilirsin. Okunabilir CC yoksa aynı kartta neden gösterilir.
 
 Paylaşılan YouTube videosunun canlı doğrulaması bu ortamda proxy HTTP 403 nedeniyle yapılamadı. Kontrollü yerel HTTPS oynatıcıda gerçek Firefox ve gerçek paket modeli kullanıldı; [kanıt ve kapsam](VALIDATION.md).
+
+0.13.1, yeni kurulumda ve eski varsayılanı taşıyan 0.13.0 ayarlarında çift altyazıyı bir kez otomatik açar. Sonraki kapatma tercihi sürüm işaretiyle kaydedilir; yeniden açılış/güncelleme/yedek geri yüklemede tekrar zorla açılmaz. Diğer kayıtlı dil, görünüm, satır görünürlüğü, modül ve kelime tercihleri korunur.

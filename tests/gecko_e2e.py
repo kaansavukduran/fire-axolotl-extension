@@ -16,7 +16,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from gecko_controls import choose_option
+from gecko_controls import choose_option, disable_automatic_captions
 
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = ROOT / 'work/test-artifacts'
@@ -136,6 +136,7 @@ try:
     record('Integrated hash-pinned uBlock Origin engine blocks a real script request while the normal page still runs')
     record('One independently identified extension supplies both uBO and Aion; no second add-on installed')
     base = f'moz-extension://{ublock_uuid}/aion/'
+    disable_automatic_captions(driver,base)
     driver.get(base + 'settings.html')
     wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: d.execute_script('return typeof UI !== "undefined" && !!UI.settings'))
