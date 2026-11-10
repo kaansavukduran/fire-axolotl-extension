@@ -31,6 +31,7 @@ jobs:
       - run: python3 tests/caption_learning_e2e.py
       - run: python3 tests/bergamot_e2e.py
       - run: python3 tests/caption_card_e2e.py
+      - run: python3 tests/wordbook_e2e.py
       - run: python3 scripts/fetch_previous_preview.py
       - name: Preserve settings and blocker data on temporary developer upgrade
         env:
@@ -50,6 +51,7 @@ jobs:
             work/caption-learning-test-artifacts/
             work/bergamot-test-artifacts/
             work/caption-card-test-artifacts/
+            work/wordbook-test-artifacts/
             work/bergamot-support/
             work/components/*corresponding-source.tar.gz
             work/ai-support/

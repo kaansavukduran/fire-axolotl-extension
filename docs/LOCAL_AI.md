@@ -95,3 +95,14 @@ Karttaki dil seçimi o karta aittir; AI sayfasındaki kalıcı tercihi değişti
 **Escape** kartı kapatır ve videoyu duraklatılmış bırakır. **Kapat ve devam et** açıkça oynatmayı başlatır. Altyazıdaki × tüm Aion altyazısını kapatır. AI panelinden durdurma, panel bağlantısının kapanması veya sayfadan ayrılma katmanı temizler; kapanan kartın gecikmiş sonucu yeni karta yazılmaz. Canlı altyazıya yeni satırlar eklenirken açık kart ve odak korunur.
 
 Kart erişilebilir iframe içinde de çalışır. Oynatıcı kapsayıcısının HTML tam ekranında görünür; video öğesinin kendi native tam ekranında Firefox yalnız altyazıyı çizer, etkileşimli kart gösterilemez. Kart için native tam ekrandan çık. Konuşma tanıma veya her hizmette altyazıya erişim bu sürüme eklenmez.
+
+
+## Kelime defterini yönetme · 0.10.0
+
+Popup’ın çeviri bölümündeki, AI ekranındaki öğrenme bölümündeki veya Ayarlar → Veri bölümündeki **Kelime defteri** düğmesini aç. Kaydedilmiş kelimeler en yeni kayıt önde, sayfa başına 50 metinle gösterilir. Arama mevcut arayüz dilinin büyük/küçük harf kurallarını kullanır. Kelime veya cümle eklemek AI çalıştırmaz. Kayıt en fazla 300 karakterdir; 5.000 kayıt sınırında yeni kayıt reddedilir, mevcut kelimeyi tekrar kaydetmek kopya oluşturmaz. Dolu defter ve uzun metin artık sessizce kırpılmaz veya kaydedilmiş gibi gösterilmez.
+
+**Kaydı sil**, seçili metnin tüm birebir aynı eski tekrarlarını da siler. **Son silmeyi geri al**, başka bir sayfada eklenen kelimeleri koruyarak eski metni ve mümkün olan sırasını geri getirir. Daha sonra aynı metin yeniden eklenmişse kopya oluşturmaz. Geri alma, ekran açıkken son silme içindir; arka plan en son 20 işlemi bellekte tutar ve Firefox yeniden başlatılınca bırakır. Defter arada dolmuşsa geri alma yeni kayıtları silmez; yer açtıktan sonra yeniden deneyebilirsin. Kelime silmek keşif kilometre taşını geri almaz: o gösterge aracı denediğini belirtir, bilgi düzeyini ölçmez.
+
+**Dışa aktar**, yalnız kelimeleri `fire-axolotl-vocabulary.json` dosyasına indirir. **Kelime yedeğini seç** gerçek dosyayı önizler; ilk 5 metin gösterilir. **Önizlenen kayıtları birleştir** mevcut kayıtları korur ve birebir aynı tekrarları atlar. Yanlış biçim/sürüm, geçersiz kayıt veya kapasite aşımında hiçbir kayıt yazılmaz. Dosya en fazla 12 MiB, 5.000 kayıt ve kayıt başına 300 karakter olabilir. Sınır, kaçışlı Unicode içeren geçerli tam yedeğin de tekrar alınabilmesi için ayrı tutulur. Bu dosya genel ayar yedeği değildir; tema, çeviri hizmeti ve taslak değiştirmez. Önizleme kapatılabilir.
+
+Çeviri modülü kapalıyken yeni elle kelime kaydı kapalıdır; mevcut veriye arama, silme/geri alma ve yedekten birleştirme erişimi sürer. Türkçe/English, mevcut tema/font/ölçek ayarlarını kullanır. Dil veya görünüm değişimi açık aramayı ve ekleme taslağını temizlemez. Sayfa kapatılınca kaydedilmemiş form/arama ve son geri alma düğmesi kalıcı saklanmaz; kaydedilen kelimeler korunur.

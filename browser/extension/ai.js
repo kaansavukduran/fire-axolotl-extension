@@ -169,6 +169,7 @@ function downloadCaptions() {
 function action(id, fn) {$(id).onclick = () => UI.run(fn);}
 (async () => {
   await UI.init();
+  $('open-wordbook').onclick=()=>UI.run(()=>browser.tabs.create({url:browser.runtime.getURL('aion/wordbook.html')}));
   const languageNames = new Intl.DisplayNames([UI.locale], {type:'language'});
   for (const id of ['aiSource', 'aiTarget']) for (const code of languages) {const option=document.createElement('option');option.value=code;option.textContent=languageNames.of(code) || code;$(id).append(option);}
   modelState = await callAI('status'); render(); await tabs();

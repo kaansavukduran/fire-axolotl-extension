@@ -23,7 +23,7 @@ function fixture(seed = {}) {
     i18n: {getUILanguage: () => 'tr'},
     permissions: {contains: async () => false}
   };
-  const context = vm.createContext({browser, Aion, console, setTimeout, clearTimeout, URL, AbortSignal, fetch: () => {throw new Error('Unexpected network request');}});
+  const context = vm.createContext({browser, Aion, crypto:require('node:crypto').webcrypto, console, setTimeout, clearTimeout, URL, AbortSignal, fetch: () => {throw new Error('Unexpected network request');}});
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../browser/extension/background.js'), 'utf8'), context);
   const sender = {id: 'test@aion', url: 'moz-extension://test/aion/settings.html', tab: {id: 20}};
   return {store, removed, createdTabs, browser, listeners, send: message => listeners.message(message, sender), setTabs: value => tabs = value, setIdentities: value => identities = value, setFetch:fn => {context.fetch=fn;}};
@@ -103,4 +103,46 @@ test('manual release checks include published previews, exclude drafts and never
   f.setFetch(async()=>({ok:true,json:async()=>[]}));assert.equal((await f.send({type:'checkUpdates'})).available,false);
   f.setFetch(async()=>({ok:true,json:async()=>({unexpected:true})}));await assert.rejects(f.send({type:'checkUpdates'}),/updateFailed/);
   f.setFetch(async()=>({ok:false,status:503}));await assert.rejects(f.send({type:'checkUpdates'}),/updateFailed/);
+});
+
+test('full vocabulary rejects a new word and overlong text without silent truncation or loss; duplicate saves still work',async()=>{
+  const words=Array.from({length:5000},(_,i)=>'word-'+i),f=fixture({settings:{vocabulary:words,progress:false}});
+  await assert.rejects(f.send({type:'word',word:'new word'}),/wordLimit/);
+  await assert.rejects(f.send({type:'word',word:'x'.repeat(301)}),/wordTooLong/);
+  await assert.rejects(f.send({type:'word',word:{text:'not a string'}}),/textRequired/);
+  assert.deepEqual(f.store.settings.vocabulary,words);
+  await f.send({type:'word',word:'word-0'});assert.deepEqual(f.store.settings.vocabulary,words);
+  assert.deepEqual(f.store.settings.milestones,[]);
+});
+test('removal and undo preserve Unicode, legacy duplicates, order and a concurrently added word',async()=>{
+  const f=fixture({settings:{vocabulary:['İyi günler','cat','İyi günler','  spaces  '],theme:'contrast'},aionDraft:'Keep draft'});
+  const [removed]=await Promise.all([f.send({type:'wordbook',action:'remove',word:'İyi günler'}),f.send({type:'word',word:'new'})]);
+  assert.deepEqual(f.store.settings.vocabulary,['cat','  spaces  ','new']);
+  await f.send({type:'wordbook',action:'undo',token:removed.token});
+  assert.deepEqual(f.store.settings.vocabulary,['İyi günler','cat','İyi günler','  spaces  ','new']);
+  assert.equal(f.store.settings.theme,'contrast');assert.equal(f.store.aionDraft,'Keep draft');
+  await assert.rejects(f.send({type:'wordbook',action:'undo',token:removed.token}),/wordUndoExpired/);
+});
+test('word-only imports merge atomically, preserve existing settings and report duplicate counts',async()=>{
+  const f=fixture({settings:{vocabulary:['cat'],theme:'light',endpoint:'https://chosen.example/translate'},aionDraft:'private'});
+  const backup={format:'fire-axolotl-vocabulary',version:1,words:['cat','İyi günler','İyi günler','<img onerror=alert(1)>'],settings:{theme:'dark',endpoint:'https://untrusted.example/translate'}};
+  const result=await f.send({type:'wordbook',action:'import',backup});assert.deepEqual(JSON.parse(JSON.stringify(result)),{added:2,duplicates:2,total:3});
+  assert.deepEqual(f.store.settings.vocabulary,['cat','İyi günler','<img onerror=alert(1)>']);assert.equal(f.store.settings.theme,'light');assert.equal(f.store.settings.endpoint,'https://chosen.example/translate');assert.equal(f.store.aionDraft,'private');
+  for(const invalid of [{...backup,version:2},{...backup,words:['valid','x'.repeat(301)]},{...backup,words:['valid',null]},{...backup,words:[' ']},{...backup,format:'fire-axolotl'}])await assert.rejects(f.send({type:'wordbook',action:'import',backup:invalid}),/invalidWordBackup/);
+  assert.equal(f.store.settings.vocabulary.length,3);
+});
+test('a full-capacity merge or undo preserves every existing word and can be retried after making space',async()=>{
+  const words=Array.from({length:5000},(_,i)=>'word-'+i),f=fixture({settings:{vocabulary:words}});
+  await assert.rejects(f.send({type:'wordbook',action:'import',backup:{format:'fire-axolotl-vocabulary',version:1,words:['new','word-0']}}),/wordLimit/);assert.deepEqual(f.store.settings.vocabulary,words);
+  const removed=await f.send({type:'wordbook',action:'remove',word:'word-0'});await f.send({type:'word',word:'new'});
+  await assert.rejects(f.send({type:'wordbook',action:'undo',token:removed.token}),/wordLimit/);assert.equal(f.store.settings.vocabulary.length,5000);assert.ok(f.store.settings.vocabulary.includes('new'));
+  await f.send({type:'wordbook',action:'remove',word:'word-1'});await f.send({type:'wordbook',action:'undo',token:removed.token});assert.equal(f.store.settings.vocabulary[0],'word-0');assert.ok(f.store.settings.vocabulary.includes('new'));
+});
+test('wordbook data stays accessible with translation off and all wordbook mutations reject web content',async()=>{
+  const f=fixture({settings:{vocabulary:['cat'],disabledModules:['translation']}});
+  for(const action of ['remove','undo','import'])await assert.rejects(f.listeners.message({type:'wordbook',action,word:'cat'},{id:'test@aion',url:'https://example.org/',tab:{id:7}}),/unauthorized/);
+  const page={id:'test@aion',url:'moz-extension://test/aion/wordbook.html',tab:{id:8}};
+  assert.equal((await f.listeners.message({type:'settings'},page)).vocabulary[0],'cat');
+  await assert.rejects(f.send({type:'word',word:'new'}),/moduleDisabled/);
+  const removed=await f.send({type:'wordbook',action:'remove',word:'cat'});await f.send({type:'wordbook',action:'undo',token:removed.token});assert.deepEqual(f.store.settings.vocabulary,['cat']);
 });

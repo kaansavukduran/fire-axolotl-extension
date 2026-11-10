@@ -4,12 +4,13 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 40 geçti |
+| Node birim/izin/veri doğrulama | 45 geçti |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
-| 0.1.0 → 0.9.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
+| 0.1.0 → 0.10.0 geliştirici yükseltmesi | 2 geçti: ayarlar, eski Unicode/tekrar/boşluk içeren kelimeler, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
 | JS/HTML/yerelleştirme/manifest/vendor hash | Geçti; aynı kilitli girdilerden ikinci XPI üretimi bayt bayt aynı |
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
+| Gerçek kelime defteri · 0.10.0 | 6 geçti; [rapor](evidence/wordbook-results.json). |
 | web-ext 10.8.0 | 0 hata, 11 uyarı; [rapor](evidence/web-ext-lint.json) |
 | npm audit | 0 açık; [rapor](evidence/npm-audit.json); kapsamlı güvenlik garantisi değildir |
 | Gerçek M2M100 418M CPU · 0.8.0 | 9 teknik akış ve 4 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
@@ -131,3 +132,18 @@ Sürüm incelemesinde ana/native-newtab ve isteğe bağlı model testlerinin esk
 ![Video üzerinde yerel kelime çevirisi](evidence/on-video-word-card.png)
 
 ![Dar ekranda kelime kartı](evidence/on-video-word-card-narrow.png)
+
+
+## 0.10.0: yerel kelime defteri ve kayıt sınırları
+
+[Gerçek Firefox raporu](evidence/wordbook-results.json) altı akışı doğrular. Normal popup’tan kelime kaydet ve defteri aç; Türkçe `Işık`/`ışık` araması, düz metin HTML, klavyeyle silme/geri alma ve başka sayfada kaydedilen kelimeyi koruma. Gerçek JSON dosyası önizlemesi yazmaz; açık birleştirme 120 yeni metni ekler, tekrarları atlar, dosyadaki sahte ayar alanını uygulamaz; 50 satırlık sayfalar ve geçersiz/iptal dosyada veri koruma geçer. Tarayıcı gerçek UTF-8 JSON dosyasını indirir; aynı dosyayı seçerek silineni geri getirme, kaynak metinleri korur ve ayar/taslak dışa aktarmaz.
+
+Normal ayar kontrolleriyle TR/EN, koyu/yüksek kontrast, paket OpenDyslexic, %200 arayüz ve bağımsız %140 metin aynı akışta denendi. Dar ekranda yatay taşma olmadı; arama ve ekleme taslağı dil/görünüm değişince korundu ve ana kayıt eylemi çalıştı. Test profili cihaz dili English olduğu için Türkçe aşaması önce gerçek Ayarlar dil seçicisinden başlatılır; ürünün cihaz dilini izleme davranışı değiştirilmedi.
+
+5.000 kayıtlı gerçek dosyadan birleştirme, ekleme/popup/taşan dosyada açık hata ve kayıt/taslak/önizleme koruması geçti; ayarlar listesi yalnız son 50 kaydı önizler. Çeviri modülü normal checkbox’la kapatıldıktan sonra defterde arama/silme/geri alma çalıştı, yeniden açınca kayıtlar korundu ve AI motoru hâlâ yüklenmemişti. Ayrı [video kartı raporu](evidence/caption-card-results.json), aynı sınırda kaydet düğmesinin başarı yerine anlaşılır hata gösterdiğini de doğrular.
+
+Beş ek birim testi; dolu/uzun/yanlış tipte yeni metin ve tekrar kaydı; Unicode/boşluk/eski tekrarları sırasıyla geri alma ve eşzamanlı yeni kelime; atomik dosya birleştirme/yanlış sürüm/kötü kayıt ve ayarları koruma; kapasitesi dolan geri almayı veri kaybetmeden yeniden deneme; kapalı modülde veri erişimi ve web içeriğinin yetkisiz kalmasını kapsar. Video kartı yetki testi silme/geri alma/içe aktarma girişimlerini de reddeder. Çeviri doğruluğunda veya platform/imza kapsamındaki açıklarda iyileşme iddia edilmez.
+
+![Türkçe kelime defteri](evidence/wordbook-tr.png)
+
+![Dar ekranda %200 arayüz, bağımsız büyük yazı ve OpenDyslexic ile çalışan kayıt eylemi](evidence/wordbook-en-200-narrow.png)

@@ -42,6 +42,7 @@ async function fileCues(id) {
   action('open-game',()=>browser.tabs.create({url:browser.runtime.getURL('aion/newtab.html')}));
   action('open-tabs', () => browser.sidebarAction.open());
   action('open-ai', () => browser.tabs.create({url: browser.runtime.getURL('aion/ai.html')}));
+  action('open-wordbook', () => browser.tabs.create({url: browser.runtime.getURL('aion/wordbook.html')}));
   action('open-tools', () => browser.tabs.create({url: browser.runtime.getURL('aion/tools.html')}));
   action('open-blocker', async () => {
     const [tab] = await browser.tabs.query({active: true, currentWindow: true});

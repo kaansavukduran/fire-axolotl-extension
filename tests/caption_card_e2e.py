@@ -73,9 +73,12 @@ try:
     d.switch_to.window(controller);overlay(target,"Don't <img src=x onerror=alert(1)> stop. İyi günler!")
     d.switch_to.window(page);element('.learn').click();assert not root().find_elements(By.CSS_SELECTOR,'img');assert "Don't" in [button.text for button in element('.words').find_elements(By.TAG_NAME,'button')];assert 'İyi' in [button.text for button in element('.words').find_elements(By.TAG_NAME,'button')]
     element('.words button').click();study_buttons()[2].click();w.until(lambda _:'Saved' in element('[role=status]').text)
-    d.switch_to.window(controller);assert "Don't" in request({'type':'settings'})['vocabulary'];request({'type':'save','patch':{'disabledModules':['translation']}})
+    d.switch_to.window(controller);saved_words=request({'type':'settings'})['vocabulary'];assert "Don't" in saved_words
+    request({'type':'save','patch':{'vocabulary':['boundary-'+str(n) for n in range(5000)]}})
+    d.switch_to.window(page);study_buttons()[2].click();w.until(lambda _:'5,000' in element('[role=status]').text)
+    d.switch_to.window(controller);assert "Don't" not in request({'type':'settings'})['vocabulary'];request({'type':'save','patch':{'vocabulary':saved_words,'disabledModules':['translation']}})
     d.switch_to.window(page);study_buttons()[1].click();w.until(lambda _:'disabled' in element('[role=status]').text.lower())
-    passed.append('Apostrophes and Turkish words remain selectable; subtitle markup is literal text, and disabling translation blocks an already open card')
+    passed.append('Apostrophes and Turkish words remain selectable; markup is literal; a full vocabulary reports failure instead of false success, and disabling translation blocks an open card')
     d.switch_to.window(controller);request({'type':'save','patch':{'disabledModules':[],'language':'tr'}});nested_target=d.execute_async_script('const [url,done]=arguments;browser.tabs.query({}).then(t=>done(t.find(x=>x.url===url).id));',url+'iframe');overlay(nested_target)
     d.switch_to.window(nested);d.switch_to.frame(d.find_element(By.TAG_NAME,'iframe'));element('.learn').click();assert 'Kaynak' in element('.study').text
     study_buttons()[0].click();study_buttons()[1].click();w.until(lambda _:'kedi' in element('.study output').text.lower())

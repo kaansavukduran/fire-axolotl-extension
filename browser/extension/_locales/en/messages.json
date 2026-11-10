@@ -1165,5 +1165,122 @@
   },
   "captionStudyPending": {
     "message": "Working…"
+  },
+  "wordbook": {
+    "message": "Vocabulary"
+  },
+  "wordbookHelp": {
+    "message": "Manage the words and sentences you saved from subtitles and translation."
+  },
+  "wordbookScope": {
+    "message": "This vocabulary stays in this Firefox profile. It is not automatically sent to the cloud or AI. Imports preserve existing entries."
+  },
+  "wordSearch": {
+    "message": "Search words or sentences"
+  },
+  "wordbookEmpty": {
+    "message": "No entries yet. Add a word below or from a subtitle card."
+  },
+  "wordNoMatches": {
+    "message": "No entries match your search. Try another search."
+  },
+  "wordMatches": {
+    "message": "Matching / total"
+  },
+  "wordCapacity": {
+    "message": "Entry limit"
+  },
+  "wordPages": {
+    "message": "Vocabulary pages"
+  },
+  "wordPrevious": {
+    "message": "Previous page"
+  },
+  "wordNext": {
+    "message": "Next page"
+  },
+  "wordRemove": {
+    "message": "Remove entry"
+  },
+  "wordRemoved": {
+    "message": "Entry removed. You can undo the last removal."
+  },
+  "wordUndo": {
+    "message": "Undo last removal"
+  },
+  "wordUndoHelp": {
+    "message": "Removals can be undone. Undo for the last removal is available while this page stays open."
+  },
+  "wordRestored": {
+    "message": "Removed entry restored."
+  },
+  "wordUndoExpired": {
+    "message": "This removal can no longer be undone. Add the word again or merge a backup."
+  },
+  "wordMissing": {
+    "message": "This entry was removed in another page. Try again after the list updates."
+  },
+  "wordAdd": {
+    "message": "Add a word or sentence"
+  },
+  "wordSource": {
+    "message": "Source text to save · up to 300 characters"
+  },
+  "wordTooLong": {
+    "message": "You can save up to 300 characters. Shorten the text and try again."
+  },
+  "wordLimit": {
+    "message": "Vocabulary is full: 5,000 entries. Remove an entry from Vocabulary to make space. Existing entries are preserved."
+  },
+  "wordAddDisabled": {
+    "message": "Adding words is disabled because Translation is turned off. You can still search, remove and back up your entries."
+  },
+  "wordBackup": {
+    "message": "Vocabulary backup"
+  },
+  "wordBackupHelp": {
+    "message": "Export only vocabulary as JSON. Preview before importing; merging keeps existing words and skips duplicates. Limit: 5,000 entries, 300 characters per entry and a 12 MiB file. Settings, translation endpoints and drafts are excluded."
+  },
+  "wordImportChoose": {
+    "message": "Choose vocabulary backup"
+  },
+  "wordImportPreview": {
+    "message": "Import preview · first 5 entries"
+  },
+  "wordImportMerge": {
+    "message": "Merge previewed entries"
+  },
+  "wordImportCancel": {
+    "message": "Discard preview"
+  },
+  "wordImportReady": {
+    "message": "Preview ready. No entries have been changed yet."
+  },
+  "wordImported": {
+    "message": "Vocabulary backup merged."
+  },
+  "wordImportAdded": {
+    "message": "Added"
+  },
+  "wordImportSkipped": {
+    "message": "Duplicates skipped"
+  },
+  "wordTotal": {
+    "message": "Total"
+  },
+  "invalidWordBackup": {
+    "message": "This is not a valid Fire Axolotl vocabulary backup. Check the JSON format, version and entry limits. Existing entries were not changed."
+  },
+  "wordDownload": {
+    "message": "Download vocabulary backup"
+  },
+  "wordPreviewLimit": {
+    "message": "The latest 50 entries appear below. Open Vocabulary to search or remove entries."
+  },
+  "wordWorking": {
+    "message": "Working…"
+  },
+  "wordFileTooLarge": {
+    "message": "Vocabulary backups can be up to 12 MiB. Existing entries were not changed."
   }
 }

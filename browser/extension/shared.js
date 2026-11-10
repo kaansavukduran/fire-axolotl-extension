@@ -95,6 +95,13 @@
     return {offset: settings.captionOffset, size: settings.captionSize, opacity: settings.captionOpacity, font: settings.captionFont, position: settings.captionPosition,
       color: settings.captionColor, translationColor: settings.captionTranslationColor};
   }
+  function wordBackup(data) {
+    if (!data || data.format !== 'fire-axolotl-vocabulary' || data.version !== 1 || !Array.isArray(data.words) || data.words.length > 5000 ||
+      data.words.some(word => typeof word !== 'string' || !word.trim() || word.length > 300)) throw new Error('invalidWordBackup');
+    // Preserve exact legacy strings, including Unicode and surrounding spaces.
+    // No settings, URLs or model outputs are imported through this format.
+    return [...new Set(data.words)];
+  }
   function localPreferences(input = {}) {
     const out={aionSiteStyles:{},aionMediaSites:{}};
     const origin = value => {try{const u=new URL(value);return webURL(value)&&u.origin===value;}catch{return false;}};
@@ -105,7 +112,7 @@
     if(typeof input.aionDraft==='string')out.aionDraft=input.aionDraft.slice(0,5000);
     return out;
   }
-  const api = {defaults, normalize, language, clamp, webURL, translationEndpoint, imageSearchURL, parseVTT, captionStyle, localPreferences};
+  const api = {defaults, normalize, language, clamp, webURL, translationEndpoint, imageSearchURL, parseVTT, captionStyle, wordBackup, localPreferences};
   root.Aion = api;
   if (typeof module !== 'undefined') module.exports = api;
 })(globalThis);

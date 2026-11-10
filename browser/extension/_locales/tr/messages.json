@@ -1165,5 +1165,122 @@
   },
   "captionStudyPending": {
     "message": "İşleniyor…"
+  },
+  "wordbook": {
+    "message": "Kelime defteri"
+  },
+  "wordbookHelp": {
+    "message": "Altyazılardan ve çeviri ekranından kaydettiğin kelime ve cümleleri burada yönet."
+  },
+  "wordbookScope": {
+    "message": "Bu defter bu Firefox profilinde saklanır. Otomatik bulut veya AI aktarımı yapılmaz. İçe aktarma mevcut kayıtları korur."
+  },
+  "wordSearch": {
+    "message": "Kelime veya cümle ara"
+  },
+  "wordbookEmpty": {
+    "message": "Henüz kayıt yok. Aşağıdan veya altyazı kartından bir kelime ekle."
+  },
+  "wordNoMatches": {
+    "message": "Aramana uyan kayıt yok. Arama metnini değiştir."
+  },
+  "wordMatches": {
+    "message": "Eşleşen / toplam"
+  },
+  "wordCapacity": {
+    "message": "Kayıt sınırı"
+  },
+  "wordPages": {
+    "message": "Kelime defteri sayfaları"
+  },
+  "wordPrevious": {
+    "message": "Önceki sayfa"
+  },
+  "wordNext": {
+    "message": "Sonraki sayfa"
+  },
+  "wordRemove": {
+    "message": "Kaydı sil"
+  },
+  "wordRemoved": {
+    "message": "Kayıt silindi. Son silmeyi geri alabilirsin."
+  },
+  "wordUndo": {
+    "message": "Son silmeyi geri al"
+  },
+  "wordUndoHelp": {
+    "message": "Silme geri alınabilir. Son işlem için geri alma bu ekran açıkken kullanılabilir."
+  },
+  "wordRestored": {
+    "message": "Silinen kayıt geri getirildi."
+  },
+  "wordUndoExpired": {
+    "message": "Bu silme artık geri alınamıyor. Kelimeyi yeniden ekleyebilir veya yedekten birleştirebilirsin."
+  },
+  "wordMissing": {
+    "message": "Kayıt başka bir ekranda silinmiş. Liste güncellendiğinde tekrar dene."
+  },
+  "wordAdd": {
+    "message": "Kelime veya cümle ekle"
+  },
+  "wordSource": {
+    "message": "Kaydedilecek kaynak metin · en fazla 300 karakter"
+  },
+  "wordTooLong": {
+    "message": "En fazla 300 karakter kaydedebilirsin. Metni kısaltıp tekrar dene."
+  },
+  "wordLimit": {
+    "message": "Kelime defteri dolu: 5.000 kayıt. Yeni kayıt için Kelime defteri ekranından yer aç. Mevcut kayıtlar korunuyor."
+  },
+  "wordAddDisabled": {
+    "message": "Çeviri aracı kapalı olduğu için yeni kelime ekleme kapalı. Kayıtlarını arayabilir, silebilir ve yedekleyebilirsin."
+  },
+  "wordBackup": {
+    "message": "Kelime yedeği"
+  },
+  "wordBackupHelp": {
+    "message": "Yalnız kelimeleri JSON olarak dışa aktar. İçe aktarmadan önce önizle; birleştirme mevcut kelimeleri korur, aynı kayıtları atlar. En fazla 5.000 kayıt, kayıt başına 300 karakter ve 12 MiB dosya kabul edilir. Ayarlar, çeviri hizmeti adresi ve taslaklar bu yedeğe alınmaz."
+  },
+  "wordImportChoose": {
+    "message": "Kelime yedeğini seç"
+  },
+  "wordImportPreview": {
+    "message": "İçe aktarma önizlemesi · ilk 5 kayıt"
+  },
+  "wordImportMerge": {
+    "message": "Önizlenen kayıtları birleştir"
+  },
+  "wordImportCancel": {
+    "message": "Önizlemeyi kapat"
+  },
+  "wordImportReady": {
+    "message": "Önizleme hazır. Henüz hiçbir kayıt değiştirilmedi."
+  },
+  "wordImported": {
+    "message": "Kelime yedeği birleştirildi."
+  },
+  "wordImportAdded": {
+    "message": "Eklenen"
+  },
+  "wordImportSkipped": {
+    "message": "Atlanan aynı kayıt"
+  },
+  "wordTotal": {
+    "message": "Toplam"
+  },
+  "invalidWordBackup": {
+    "message": "Bu geçerli bir Fire Axolotl kelime yedeği değil. JSON biçimini, sürümü ve kayıt sınırlarını kontrol et. Mevcut kayıtlar değişmedi."
+  },
+  "wordDownload": {
+    "message": "Kelime yedeğini indir"
+  },
+  "wordPreviewLimit": {
+    "message": "Son 50 kayıt aşağıda. Aramak veya silmek için Kelime defterini aç."
+  },
+  "wordWorking": {
+    "message": "İşleniyor…"
+  },
+  "wordFileTooLarge": {
+    "message": "Kelime yedeği en fazla 12 MiB olabilir. Mevcut kayıtlar değişmedi."
   }
 }

@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: MPL-2.0 */
 'use strict';
 let queue = Promise.resolve();
+const wordUndo = new Map();
 function serial(fn) {
   const result = queue.then(fn);
   queue = result.catch(() => {});
@@ -32,20 +33,60 @@ async function activeTab() {
   return tab;
 }
 async function saveWord(text) {
-  const word = String(text || '').trim().slice(0,300);
+  if (typeof text !== 'string') throw new Error('textRequired');
+  const word = String(text || '').trim();
   if (!word) throw new Error('textRequired');
+  if (word.length > 300) throw new Error('wordTooLong');
   await serial(async () => {
     const settings = await readSettings();
-    if (!settings.vocabulary.includes(word)) settings.vocabulary.push(word);
+    if (!settings.vocabulary.includes(word)) {
+      if (settings.vocabulary.length >= 5000) throw new Error('wordLimit');
+      settings.vocabulary.push(word);
+    }
     await browser.storage.local.set({settings:Aion.normalize(settings)});
   });
   await milestone('word');
   return true;
 }
+async function manageWords(message) {
+  return serial(async () => {
+    const settings = await readSettings();
+    if (message.action === 'remove') {
+      const word = message.word;
+      if (typeof word !== 'string' || !word.trim() || word.length > 300) throw new Error('textRequired');
+      const positions = settings.vocabulary.flatMap((value,index) => value === word ? [index] : []);
+      if (!positions.length) throw new Error('wordMissing');
+      settings.vocabulary = settings.vocabulary.filter(value => value !== word);
+      await browser.storage.local.set({settings});
+      const token = crypto.randomUUID();wordUndo.set(token,{word,positions});
+      if (wordUndo.size > 20) wordUndo.delete(wordUndo.keys().next().value);
+      return {token};
+    }
+    if (message.action === 'undo') {
+      const entry = wordUndo.get(message.token);
+      if (!entry) throw new Error('wordUndoExpired');
+      if (!settings.vocabulary.includes(entry.word)) {
+        if (settings.vocabulary.length + entry.positions.length > 5000) throw new Error('wordLimit');
+        for (const index of entry.positions) settings.vocabulary.splice(Math.min(index,settings.vocabulary.length),0,entry.word);
+        await browser.storage.local.set({settings});
+      }
+      wordUndo.delete(message.token);return true;
+    }
+    if (message.action === 'import') {
+      const words = Aion.wordBackup(message.backup), seen = new Set(settings.vocabulary);
+      const additions = words.filter(word => !seen.has(word));
+      if (settings.vocabulary.length + additions.length > 5000) throw new Error('wordLimit');
+      settings.vocabulary.push(...additions);
+      await browser.storage.local.set({settings});
+      return {added:additions.length,duplicates:message.backup.words.length-additions.length,total:settings.vocabulary.length};
+    }
+    throw new Error('unknownAction');
+  });
+}
 async function onMessage(message, sender) {
   if (message.type === 'captionStudy') return AionCaptionStudy.handle(message,sender);
   // General container/storage/network actions remain extension-page only.
-  const allowedPages = ['popup.html', 'settings.html', 'characters.html', 'sidebar.html', 'newtab.html', 'tools.html', 'ai.html'].map(page => browser.runtime.getURL('aion/' + page));
+  const allowedPages = ['popup.html', 'settings.html', 'characters.html', 'sidebar.html', 'newtab.html', 'tools.html', 'ai.html', 'wordbook.html'].map(page => browser.runtime.getURL('aion/' + page));
   if (sender.id !== browser.runtime.id || !allowedPages.includes(sender.url)) throw new Error('unauthorized');
   const modules = {containers: 'containers', temporaryContainer: 'containers', createContainer: 'containers', openContainer: 'containers', video: 'video', mediaTab: 'video', forgetSpeed: 'video', selection: 'translation', translate: 'translation', word: 'translation', localAI: 'ai'};
   const module = modules[message.type];
@@ -54,6 +95,8 @@ async function onMessage(message, sender) {
   switch (message.type) {
     case 'settings': return readSettings();
     case 'save': return writeSettings(message.patch);
+    // Data management remains available when translation is disabled.
+    case 'wordbook': return manageWords(message);
     case 'localAI': return AionLocalAI.call(message);
     case 'pageTranslation': {
       const tab = await browser.tabs.get(Number(message.tabId));
@@ -116,7 +159,7 @@ async function onMessage(message, sender) {
       const command = {...message.command, style: Aion.captionStyle(settings), language: Aion.language(settings, browser.i18n.getUILanguage())};
       if (command.action === 'overlay') {
         const messages = await (await fetch(browser.runtime.getURL(`aion/_locales/${command.language}/messages.json`))).json();
-        const keys = ['captionStudy','captionStudyHelp','captionStudyContinue','captionStudyTranslate','captionStudySave','captionStudySaved','captionStudySentence','captionStudySource','captionStudyTarget','captionStudyLocal','captionStudyPending','aiBusy','aiSourceRequired','aiBergamotPairUnsupported','aiTargetUnsupported','moduleDisabled','operationFailed'];
+        const keys = ['captionStudy','captionStudyHelp','captionStudyContinue','captionStudyTranslate','captionStudySave','captionStudySaved','captionStudySentence','captionStudySource','captionStudyTarget','captionStudyLocal','captionStudyPending','aiBusy','aiSourceRequired','aiBergamotPairUnsupported','aiTargetUnsupported','moduleDisabled','operationFailed','wordLimit','wordTooLong'];
         command.studyUI = {source:settings.aiSource,target:settings.aiTarget,labels:Object.fromEntries(keys.map(key=>[key,messages[key]?.message || key]))};
       }
       const result = await AionMedia.command(tab.id, command);

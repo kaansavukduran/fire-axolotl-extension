@@ -23,3 +23,5 @@ h1,h2,label,summary{overflow-wrap:anywhere}
 .tab-select[aria-current=true]{font-weight:700}
 
 .tab-row>input[type=checkbox]{width:1.15rem;min-width:1.15rem;min-height:1.15rem;accent-color:var(--accent)}
+.wordbook-list{list-style:none;padding:0;margin:1rem 0}.wordbook-list li{display:flex;align-items:start;flex-wrap:wrap;gap:.75rem;border-bottom:1px solid var(--line);padding:.75rem 0}.wordbook-list p{flex:1 1 12rem;min-width:0;white-space:pre-wrap;margin:0;color:var(--ink)}.wordbook-list button{max-width:100%}.wordbook nav{align-items:center}.wordbook #word-preview{margin-top:1rem;border:1px solid var(--line);padding:1rem;border-radius:.6rem}.wordbook #word-preview-list{white-space:pre-wrap}
+.wordbook-list{max-height:28rem;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}.wordbook-list:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}

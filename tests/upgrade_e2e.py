@@ -29,7 +29,7 @@ try:
     wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
     assert driver.execute_script('return browser.runtime.getManifest().version')=='0.1.0'
     driver.execute_async_script('''(async()=>{
-      await browser.runtime.sendMessage({type:'save',patch:{theme:'light',aiSource:'en',aiTarget:'tr'}});
+      await browser.runtime.sendMessage({type:'save',patch:{theme:'light',aiSource:'en',aiTarget:'tr',vocabulary:['Legacy word','İyi günler','  legacy spaces  ','Legacy word']}});
       await browser.storage.local.set({aionDraft:'Private sample',aionRunnerBest:7,aionMediaSites:{'https://example.org':1.5}});
       const cache=await caches.open('aion-upgrade-test');await cache.put('https://example.org/test',new Response('local cache sample'));
     })().then(()=>arguments[0](true),e=>arguments[0]({error:e.message}));''')
@@ -54,11 +54,12 @@ try:
     assert driver.execute_script('return browser.runtime.getManifest().version')==version
     assert driver.execute_script('return UI.settings.theme')=='light'
     assert driver.execute_script('return UI.settings.aiSource')=='en'
+    assert driver.execute_script('return UI.settings.vocabulary')==['Legacy word','İyi günler','  legacy spaces  ','Legacy word']
     saved=driver.execute_async_script('browser.storage.local.get(["aionDraft","aionRunnerBest","aionMediaSites"]).then(arguments[0]);')
     assert saved['aionDraft']=='Private sample' and saved['aionRunnerBest']==7 and saved['aionMediaSites']['https://example.org']==1.5
     cached=driver.execute_async_script('caches.open("aion-upgrade-test").then(c=>c.match("https://example.org/test")).then(r=>r.text()).then(arguments[0]);')
     assert cached=='local cache sample'
-    results.append(f'Real temporary 0.1.0→{version} upgrade preserves extension ID, settings, draft, game record, site rule and CacheStorage')
+    results.append(f'Real temporary 0.1.0→{version} upgrade preserves extension ID, settings, legacy vocabulary including Unicode/duplicates/spaces, draft, game record, site rule and CacheStorage')
     driver.get(base+'1p-filters.html')
     wait.until(lambda d:d.execute_script('return !!globalThis.vAPI?.messaging'))
     after=driver.execute_async_script('vAPI.messaging.send("dashboard",{what:"readUserFilters"}).then(arguments[0]);')

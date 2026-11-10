@@ -1,0 +1,10 @@
+{
+  "passed": [
+    "The normal popup opens the offline vocabulary page; Turkish case search, literal markup, keyboard removal/undo and a word saved in another page preserve each other",
+    "A real JSON file previews without writes, merges 120 new records while skipping duplicates and ignoring injected settings, paginates at 50 rows, and invalid/cancelled files leave data unchanged",
+    "The browser downloads an actual UTF-8 word-only JSON backup; importing that exported file restores a removed entry without duplicating existing words or exporting settings/drafts",
+    "Real settings controls switch TR/EN, dark/high-contrast, OpenDyslexic, 200% UI and independent 140% text; the narrow page stays usable and preserves its filter and draft",
+    "A 5,000-entry import stays paginated; full-capacity manual/popup/import attempts report errors without false success, losing records or clearing the draft/preview; settings render only 50 preview rows",
+    "With Translation disabled, saved data remains searchable, removable and restorable; reopening preserves all records and no AI engine was loaded during the offline workflow"
+  ]
+}

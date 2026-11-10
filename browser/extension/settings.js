@@ -30,7 +30,7 @@ function render() {
   document.querySelectorAll('[data-scale]').forEach(button => button.setAttribute('aria-pressed', Number(button.dataset.scale) === UI.settings.scale));
   $('version').textContent = browser.runtime.getManifest().version + ' · ' + UI.t('developmentVersion');
   $('word-count').textContent = `${new Intl.NumberFormat(UI.locale).format(UI.settings.vocabulary.length)} ${UI.t('savedWords')}`;
-  $('word-list').replaceChildren(...UI.settings.vocabulary.map(word => {const li = document.createElement('li'); li.textContent = word; return li;}));
+  $('word-list').replaceChildren(...UI.settings.vocabulary.slice(-50).reverse().map(word => {const li = document.createElement('li'); li.textContent = word; return li;}));
 }
 function action(id, fn) {$(id).addEventListener('click', () => UI.run(fn));}
 async function save(patch) {await UI.save(patch); render();}
@@ -63,6 +63,7 @@ async function save(patch) {await UI.save(patch); render();}
   action('open-blocker', () => browser.tabs.create({url: browser.runtime.getURL('dashboard.html')}));
   action('open-firefox', () => browser.tabs.create({url: 'about:preferences'}));
   action('open-ai', () => browser.tabs.create({url: browser.runtime.getURL('aion/ai.html')}));
+  action('open-wordbook', () => browser.tabs.create({url: browser.runtime.getURL('aion/wordbook.html')}));
   action('open-tools', () => browser.tabs.create({url: browser.runtime.getURL('aion/tools.html')}));
   action('export', async () => {
     const local = Aion.localPreferences(await browser.storage.local.get(['aionSiteStyles','aionMediaSites','aionRunnerBest','aionSidebarCompanions','aionDraft']));

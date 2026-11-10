@@ -19,7 +19,7 @@ test('caption capability binds source words to one sender, frame and session; it
   const f=fixture();
   for(const who of [{...f.sender,id:'other'}, {...f.sender,frameId:0}, {...f.sender,tab:{id:8}}, {...f.sender,url:'https://example.org/other'}])await assert.rejects(f.send({},who),/unauthorized/);
   await assert.rejects(f.send({token:'guess'}),/unauthorized/);
-  for(const action of ['settings','load','generate','download'])await assert.rejects(f.send({action}),/unauthorized/);
+  for(const action of ['settings','load','generate','download','remove','undo','import'])await assert.rejects(f.send({action}),/unauthorized/);
   for(const text of ['unrelated private page text','cats','a'.repeat(301)])await assert.rejects(f.send({text}),/textRequired/);
   assert.equal(f.calls.length,0);assert.equal((await f.send()).text,'Kedi');
   assert.deepEqual(JSON.parse(JSON.stringify(f.calls)),[{action:'translate',text:'cat',source:'en',target:'tr'}]);
