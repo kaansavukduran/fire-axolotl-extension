@@ -7,7 +7,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 | Node birim/izin/veri doğrulama | 32 geçti |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
-| 0.1.0 → 0.2.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
+| 0.1.0 → 0.7.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
 | JS/HTML/yerelleştirme/manifest/vendor hash | Geçti; aynı kilitli girdilerden ikinci XPI üretimi bayt bayt aynı |
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | web-ext 10.8.0 | 0 hata, 11 uyarı; [rapor](evidence/web-ext-lint.json) |
@@ -99,3 +99,5 @@ Ayrı [gerçek M2M100 raporunda](evidence/m2m-results.json), hash doğrulanmış
 Qwen [tanı denemeleri](evidence/qwen-diagnostics-0.7.json) farklı komutların ve sabit upstream LFS SHA-256 ile doğrulanmış q4 dosyasının Türkçe hatasını çözmediğini gösterir. Native CPU ve Firefox deneylerinde sistem komutları farklı olduğundan bu tek başına hatalı katmanı yalıtmaz. q4 ürüne eklenmedi, başarısız sonuçlar gizlenmedi. Bu denemeler kapsamlı dil ölçümü değildir.
 
 ![Dosya altyazısında öğrenme ve döngü kontrolleri](evidence/caption-learning.png)
+
+0.7.0’ın ilk CI koşusu [42817434523](https://github.com/kaansavukduran/fire-axolotl-extension/actions/runs/42817434523), popup’ta metin görünürken dinleyiciler henüz bağlanmadan konteyner formuna tıklama yarışı nedeniyle durdu. Popup başlangıçta `inert`/`aria-busy` olur; hazırlık tamamlanınca açılır. Testler placeholder/başlık yerine gerçek `data-ready` işaretini bekler. Düzeltmeden sonra yerel ana akışın 42 kontrolü ve gerçek 0.1.0→0.7.0 yükseltmesi geçti. İlk başarısız koşu korunur; bu olay yeni altyazı testinden önceydi.

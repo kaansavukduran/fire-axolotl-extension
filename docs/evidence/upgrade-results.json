@@ -1,6 +1,6 @@
 {
   "passed": [
-    "Real temporary 0.1.0\u21920.2.0 upgrade preserves extension ID, settings, draft, game record, site rule and CacheStorage",
+    "Real temporary 0.1.0\u21920.7.0 upgrade preserves extension ID, settings, draft, game record, site rule and CacheStorage",
     "Integrated blocker user filter survives the real temporary upgrade"
   ],
   "previous_sha256": "cccc3b5208d0fb5c7bf1fd6b7dbaa91e14771374263f5ba76ac7ce9ed80d0aeb",

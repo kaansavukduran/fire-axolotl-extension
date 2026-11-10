@@ -82,5 +82,6 @@ async function fileCues(id) {
     await video({action: 'overlay', original, translated});
   });
   action('hide-subtitles', () => video({action: 'closeOverlay'}));
+  document.body.inert=false;document.body.removeAttribute('aria-busy');
   document.body.dataset.ready = 'true';
-})().catch(() => UI.status('operationFailed', true));
+})().catch(() => {document.body.inert=false;document.body.removeAttribute('aria-busy');UI.status('operationFailed', true);});
