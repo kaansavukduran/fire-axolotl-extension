@@ -2,14 +2,14 @@
 
 Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci bir reklam engelleme eklentisi gerekmez. Fire Axolotl donör olarak kullanılır; donör depo bu çalışma tarafından değiştirilmez.
 
-**Durum: 0.1.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
+**Durum: 0.2.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
 
 ## Neler var?
 
 - Aynı XPI içinde uBlock Origin 1.76.0 motoru: ağ ve kozmetik filtreler, filtre listeleri, site istisnaları, öğe seçici, günlük ve gelişmiş panel. İkinci bir eklenti kurulmaz.
 - Kalıcı ve son sekmesi kapanınca temizlenen geçici konteynerler.
 - Ana belge ve erişilebilen iframe’lerde video/ses hızı 0,25×–4×, site hız tercihi, atanabilir kısayollar, gerçek çözünürlük okuma, deneysel YouTube kalite isteği, yerel VTT/SRT çift altyazı ve video tam ekranında altyazı.
-- Aynı pakette Qwen 2.5 1.5B için yerel çalışma motoru: ilk model indirme veya çevrimdışı içe aktarma; metin, genel soru ve okunabilir video altyazısı çevirisi. [Kullanım ve deneysel kalite sınırları](docs/LOCAL_AI.md).
+- Aynı pakette yerel yapay zekâ çalışma motoru: çeviri için M2M100 418M, genel metin için Qwen 2.5 1.5B; model verisi ayrıca indirilir veya yerelden içe aktarılır. M2M100 metin ve okunabilir video altyazısı çevirisinde 100 dil seçeneği sunar; kalite dile göre değişir. [Kullanım ve deneysel kalite sınırları](docs/LOCAL_AI.md).
 - Açık eylemle HTTPS çeviri hizmeti, seçili metin/altyazı alma, kelime defteri. Çeviri taslağı açılır pencere kapandıktan sonra korunur.
 - Sekme yan paneli: arama, etkinleştirme, sabitleme, kapatma, klavyeyle yukarı/aşağı taşıma. `Alt+Shift+A` paneli açar.
 - Aion, kuzu, kurt, baykuş; yerel PNG kare dizisi içe aktarma ve karakter yedeği. Animasyon durdurma ve sistemin azaltılmış hareket tercihi.
@@ -21,11 +21,11 @@ Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci b
 
 İki alternatif paket vardır; **yalnızca birini** kur:
 
-- `fire-axolotl-extension-0.1.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
-- `fire-axolotl-extension-0.1.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
+- `fire-axolotl-extension-0.2.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
+- `fire-axolotl-extension-0.2.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
 
-1. [Geliştirici sürümünü](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.1.0-preview.1) aç.
-2. Mevcut yeni sekmeyi korumak için `fire-axolotl-extension-0.1.0-native-newtab-unsigned.xpi` dosyasını indir. Aion yeni sekmesi için diğer XPI’yi seç.
+1. [Geliştirici sürümünü](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.2.0-preview.1) aç.
+2. Mevcut yeni sekmeyi korumak için `fire-axolotl-extension-0.2.0-native-newtab-unsigned.xpi` dosyasını indir. Aion yeni sekmesi için diğer XPI’yi seç.
 3. Masaüstü Firefox'ta adres çubuğuna `about:debugging#/runtime/this-firefox` yaz.
 4. **Geçici Eklenti Yükle / Load Temporary Add-on** düğmesine bas, bu XPI'yi seç.
 5. Firefox'un eklenti menüsünden **Fire Axolotl Extension** düğmesini aç. Ayarlar, Sekmeler, Engelleme ve Araçlar buradadır. Aion yeni sekmeli pakette yeni sekme açınca oyun görünür; diğer pakette popup içinden açılır.
@@ -77,7 +77,7 @@ A single independently identified Firefox extension reusing the pinned Fire Axol
 
 **Unsigned developer preview, not a signed permanent installation or complete parity with the native browser.** Use Firefox `about:debugging` → **Load Temporary Add-on** with the generated XPI. Temporary installation ends when Firefox exits. Permanent installation needs Mozilla signing; do not disable signature verification. Native tab-strip relocation, browser branding/fonts, engine changes, DRM capabilities and native telemetry policies cannot be supplied by a standard extension. See the bilingual [parity matrix](docs/PARITY.md).
 
-Local Qwen runtime/model pins and optional preference sync are documented in the repository. Model weights are downloaded separately and are not inside the XPI. Translation is experimental; streaming-site caption access and quality vary.
+Local M2M100 translation and shared Qwen runtime/model pins are documented in the repository. Weights download separately and are not inside the XPI. Translation quality varies; streaming-site caption access is limited. Qwen failed its Turkish translation quality check.
 
 The combined distribution is GPL-3.0-or-later with retained MPL, MIT, OFL and filter/library notices. Not affiliated with Mozilla, uBlock Origin or Dark Reader. Upstream components retain their own authorship. No guarantee of absolute protection or universal streaming quality is made.
 

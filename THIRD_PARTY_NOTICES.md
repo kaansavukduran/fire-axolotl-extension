@@ -34,6 +34,8 @@ ONNX Runtime's Eigen dependency is MPL-2.0 at commit `1d8b82b0740839c0de7f1242a3
 
 Qwen 2.5 1.5B Instruct: Qwen/Alibaba Cloud, Apache-2.0; original repository and ONNX conversion revisions, file sizes and SHA-256 hashes are fixed in `ai/model.json`. The original model license is `ai/MODEL-LICENSE.txt`. Weights are separate data downloaded or imported explicitly into a private extension cache; they are not represented as part of the XPI or as our original trained model. No model/provider affiliation or guaranteed translation quality is claimed.
 
+M2M100 418M base model: Meta/Facebook, `facebook/m2m100_418M` at `55c2e61bbf05dfb8d7abccdc3fae6fc8512fd636`; the upstream model card declares MIT. The fairseq MIT notice, copyright Facebook, Inc. and affiliates, is retained as `ai/M2M-LICENSE.txt` from fairseq commit `3d262bb25690e4eb2e7d3c1309b1e9c406ca4b99`. The separately fetched ONNX conversion `Xenova/m2m100_418M` at `9c374f0b7aca709787cea97b047bfbbd1559d177` identifies that base model; its conversion repository does not itself declare a separate license. We record this provenance and do not assert independent trademark or conversion rights. Converted weights are not inside the XPI; file hashes and sizes are pinned in `ai/translation-model.json`.
+
 Node-only image tooling such as sharp is a build dependency and is not embedded in the browser bundle. The dependency lock uses a patched sharp override. Model data, test profiles and credentials are excluded from source/Git backup archives.
 
 ## Artwork

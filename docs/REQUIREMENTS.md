@@ -7,10 +7,10 @@ Yetkili hedef `kaansavukduran/fire-axolotl-extension`; donör, sabit `2b739252a5
 | Sıra | Durum | Uygulama ve sınır |
 | --- | --- | --- |
 | 1 · Amaç/güvenlik | Tamamlandı, inceleme sürer | Tek ürün kimliği/manifest; izin ve veri akışları belgeli. Aion telemetrisi yok. uBO filtre güncellemeleri, açık arama/çeviri, isteğe bağlı Sync ve model indirmeleri ayrı açıklanır. |
-| 2 · Araçlar/çeviri | Kısmen tamamlandı | Konteyner, video/ses, çift yerel altyazı, seçili metin ve açık HTTPS hizmeti var. Qwen yerel motoru/altyazı modu eklendi; dil/kalite sınırları ayrı test edilir. Genel sayfanın bütün DOM’unu otomatik çevirme yok. |
+| 2 · Araçlar/çeviri | Kısmen tamamlandı | Konteyner, video/ses, çift yerel altyazı, seçili metin ve açık HTTPS hizmeti var. Qwen ve M2M100 yerel motorları/altyazı modu eklendi; M2M100 İngilizce/Türkçe örnekleri geçti, geniş dil ve hizmet kalite sınırları açık. Genel sayfanın bütün DOM’unu otomatik çevirme yok. |
 | 3 · Aion/marka | Tamamlandı, marka incelemesi açık | Donörün özgün Aion logosu, karakter paftaları ve kaynak kayıtları kullanılır. Firefox resmî ürünü iddiası yok; üretim marka benzerliği incelemesi hukuki garanti yerine geçmez. |
 | 4 · Sekme konumu | Eklenti kapsamı tamamlandı | Mevcut üst sekmeler/tercihler değiştirilmez. İsteğe bağlı aramalı/sıralamalı yan panel var; panel tarafı/native sekme düzeni Firefox ayarıdır. Native çubuğu taşıma iddiası yok. |
-| 5 · Ayarlar/güncelleme | Kısmen tamamlandı | Araç kapatma, sıra, klavyeli taşıma, kısayol atama, temalar, fontlar, ölçek. İmzalı güncelleme ve iki gerçek sürümle yükseltme, AMO hesabı/imzalama bekliyor. Kullanıcı geliştirici önizlemesini seçti. |
+| 5 · Ayarlar/güncelleme | Kısmen tamamlandı | Araç kapatma, sıra, klavyeli taşıma, kısayol atama, temalar, fontlar, ölçek. İki gerçek sürüm arasında geçici geliştirici yükseltmesi veri korumasıyla test edildi; imzalı güncelleme AMO hesabı/imzalama bekliyor. Kullanıcı geliştirici önizlemesini seçti. |
 | 6 · Lisans/ücretsiz | Kaydedildi | GPL/MPL/MIT/Apache/OFL ve filtre/listelerin bildirimleri korunur. uBO tam ilgili kaynak ve Eigen MPL kaynak arşivleri oluşturulur. Ücretsiz dağıtım, lisans koşullarını kaldırmaz. |
 | 7 · Örnek eklentiler | Kısmen tamamlandı | uBO motoru aynı pakette, diğer araçlar yerel modüller. Güvenlik incelemesiz parola kasası yapılmaz; mevcut Firefox parola yöneticisi korunur. Öneri ürünleri ek kapsam sayılmaz. |
 | 8 · Video | Kısmen tamamlandı | Hız, ses, erişilebilen iframe, site hız kuralı, atanabilir hız kısayolları, gerçek çözünürlük, deneysel YouTube kalite isteği. Netflix/DRM aşma veya her sitede kalite garantisi yok. |
@@ -30,3 +30,5 @@ Yetkili hedef `kaansavukduran/fire-axolotl-extension`; donör, sabit `2b739252a5
 ## Dağıtım engelleri
 
 Mozilla geliştirici hesabı/AMO imzası henüz sağlanmadı; bu sürüm geçici yüklenen bir geliştirici önizlemesidir. İmza denetimini kapatma, özel Firefox derleme, native messaging veya sahte otomatik güncelleme akışı eklenmez. Windows/macOS/Android donanım doğrulaması, iOS uyarlaması, gerçek hesap Sync deneyi ve geniş hizmet kalite/altyazı adaptörleri tamamlandı sayılmaz.
+
+Ek yerel çeviri modeli M2M100 418M, Firefox içinde çevrimdışı metin ve TextTrack örneklerinde kullanıldı. Test edilen örnekler [VALIDATION.md](VALIDATION.md) içindedir; tüm diller için kalite garantisi değildir.

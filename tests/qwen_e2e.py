@@ -41,12 +41,13 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.1.0-unsigned.xpi'), temporary=True)
+    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.2.0-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
     driver.get(f'moz-extension://{uuid}/aion/ai.html')
     wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
+    Select(driver.find_element(By.ID,'aiModel')).select_by_value('qwen')
     pin = json.loads((ROOT / 'browser/extension/ai/model.json').read_text())
     model_dir = Path(os.environ['AION_MODEL_DIR'])
     files = [model_dir / name for name in pin['files'] if not name.endswith('model_q4f16.onnx')]
@@ -66,6 +67,15 @@ try:
         time.sleep(3)
     else: raise AssertionError('Qwen model loading timed out')
     results.append('Actual SHA-256-verified Qwen 2.5 1.5B uint8 model loaded in the extension WASM worker')
+    Select(driver.find_element(By.ID,'aiBackend')).select_by_value('webgpu')
+    wait.until(lambda d:d.execute_script('return UI.settings.aiBackend')=='webgpu')
+    driver.refresh()
+    wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
+    assert driver.find_element(By.ID,'aiModel').get_attribute('value')=='qwen'
+    assert driver.find_element(By.CSS_SELECTOR,'#aiBackend option[value=webgpu]').is_enabled()
+    assert driver.find_element(By.ID,'aiBackend').get_attribute('value')=='webgpu'
+    assert 'CPU / WASM' in driver.find_element(By.ID,'ai-state').text
+    results.append('Reopening the AI page restores the loaded Qwen selection and backend controls')
     ai_handle=driver.current_window_handle
     driver.switch_to.new_window('tab'); video_handle=driver.current_window_handle
     fixture_url=f'http://127.0.0.1:{server.server_port}/'
@@ -77,6 +87,11 @@ try:
     Select(driver.find_element(By.ID,'video-tab')).select_by_value(str(target))
     # Network is off before inference: this must be the actual local model.
     driver.set_context('chrome'); driver.execute_script('Services.io.offline = true'); driver.set_context('content')
+    driver.find_element(By.CSS_SELECTOR, '#ai-prompt').find_element(By.XPATH,'ancestor::details').find_element(By.TAG_NAME,'summary').click()
+    driver.find_element(By.ID,'ai-prompt').send_keys('Say hello.')
+    driver.find_element(By.ID,'ai-generate').click()
+    WebDriverWait(driver,600).until(lambda d:bool(d.find_element(By.ID,'ai-answer').text.strip()))
+    results.append('The same Qwen worker also produced a general response offline; its quality was not graded')
     Select(driver.find_element(By.ID,'aiSource')).select_by_value('en')
     wait.until(lambda d:d.execute_script('return UI.settings.aiSource')=='en')
     driver.execute_script("document.getElementById('ai-text').value='The cat is sleeping.';")

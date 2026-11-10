@@ -3,12 +3,17 @@
 const $ = id => document.getElementById(id);
 const callAI = (action, options = {}) => browser.runtime.sendMessage({type: 'localAI', action, ...options});
 const videoPort = browser.runtime.connect({name: 'aion-ai-video'});
-const languages = {en:'English', tr:'Türkçe', de:'Deutsch', fr:'Français', es:'Español', it:'Italiano', pt:'Português', ru:'Русский', ar:'العربية', ja:'日本語', ko:'한국어', zh:'中文', nl:'Nederlands', pl:'Polski', uk:'Українська', hi:'हिन्दी', fa:'فارسی'};
+const languages = ["af", "am", "ar", "ast", "az", "ba", "be", "bg", "bn", "br", "bs", "ca", "ceb", "cs", "cy", "da", "de", "el", "en", "es", "et", "fa", "ff", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "he", "hi", "hr", "ht", "hu", "hy", "id", "ig", "ilo", "is", "it", "ja", "jv", "ka", "kk", "km", "kn", "ko", "lb", "lg", "ln", "lo", "lt", "lv", "mg", "mk", "ml", "mn", "mr", "ms", "my", "ne", "nl", "no", "ns", "oc", "or", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "so", "sq", "sr", "ss", "su", "sv", "sw", "ta", "th", "tl", "tn", "tr", "uk", "ur", "uz", "vi", "wo", "xh", "yi", "yo", "zh", "zu"];
 let modelState = {}, operation = 0, live = false, fileRunning = false, original = [], translated = [], downloadURL, targetId;
 const translate = (text, detectedSource) => callAI('translate', {text, source: UI.settings.aiSource==='auto'&&detectedSource?detectedSource:UI.settings.aiSource, target: UI.settings.aiTarget});
 function renderModel(state) {
   modelState = state;
+  if (state.phase === 'ready') $('aiModel').value = state.modelKind || 'qwen';
+  $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value === 'm2m';
+  if ($('aiModel').value === 'm2m') $('aiBackend').value = 'wasm';
+  else $('aiBackend').value = UI.settings.aiBackend;
   $('ai-state').textContent = UI.t(state.error || 'aiState-' + state.phase);
+  if (state.phase === 'ready') $('ai-state').textContent += ` · ${state.backend === 'webgpu' ? 'WebGPU' : 'CPU / WASM'}`;
   $('ai-detail').textContent = state.detail || '';
   const busy = ['downloading', 'loading', 'running'].includes(state.phase);
   $('model-progress').hidden = state.phase !== 'downloading';
@@ -16,8 +21,9 @@ function renderModel(state) {
     $('model-progress').max = state.total; $('model-progress').value = state.loaded || 0;
     $('model-bytes').textContent = `${new Intl.NumberFormat(UI.locale, {maximumFractionDigits: 1}).format((state.loaded || 0) / 1e9)} / ${new Intl.NumberFormat(UI.locale, {maximumFractionDigits: 2}).format(state.total / 1e9)} GB · ${state.file || ''}`;
   } else $('model-bytes').textContent='';
-  for (const id of ['model-download', 'model-load', 'model-import']) $(id).disabled = busy;
-  for (const id of ['ai-translate', 'ai-generate', 'translate-file']) $(id).disabled = state.phase !== 'ready' || live || fileRunning;
+  for (const id of ['model-download', 'model-load', 'model-import', 'aiModel']) $(id).disabled = busy;
+  $('ai-generate').disabled = state.modelKind === 'm2m' || state.phase !== 'ready' || live || fileRunning;
+  for (const id of ['ai-translate', 'translate-file']) $(id).disabled = state.phase !== 'ready' || live || fileRunning;
   $('live-mode').disabled = !live && state.phase !== 'ready';
 }
 function render() {
@@ -25,6 +31,8 @@ function render() {
     const value = UI.settings[element.dataset.setting];
     if (element.type === 'checkbox') element.checked = value; else element.value = value;
   }
+  $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value === 'm2m';
+  if ($('aiModel').value === 'm2m') $('aiBackend').value = 'wasm';
   for (const name of ['captionSize', 'captionOpacity']) $(name + '-value').value = UI.settings[name];
   const preview = $('caption-preview');
   preview.style.fontSize = UI.settings.captionSize + 'px'; preview.style.backgroundColor = `rgba(6,21,47,${UI.settings.captionOpacity / 100})`;
@@ -90,33 +98,36 @@ function downloadCaptions() {
 function action(id, fn) {$(id).onclick = () => UI.run(fn);}
 (async () => {
   await UI.init();
-  for (const id of ['aiSource', 'aiTarget']) for (const [code, name] of Object.entries(languages)) {const option=document.createElement('option');option.value=code;option.textContent=name;$(id).append(option);}
+  const languageNames = new Intl.DisplayNames([UI.locale], {type:'language'});
+  for (const id of ['aiSource', 'aiTarget']) for (const code of languages) {const option=document.createElement('option');option.value=code;option.textContent=languageNames.of(code) || code;$(id).append(option);}
   modelState = await callAI('status'); render(); await tabs();
   browser.runtime.onMessage.addListener((message, sender) => {
     if (sender.id === browser.runtime.id && message.type === 'aionAIState') renderModel(message.state);
   });
   document.addEventListener('aion-settings', () => {render(); if (targetId && (original.length || translated.length)) UI.run(overlay);});
   for (const element of document.querySelectorAll('[data-setting]')) element.addEventListener(element.type === 'range' ? 'input' : 'change', () => UI.run(async () => {
+    const value = element.type === 'checkbox' ? element.checked : element.type === 'range' ? Number(element.value) : element.value;
     if (['aiSource','aiTarget','aiBackend'].includes(element.dataset.setting)) await stopVideo();
-    await UI.save({[element.dataset.setting]: element.type === 'checkbox' ? element.checked : element.type === 'range' ? Number(element.value) : element.value});
+    await UI.save({[element.dataset.setting]: value});
   }));
-  action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: UI.settings.aiBackend});});
-  action('model-load', () => callAI('load', {backend: UI.settings.aiBackend}));
-  action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: UI.settings.aiBackend, files: [...$('model-files').files]});});
+  $('aiModel').onchange = () => UI.run(async () => {const selected = $('aiModel').value; await stopVideo(); const state = await callAI('unload'); $('aiModel').value = selected; renderModel(state); if (selected === 'm2m') await UI.save({aiBackend:'wasm'}); render();});
+  action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value});});
+  action('model-load', () => callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value}));
+  action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value, files: [...$('model-files').files]});});
   action('model-cancel', async () => {await stopVideo(); await callAI('cancel');});
   action('model-unload', async () => {await stopVideo(); await callAI('unload');});
-  action('model-delete', async () => {if (confirm(UI.t('aiConfirmDelete'))) {await stopVideo(); await callAI('clear');}});
+  action('model-delete', async () => {if (confirm(UI.t('aiConfirmDelete'))) {await stopVideo(); await callAI('clear', {modelKind: $('aiModel').value});}});
   action('ai-translate', async () => {$('ai-result').value = (await translate($('ai-text').value)).text;});
   action('ai-generate', async () => {$('ai-answer').textContent = (await callAI('generate', {text: $('ai-prompt').value})).text;});
   action('video-refresh', tabs);
-  $('video-tab').onchange = () => UI.run(stopVideo);
+  $('video-tab').onchange = () => UI.run(async () => {await stopVideo(); $('caption-track').replaceChildren($('caption-track').options[0]);});
   $('caption-track').onchange = () => UI.run(stopVideo);
   $('live-mode').onchange = () => UI.run(async () => {
     if (!$('live-mode').checked) {await stopVideo(); return;}
     targetId = Number($('video-tab').value); if (!targetId) throw new Error('restrictedPage');
     original = []; translated = []; live = true; const token = ++operation;
     renderModel(modelState);
-    liveLoop(token).catch(async error => {await stopVideo(); UI.status(error.message in UI.messages ? error.message : 'operationFailed', true);});
+    liveLoop(token).catch(async error => {if (token === operation) {await stopVideo(); UI.status(error.message in UI.messages ? error.message : 'operationFailed', true);}});
   });
   action('stop-video', stopVideo);
   action('translate-file', async () => {

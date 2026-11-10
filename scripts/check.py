@@ -60,3 +60,21 @@ with zipfile.ZipFile(package) as archive:
     assert not any(name.endswith('.onnx') or name.endswith('.onnx_data') for name in archive.namelist())
     assert 'aion/ai/worker.mjs' in archive.namelist()
 print('PASS: optional native-newtab build and model-data boundary')
+
+# Both local model manifests are packaged unchanged and every referenced weight
+# has an explicit size and SHA-256; weights themselves stay outside the XPI.
+import re
+for name in ['model.json', 'translation-model.json']:
+    local = (SOURCE / 'ai' / name).read_bytes()
+    pin = json.loads(local)
+    with zipfile.ZipFile(package) as archive:
+        assert archive.read('aion/ai/' + name) == local
+    for entry in pin['files'].values():
+        assert isinstance(entry['size'], int) and entry['size'] > 0
+        assert re.fullmatch(r'[a-f0-9]{64}', entry['sha256'])
+    for variant in pin['variants'].values():
+        selected = variant.get('files', [variant.get('file')])
+        assert selected and all(path in pin['files'] for path in selected)
+    if pin.get('kind') == 'm2m':
+        assert len(pin['languages']) == len(set(pin['languages'])) == 100
+print('PASS: packaged model manifests, SHA-256 pins and 100 supported translation codes')

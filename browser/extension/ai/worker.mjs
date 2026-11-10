@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-3.0-or-later */
-import {Qwen2Tokenizer, AutoModelForCausalLM, TextGenerationPipeline, env} from '@huggingface/transformers';
+import {Qwen2Tokenizer, M2M100Tokenizer, AutoModelForCausalLM, AutoModelForSeq2SeqLM, TextGenerationPipeline, TranslationPipeline, env} from '@huggingface/transformers';
 import {sha256} from '@noble/hashes/sha2.js';
 const nativeFetch=globalThis.fetch.bind(globalThis);
 let generator, pin, backend;
@@ -15,7 +15,9 @@ async function prepare(message) {
   }
   const cache = await caches.open(pin.cache);
   const base = `https://huggingface.co/${pin.id}/resolve/${pin.revision}/`;
-  const names = Object.keys(pin.files).filter(name => !name.startsWith('onnx/') || name === pin.variants[backend].file);
+  if (!pin.variants[backend]) throw new Error('aiGPUUnavailable');
+  const selected = pin.variants[backend].files || [pin.variants[backend].file];
+  const names = Object.keys(pin.files).filter(name => !name.startsWith('onnx/') || selected.includes(name));
   const total = names.reduce((sum, name) => sum + pin.files[name].size, 0);
   let complete = 0;
   for (const name of names) {
@@ -31,7 +33,10 @@ async function prepare(message) {
     if (local && local.size !== expected.size) throw new Error('aiHashMismatch');
     let response;
     if (local) response = new Response(local.stream());
-    else response = await fetch(url, {credentials: 'omit', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(3600000)});
+    else {
+      try {response = await fetch(url, {credentials: 'omit', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(3600000)});}
+      catch {throw new Error('aiDownloadFailed');}
+    }
     if (!response.ok || !response.body) throw new Error('aiDownloadFailed');
     const reader = response.body.getReader(), hash = sha256.create();
     let count = 0, last = 0;
@@ -77,9 +82,17 @@ async function prepare(message) {
     wasm: new URL(`./ort/ort-wasm-simd-threaded${runtime}.wasm`, import.meta.url).href
   };
   const options = {revision: pin.revision, local_files_only: true, dtype: pin.variants[backend].dtype, device: backend, use_external_data_format: false, session_options: {graphOptimizationLevel:'disabled',enableCpuMemArena:false,enableMemPattern:false,extra:{session:{disable_prepacking:'1'}}}};
-  const tokenizer = new Qwen2Tokenizer(await (await cache.match(base + 'tokenizer.json')).json(), await (await cache.match(base + 'tokenizer_config.json')).json());
-  const model = await AutoModelForCausalLM.from_pretrained(pin.id, options);
-  generator = new TextGenerationPipeline({task: 'text-generation', tokenizer, model});
+  const tokenizerData = await (await cache.match(base + 'tokenizer.json')).json();
+  const tokenizerConfig = await (await cache.match(base + 'tokenizer_config.json')).json();
+  if (pin.kind === 'm2m') {
+    const tokenizer = new M2M100Tokenizer(tokenizerData, tokenizerConfig);
+    const model = await AutoModelForSeq2SeqLM.from_pretrained(pin.id, options);
+    generator = new TranslationPipeline({task: 'translation', tokenizer, model});
+  } else {
+    const tokenizer = new Qwen2Tokenizer(tokenizerData, tokenizerConfig);
+    const model = await AutoModelForCausalLM.from_pretrained(pin.id, options);
+    generator = new TextGenerationPipeline({task: 'text-generation', tokenizer, model});
+  }
   state({phase: 'ready', backend});
   return {ready: true, backend};
 }
@@ -91,6 +104,16 @@ async function generate(message) {
   const translation = message.action === 'translate';
   const source = /^[a-z]{2,3}(?:-[A-Za-z]{2,4})?$/.test(message.source) ? message.source : 'auto';
   const target = /^[a-z]{2,3}(?:-[A-Za-z]{2,4})?$/.test(message.target) ? message.target : 'tr';
+  if (pin.kind === 'm2m') {
+    if (!translation) throw new Error('aiGeneralQwenOnly');
+    if (source === 'auto') throw new Error('aiSourceRequired');
+    const src = source.split('-')[0], tgt = target.split('-')[0];
+    if (src === tgt) return {text, backend, local: true};
+    const result = await generator(text, {src_lang: src, tgt_lang: tgt, max_new_tokens: Math.max(8, Math.min(256, Number(message.maxTokens) || 160))});
+    const answer = result[0]?.translation_text;
+    if (typeof answer !== 'string' || !answer.trim()) throw new Error('aiInferenceFailed');
+    return {text: answer.trim(), backend, local: true};
+  }
   const names = {tr:'Turkish',en:'English',de:'German',fr:'French',es:'Spanish',it:'Italian',pt:'Portuguese',ru:'Russian',ar:'Arabic',ja:'Japanese',ko:'Korean',zh:'Chinese',nl:'Dutch',pl:'Polish',uk:'Ukrainian',hi:'Hindi',fa:'Persian'};
   const system = translation
     ? 'You are a translation engine. Reply with the translated text only, without explanations or quotation marks.'

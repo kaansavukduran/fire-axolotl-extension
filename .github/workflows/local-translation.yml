@@ -1,0 +1,33 @@
+name: Real local translation quality
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  firefox-m2m:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: python3 -m pip install -r tests/requirements-gecko.txt
+      - run: npm ci --ignore-scripts
+      - run: npm run build:ai
+      - run: python3 scripts/package_extension.py
+      - run: python3 scripts/fetch_test_runtime.py
+      - run: python3 scripts/fetch_model.py --model m2m
+      - name: Offline real model, source detection, video and translation checks
+        env:
+          AION_TRANSLATION_MODEL_DIR: ${{ github.workspace }}/work/translation-model
+        run: python3 tests/m2m_e2e.py
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: real-translation-evidence
+          path: work/m2m-test-artifacts/
+          retention-days: 30

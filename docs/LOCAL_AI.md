@@ -1,53 +1,48 @@
-# Yerel Qwen / Local Qwen
+# Cihazda yapay zekâ ve çeviri
 
-Eklenti, **Qwen 2.5 1.5B Instruct** için ortak bir yerel motor içerir. Metin çevirisi, altyazı ve genel metin sorusu aynı bellek içi modeli kullanır. Sunucu tabanlı yapay zekâya otomatik dönüş yoktur. Küçük modelin çeviri doğruluğu ve talimat takibi sınırlıdır; sonuçlar incelenmelidir. Bu özellik geliştirici önizlemesinde deneyseldir. **CPU Türkçe çeviri doğruluk testi başarısızdır:** “The cat is sleeping.” için uint8 çıktısı “Ateş.” olmuştur. q8 denemesi de başarısızdır. Yükleme ve çevrimdışı çıkarımın çalışması, kullanışlı çeviri sağlandığı anlamına gelmez. Güvenilir çeviri tamamlanmış sayılmaz.
+Eklentinin ortak çalışma motoru iki ayrı yerel modeli destekler:
 
-**Gömülü olan çalışma kodudur; model ağırlıkları XPI’nin içinde değildir.** CPU uint8 model/toplam dosyalar yaklaşık 1.59 GB, WebGPU q4f16 yaklaşık 1.23 GB indirilir. İlk indirme açık bir düğme eylemidir. Tamamlanan dosyalar eklentinin yerel CacheStorage alanında tutulur. Çevrimdışı dosya seçimi de vardır. Her dosyanın boyutu ve SHA-256 özeti doğrulanır; yarım kalan büyük dosya yeniden başlatılır. Model revizyonu ve dosya özetleri `browser/extension/ai/model.json` içindedir.
+- **M2M100 418M:** çeviri için varsayılan seçenek. CPU/WASM sürümü ilk kullanımda yaklaşık **640 MB** model verisi indirir veya kullanıcının seçtiği yerel dosyalardan içe aktarılır. Modelin kapsadığı 100 dil seçeneği vardır; kalite dile ve metne göre değişir.
+- **Qwen 2.5 1.5B Instruct:** genel metin görevleri ve deneysel çeviri. CPU yaklaşık **1,59 GB**, WebGPU yaklaşık **1,23 GB** model verisi ister. Qwen’in Türkçe çeviri kalite testi başarısızdır; Türkçe çeviride M2M100’ü dene.
+
+Çalışma kodu ve WASM XPI içindedir; **model ağırlıkları XPI’ye gömülü değildir**. İndirme kullanıcı düğmesine basınca başlar. Her dosyanın sabit revizyonu, boyutu ve SHA-256 özeti doğrulanır; tamamlanan dosyalar modelin ayrı yerel önbelleğinde saklanır. Çıkarım sırasında metin bir AI sunucusuna gönderilmez; otomatik uzak çıkarım alternatifi yoktur. `ai/model.json` ve `ai/translation-model.json` kaynakları sabitler.
 
 ## Kullanım
 
-1. Firefox araç çubuğundaki Fire Axolotl düğmesini aç.
-2. **Yerel yapay zekâ ve altyazı** düğmesine bas.
-3. İlk kullanımda **CPU / WASM** ve **Modeli indir ve cihazda yükle** seç. Bir sonraki kullanımda **İndirmeden yerel modeli yükle** yeterlidir.
-4. Hazır durumu göründüğünde kaynak/hedef dili seç. Otomatik kaynak seçimi, videoda varsa altyazı dil metadata’sını kullanır; diğer metinlerde modele algılatılır.
-5. Metni yazıp **Qwen ile cihazda çevir** düğmesine bas. Genel metin görevi için **Aynı modelle başka bir soru sor** bölümünü aç.
-6. Video için izlediğin sekmeyi seç, oynatıcıda altyazıyı aç, **Video altyazı çevirisini aç** anahtarını etkinleştir.
-7. Altyazı boyutu, fontu, renkleri, arka planı, konumu ve iki satırın görünürlüğünü aynı sayfadan ayarla. Durdurma, önceki yerel altyazı seçimini geri getirir.
+1. Eklenti menüsünden **Yerel yapay zekâ ve altyazı** sayfasını aç.
+2. M2M100 veya Qwen’i seç; **Modeli indir ve cihazda yükle** düğmesine bas. Kayıtlı model için **İndirmeden yerel modeli yükle** yeterlidir. İndirmenin çalışmadığı ortamlarda doğrulanmış model dosyalarını **Çevrimdışı model dosyaları** altında seçebilirsin.
+3. Kaynak ve hedef dili seç, metni gir ve **Yerel modelle çevir** düğmesine bas. M2M100 otomatik kaynak seçiminde önce video altyazısının dil bilgisini, diğer metinlerde Firefox’un dil algılamasını kullanır. Firefox yeterince emin değilse kaynak dili elle seçmeni ister.
+4. Video için sekmeyi seç, videonun altyazısını aç ve **Video altyazı çevirisini aç** anahtarını kullan. Yazı boyutu, font, renk, arka plan, konum ve iki satırın görünürlüğü ayarlanabilir. Yerel VTT/SRT çevirip VTT olarak indirme de vardır.
+5. Genel soru için Qwen’i seç ve yükle. M2M100 bir çeviri modelidir; genel soru düğmesi Qwen’de kullanılabilir. Bellekten çıkar önbelleği korur, sil yalnız seçili modelin önbelleğini kaldırır.
 
-Video modu standart HTML TextTrack altyazılarını okur. Bazı YouTube, Netflix ve özel oynatıcılar altyazılarını bu yolla sunmaz; bu siteler için evrensel destek iddia edilmez. Altyazısız sesi yazıya dönüştüren bir ASR modeli dahil değildir. Yavaş cihazlarda çeviri gerçek zamanın gerisinde kalabilir. VTT/SRT dosyasını önceden çevirip indirerek aynı zaman damgalarıyla oynatmak daha tutarlı olabilir. İptal/durdurma, o ana kadar hazırlanmış indirilebilir VTT çıktısını korur.
+Video modu standart HTML TextTrack altyazılarını okur. Bazı YouTube, Netflix veya özel oynatıcılar altyazılarını bu yolla sunmaz. Sesin otomatik yazıya dökülmesi yoktur; gerçek zamanlı çeviri cihaz hızına bağlıdır. Netflix çözünürlüğü veya her hizmette altyazı desteği garanti edilmez. Firefox arayüzü ve kendi dil paketleri ayrı yönetilir; 100 çeviri dili, eklenti arayüzünün 100 dilde çevrildiği anlamına gelmez.
 
-CPU için en az 8 GB kullanılabilir bellek önerilir; yükleme sırasında tarayıcının bellek sınırları ayrıca geçerlidir. WebGPU, Firefox/platform desteği ve `shader-f16` ister; bu yolun donanım doğrulaması ayrıca takip edilir. Uygulama Firefox korumalarını veya donanım bayraklarını kapatmaz. Bellekten çıkar düğmesi worker’ı kapatır, model dosyalarını korur. Sil düğmesi yalnızca model önbelleğini siler.
+M2M100 CPU, Qwen CPU/WebGPU destekler. Qwen WebGPU yolu Firefox/platform desteği ve `shader-f16` gerektirir; bu yol henüz donanımda doğrulanmadı. Büyük modeller için kullanılabilir bellek ve disk alanı gerekir. Firefox güvenlik ve imza kontrolleri kapatılmaz.
 
-## Geliştirme ve doğrulama
+## Kalite sınırı ve alternatif deneme
+
+`I was about to give up.` örneğinde M2M100 `Ben vazgeçmeye hazırım.` üretti; bu çıktı geçmiş zaman anlamını doğru korumaz. Bu cümlede sonuç hatalıdır. Üç basit testin geçmesi bütün dil yönleri veya cümleler için kalite güvencesi değildir. İkinci bir İngilizce→Türkçe seçenek olarak CC-BY-4.0 bildiren `onnx-community/opus-mt-tc-big-en-tr` (`ce128ea834a090aca240e4e113e7756e06cc78e0`) araştırıldı; mevcut Transformers.js ortamında tokenizer uyarısı ve anlamsız sonuç verdi. Bu model eklentiye eklenmedi.
+
+## Geliştirme
 
 ```sh
 npm ci --ignore-scripts
 npm run build:ai
-python3 scripts/fetch_model.py --backend wasm
+python3 scripts/fetch_model.py --model m2m --backend wasm
+python3 scripts/fetch_test_runtime.py
 python3 scripts/package_extension.py
-AION_MODEL_DIR="$PWD/work/local-model" \
-AION_FIREFOX_BINARY="$PWD/work/test-runtime/firefox/firefox/firefox" \
-AION_GECKODRIVER="$PWD/work/test-runtime/geckodriver/geckodriver" \
-.venv/bin/python tests/qwen_e2e.py
+AION_TRANSLATION_MODEL_DIR="$PWD/work/translation-model" \\
+AION_FIREFOX_BINARY="$PWD/work/test-runtime/firefox/firefox/firefox" \\
+AION_GECKODRIVER="$PWD/work/test-runtime/geckodriver/geckodriver" \\
+.venv/bin/python tests/m2m_e2e.py
 ```
 
-Üretimdeki modelin yerine test amaçlı küçük/sahte model kullanılmaz. Test, gerçek 1.5B dosyalarını arayüzden seçer; SHA-256 doğrulaması ve yerel yükleme sonrası Firefox ağını kapatır. Test kayıtları sonuç ve kalite sınırlarını ayrı belirtir; yüklemenin geçmesi tek başına iyi çeviri kanıtı değildir.
+Test, gerçek model dosyalarını arayüzden alır, hash doğrular, Firefox ağını kapatır ve çeviriyi/video zaman damgalarını sınar. `AION_TEST_MODEL_DOWNLOAD=1` indir düğmesini ayrıca sınar. Bu görevdeki yönetilen ortamda Firefox’un dış ağı için sağlanan proxy ve CA’nın geçici test profiline eklenmesi gerekmiştir; `AION_USE_TEST_PROXY=1` yalnız bu test profilinde bunu yapar, TLS doğrulamasını kapatmaz. Üretim eklentisi kullanıcının Firefox ağ ayarlarını değiştirmez.
 
-```mermaid
-flowchart LR
-  UI[Popup / AI kontrol sayfası] -->|izin verilen yerel mesaj| Broker[Ortak AI servisi]
-  Broker --> Worker[Yerel model worker]
-  Worker --> Cache[Doğrulanmış model önbelleği]
-  Captions[Video / erişilebilen iframe altyazısı] --> UI
-  UI -->|aynı zaman damgaları| Overlay[Özgün çift altyazı katmanı]
-```
+Yeni özellikler, yalnızca izin verilen eklenti sayfalarından ortak `localAI` servisini kullanır. Model ve revizyon, web sayfasından gelen rastgele yola göre seçilmez; bir seferde bir iş çalışır, iptal worker’ı sonlandırır. Genel soru modunun sekme, ağ veya dosya araçları yoktur.
 
-Yeni özellikler `localAI` mesajıyla `status`, `load`, `translate`, `generate`, `cancel`, `unload`, `clear` işlemlerini kullanabilir. Bunlar yalnızca açıkça izin verilen paket sayfalarından kabul edilir; web sayfalarına açık bir RPC/API değildir. Model yolu veya sürümü gelen mesajdan alınmaz. Bir seferde bir iş yürütülür; iptal worker’ı sonlandırır. Genel soru modu sekme okuma, ağ, dosya veya işlem araçlarına sahip değildir.
-
-Transformers.js 3.7.2, ONNX Runtime Web 1.22.0 ve ilgili lisanslar paketlenir. Yükleme doğrudan doğrulanmış tokenizer JSON’u ve sabit revizyonla yapılır; çıkarımda `allowRemoteModels=false` ve ağ isteğini reddeden fetch kullanılır. WASM ve yardımcı JavaScript uzaktan çalıştırılmaz. CPU için uint8, kapalı prepacking ve bellek arena ayarları kullanılır; farklı bir model ailesiyle sessiz değişim yapılmaz.
-
-Model: Qwen/Qwen2.5-1.5B-Instruct, Apache-2.0. ONNX dönüşümü: onnx-community, sabit commit. Lisans `ai/MODEL-LICENSE.txt`, çalışma motoru lisansları `ai/licenses/`, Eigen MPL kaynakları `scripts/fetch_ai_support.py` ile sunulur.
+M2M100 temel modelinin kartı MIT bildirir; ONNX dönüşüm deposunun ayrı lisans bildirmediği kaynak kaydında belirtilir. Qwen Apache-2.0’dır. [Üçüncü taraf bildirimleri](../THIRD_PARTY_NOTICES.md) ve [gerçek Firefox sonuçları](VALIDATION.md) ayrıntıları içerir.
 
 ## English
 
-The extension embeds a shared runtime for the actual Qwen 2.5 1.5B Instruct model. Weights are downloaded separately on explicit action or imported locally, hash checked and cached. Inference has no remote network access or cloud fallback. Translation quality is experimental. Native text-track captions and local VTT/SRT are supported; no universal streaming adapter or audio transcription is claimed. CPU needs substantial memory; WebGPU requires shader-f16 and separate platform validation. The same internal service supports future local text features without exposing tools or model execution to websites.
+M2M100 418M is a local CPU translation model with 100 language choices; Qwen 2.5 1.5B remains available for general prompts. Model weights are separately downloaded or imported, hash checked and cached. Inference is offline. Qwen failed the Turkish translation check; M2M100 passed the small English/Turkish examples documented in the validation report. Caption availability and translation quality vary. Firefox language detection may ask for a manual source language when uncertain.

@@ -2,6 +2,7 @@
 """Stage developer binaries, matching source, source obligations and SHA256SUMS."""
 from pathlib import Path
 import hashlib
+import json
 import shutil
 import subprocess
 import zipfile
@@ -12,12 +13,14 @@ commit = subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).
 stage=ROOT/'work/release'
 if stage.exists():shutil.rmtree(stage)
 stage.mkdir(parents=True)
-for p in [*sorted((ROOT/'dist').glob('*.xpi')), ROOT/'work/components/ublock-origin-1.76.0-corresponding-source.tar.gz',ROOT/'work/components/ublock-origin.json',ROOT/'work/ai-support/eigen-mpl-corresponding-source.zip',ROOT/'work/ai-support/AI-SUPPORT-SOURCES.json']:
+version = json.loads((ROOT/'browser/extension/manifest.json').read_text())['version']
+packages = [ROOT/f'dist/fire-axolotl-extension-{version}-unsigned.xpi', ROOT/f'dist/fire-axolotl-extension-{version}-native-newtab-unsigned.xpi']
+for p in [*packages, ROOT/'work/components/ublock-origin-1.76.0-corresponding-source.tar.gz',ROOT/'work/components/ublock-origin.json',ROOT/'work/ai-support/eigen-mpl-corresponding-source.zip',ROOT/'work/ai-support/AI-SUPPORT-SOURCES.json']:
     shutil.copyfile(p,stage/p.name)
 assert len(list(stage.glob('*.xpi')))==2
 source=stage/f'fire-axolotl-extension-{commit[:12]}-source.zip'
 subprocess.run(['git','archive','--format=zip','--prefix=fire-axolotl-extension/',f'--output={source}',commit],cwd=ROOT,check=True)
-with zipfile.ZipFile(stage/'fire-axolotl-extension-0.1.0-test-evidence.zip','w',zipfile.ZIP_DEFLATED) as z:
+with zipfile.ZipFile(stage/f'fire-axolotl-extension-{version}-test-evidence.zip','w',zipfile.ZIP_DEFLATED) as z:
     for p in sorted((ROOT/'docs/evidence').glob('*')):z.write(p,p.relative_to(ROOT).as_posix())
     z.write(ROOT/'docs/VALIDATION.md','docs/VALIDATION.md')
 for p in stage.glob('*.zip'):

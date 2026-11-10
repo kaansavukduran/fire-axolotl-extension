@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
-"""Download the exact public Qwen data files for an offline import/test.
+"""Download the exact public local-model data files for an offline import/test.
 
 Model data is not executable source and is never added to Git. Browser users
 can instead press Download in the extension. Completed files are hash checked.
@@ -12,13 +12,20 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--model', choices=['qwen','m2m'], default='qwen')
 parser.add_argument('--backend', choices=['wasm','webgpu'], default='wasm')
-parser.add_argument('--output', type=Path, default=ROOT / 'work/local-model')
+parser.add_argument('--output', type=Path)
 args = parser.parse_args()
-pin = json.loads((ROOT / 'browser/extension/ai/model.json').read_text())
+pin = json.loads((ROOT / ('browser/extension/ai/translation-model.json' if args.model == 'm2m' else 'browser/extension/ai/model.json')).read_text())
+if args.backend not in pin['variants']:
+    raise ValueError('This model does not support the chosen backend')
+variant = pin['variants'][args.backend]
+model_files = variant.get('files', [variant.get('file')])
+if args.output is None:
+    args.output = ROOT / ('work/translation-model' if args.model == 'm2m' else 'work/local-model')
 base = f'https://huggingface.co/{pin["id"]}/resolve/{pin["revision"]}/'
 for name, record in pin['files'].items():
-    if name.startswith('onnx/') and name != pin['variants'][args.backend]['file']:
+    if name.startswith('onnx/') and name not in model_files:
         continue
     path = args.output / name
     path.parent.mkdir(parents=True, exist_ok=True)

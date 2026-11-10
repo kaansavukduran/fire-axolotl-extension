@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Fire Axolotl Extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Aion, containers, video, dual captions, translation, tabs, offline game and integrated content blocking for Firefox.",
   "default_locale": "tr",
   "browser_specific_settings": {
@@ -40,7 +40,7 @@
   },
   "browser_action": {
     "default_area": "navbar",
-    "default_title": "Fire Axolotl \u00b7 Aion",
+    "default_title": "Fire Axolotl · Aion",
     "default_popup": "popup.html",
     "default_icon": {
       "32": "icons/32.png",

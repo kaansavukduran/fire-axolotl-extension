@@ -663,13 +663,13 @@
     "message": "Local AI and subtitles"
   },
   "aiLocalHelp": {
-    "message": "Experimental Qwen 2.5 1.5B runs on this device. CPU Turkish translation failed the accuracy test; do not rely on it for translation. Your text is not sent to an AI server."
+    "message": "Local translation and Qwen run on this device; text is not sent to an AI server. Qwen failed the Turkish translation test; try M2M100 for translation."
   },
   "aiModelTitle": {
     "message": "Built-in runtime · local model"
   },
   "aiModelSize": {
-    "message": "Model weights download separately on first use: CPU about 1.59 GB; WebGPU about 1.23 GB. Weights are not inside the XPI. 8 GB or more available RAM is recommended for CPU; speed depends on hardware. Completed files are cached; interrupted model files restart."
+    "message": "Qwen model weights download separately on first use: CPU about 1.59 GB; WebGPU about 1.23 GB. Weights are not inside the XPI. 8 GB or more available RAM is recommended for CPU; speed depends on hardware. Completed files are cached; interrupted model files restart."
   },
   "aiBackend": {
     "message": "Execution backend"
@@ -693,7 +693,7 @@
     "message": "Offline model files"
   },
   "aiImportHelp": {
-    "message": "Select config.json, generation_config.json, tokenizer.json, tokenizer_config.json, special_tokens_map.json and model_uint8.onnx or model_q4f16.onnx for the selected backend from the pinned revision. SHA-256 is verified."
+    "message": "Select the five JSON files and ONNX files of the chosen pinned model. Qwen needs one model file; M2M100 needs encoder_model_quantized.onnx and decoder_model_merged_quantized.onnx. Files are SHA-256 verified."
   },
   "aiImport": {
     "message": "Verify and load local model files"
@@ -702,7 +702,7 @@
     "message": "Delete only cached model files"
   },
   "aiConfirmDelete": {
-    "message": "Delete downloaded Qwen model files? Aion settings, words and game records are preserved."
+    "message": "Delete the selected model files? Aion settings, vocabulary and game record will be kept."
   },
   "aiTranslation": {
     "message": "On-device translation"
@@ -714,7 +714,7 @@
     "message": "Auto-detect"
   },
   "aiTranslate": {
-    "message": "Translate locally with Qwen"
+    "message": "Translate with the local model"
   },
   "aiGeneral": {
     "message": "Ask the same model another question"
@@ -732,7 +732,7 @@
     "message": "Dual-subtitle translation mode"
   },
   "aiVideoHelp": {
-    "message": "Choose source and target languages above. The loaded Qwen model translates readable video captions or a local VTT/SRT file. Original and translation use the same timestamps."
+    "message": "Choose source and target languages above. The loaded local model translates readable video captions or local VTT/SRT files. Original and translation share the same timestamps."
   },
   "captionTrack": {
     "message": "Video source subtitle track"
@@ -795,10 +795,10 @@
     "message": "Preparing the local runtime and model. This may take several minutes for a large model."
   },
   "aiState-ready": {
-    "message": "Qwen 2.5 1.5B ready · on-device processing"
+    "message": "Local model ready · running on this device"
   },
   "aiState-running": {
-    "message": "Qwen is generating a response on this device. You can cancel the operation."
+    "message": "The local model is generating on this device. You can cancel."
   },
   "aiState-error": {
     "message": "Model preparation failed. Check local files, free storage and available memory, then retry."
@@ -870,7 +870,7 @@
     "message": "Service-based text translation"
   },
   "module-ai": {
-    "message": "Local Qwen and captions"
+    "message": "Local models and captions"
   },
   "module-characters": {
     "message": "Companions"
@@ -940,5 +940,23 @@
   },
   "openGame": {
     "message": "Aion Run"
+  },
+  "aiModelChoice": {
+    "message": "Choose local model"
+  },
+  "aiM2MHelp": {
+    "message": "M2M100 is for translation and needs a separate approximately 640 MB CPU download. Choose Qwen for general prompts. Select the source language manually if detection is uncertain. Translations can change meaning or tense; review the result."
+  },
+  "aiSourceRequired": {
+    "message": "Language could not be detected reliably. Select the source language manually."
+  },
+  "aiGeneralQwenOnly": {
+    "message": "Load Qwen for general prompts."
+  },
+  "aiTargetUnsupported": {
+    "message": "The selected target language is not supported by this model."
+  },
+  "aiBackendHelp": {
+    "message": "Reload the model to apply a changed backend; the ready status shows the active backend."
   }
 }

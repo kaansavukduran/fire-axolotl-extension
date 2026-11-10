@@ -11,11 +11,11 @@ function fixture() {
     postMessage(message) {this.messages.push(message);}
     terminate() {this.terminated = true;}
   }
-  const browser = {runtime: {id:'test', getURL:path=>'moz-extension://test/'+path,
+  const browser = {i18n:{detectLanguage:async()=>({isReliable:false,languages:[]})},runtime: {id:'test', getURL:path=>'moz-extension://test/'+path,
     onConnect:{addListener:()=>{}},sendMessage:async message=>states.push(message)}};
-  const context = vm.createContext({browser, Worker, fetch:async()=>({json:async()=>pin}), caches:{delete:async name=>deleted.push(name)}});
+  const context = vm.createContext({browser, Worker, fetch:async url=>({json:async()=>url.endsWith('translation-model.json')?{id:'m2m-pinned',cache:'m2m-cache',languages:['en','tr']}:pin}), caches:{delete:async name=>deleted.push(name)}});
   vm.runInContext(fs.readFileSync('browser/extension/ai-service.js','utf8'),context);
-  return {service:context.AionLocalAI, instances, deleted, states};
+  return {service:context.AionLocalAI, instances, deleted, states, browser};
 }
 const turn = () => new Promise(resolve=>setImmediate(resolve));
 test('one shared local AI rejects overlapping inference and uses only the packaged model pin', async () => {
@@ -35,4 +35,28 @@ test('cancel rejects the pending task, terminates its worker and does not delete
   assert.equal((await f.service.call({action:'status'})).phase,'unloaded');
   await f.service.call({action:'clear'});
   assert.deepEqual(f.deleted,['fire-axolotl-qwen-test']);
+});
+
+test('translator uses a fixed model pin and refuses unreliable language detection', async () => {
+  const f=fixture();
+  await assert.rejects(f.service.call({action:'load',modelKind:'../../remote'}),/unknownAction/);
+  const loading=f.service.call({action:'load',modelKind:'m2m'});await turn();
+  const worker=f.instances[0],request=worker.messages[0];assert.equal(request.pin.id,'m2m-pinned');
+  worker.onmessage({data:{id:request.id,result:{ready:true}}});await loading;
+  await assert.rejects(f.service.call({action:'generate',text:'hello'}),/aiGeneralQwenOnly/);
+  await assert.rejects(f.service.call({action:'translate',source:'auto',text:'hello'}),/aiSourceRequired/);
+  assert.equal(worker.messages.length,1);
+  await assert.rejects(f.service.call({action:'translate',source:'en',target:'xx',text:'hello'}),/aiTargetUnsupported/);
+  const translation=f.service.call({action:'translate',source:'en',target:'tr',text:'hello'});await turn();
+  const job=worker.messages[1];assert.equal(job.pin.id,'m2m-pinned');assert.equal(job.source,'en');
+  worker.onmessage({data:{id:job.id,result:{text:'Merhaba'}}});assert.equal((await translation).text,'Merhaba');
+  await f.service.call({action:'clear',modelKind:'m2m'});assert.deepEqual(f.deleted,['m2m-cache']);
+});
+test('a cancelled language detection cannot restart an unloaded model', async () => {
+  const f=fixture();const load=f.service.call({action:'load',modelKind:'m2m'});await turn();
+  const worker=f.instances[0];worker.onmessage({data:{id:worker.messages[0].id,result:{ready:true}}});await load;
+  let finish;f.browser.i18n.detectLanguage=()=>new Promise(resolve=>{finish=resolve;});
+  const task=f.service.call({action:'translate',source:'auto',text:'Hello'});await turn();
+  await f.service.call({action:'unload'});finish({isReliable:true,languages:[{language:'en',percentage:99}]});
+  await assert.rejects(task,/aiModelMissing/);assert.equal(worker.messages.length,1);
 });
