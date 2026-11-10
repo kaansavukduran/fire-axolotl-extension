@@ -40,7 +40,7 @@ def package(with_sources=False, native_newtab=False):
     manifest['permissions'] = sorted(set(manifest['permissions'] + aion['permissions']))
     manifest['optional_permissions'] = ['sessions']
     manifest['options_ui'] = {'page': 'aion/settings.html', 'open_in_tab': True}
-    manifest['browser_action'] = {**aion['browser_action'], 'default_popup': 'aion/popup.html', 'default_title': aion['name']}
+    manifest['browser_action'] = {**aion['browser_action'], 'default_popup': 'aion/popup.html'}
     manifest['browser_action']['default_icon'] = {k: 'aion/' + v for k, v in aion['browser_action']['default_icon'].items()}
     manifest['icons'] = {k: 'aion/' + v for k, v in aion['icons'].items()}
     manifest['sidebar_action'] = {**aion['sidebar_action'], 'default_title': 'Fire Axolotl', 'default_panel': 'aion/sidebar.html', 'default_icon': 'aion/icons/32.png'}
@@ -60,6 +60,15 @@ def package(with_sources=False, native_newtab=False):
         '<script src="aion/image-search.js"></script>\n<script src="aion/container-menus.js"></script>\n<script src="aion/sync.js"></script>\n<script src="aion/site-style.js"></script>\n<script src="aion/browser-integration.js"></script>\n</body>').encode()
     # Both modules own menus in the same extension. Never erase the other module.
     data = files['js/vapi-background.js'].decode()
+    # The engine clears port.sender after caching its own message ports. Aion
+    # must authenticate and own its separate lifecycle channel before that.
+    data = replace_once(data, 'onPortConnect: function(port) {',
+        "onPortConnect: function(port) {\n        if (port.name === 'aion-ai-video') { return; }")
+    # uBO updates the runtime action icon after requests/startup. Keep Aion's
+    # identity in every state while retaining the engine's badges and counts.
+    data = replace_once(data, 'await webext.browserAction.setIcon(...arguments);',
+        "const { tabId } = arguments[0] || {};\n"
+        "                await webext.browserAction.setIcon({ ...(Number.isInteger(tabId) ? { tabId } : {}), path: browser.runtime.getManifest().browser_action.default_icon });")
     data = replace_once(data, 'webext.menus.removeAll();',
         "for (const entry of this._aionOwnedEntries || []) { webext.menus.remove(entry.id).catch(() => {}); }\n"
         '        this._aionOwnedEntries = entries;')

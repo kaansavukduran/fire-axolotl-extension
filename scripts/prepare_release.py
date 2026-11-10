@@ -18,6 +18,13 @@ packages = [ROOT/f'dist/fire-axolotl-extension-{version}-unsigned.xpi', ROOT/f'd
 for p in [*packages, ROOT/'work/components/ublock-origin-1.76.0-corresponding-source.tar.gz',ROOT/'work/components/ublock-origin.json',ROOT/'work/ai-support/eigen-mpl-corresponding-source.zip',ROOT/'work/ai-support/AI-SUPPORT-SOURCES.json',ROOT/'work/bergamot-support/bergamot-corresponding-source.tar.gz',ROOT/'work/bergamot-support/BERGAMOT-SOURCES.json']:
     shutil.copyfile(p,stage/p.name)
 assert len(list(stage.glob('*.xpi')))==2
+# Downloading a ZIP avoids Firefox treating a direct unsigned-XPI link as an
+# installation attempt. It still uses Firefox's supported temporary loader.
+with zipfile.ZipFile(stage/f'fire-axolotl-extension-{version}-firefox-preview.zip','w') as archive:
+    for name,data in [(packages[1].name,packages[1].read_bytes()),('KURULUM-READ-ME.txt',(ROOT/'docs/PREVIEW_INSTALL.txt').read_bytes())]:
+        info=zipfile.ZipInfo(name,(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_STORED
+        archive.writestr(info,data)
+
 source=stage/f'fire-axolotl-extension-{commit[:12]}-source.zip'
 subprocess.run(['git','archive','--format=zip','--prefix=fire-axolotl-extension/',f'--output={source}',commit],cwd=ROOT,check=True)
 with zipfile.ZipFile(stage/f'fire-axolotl-extension-{version}-test-evidence.zip','w',zipfile.ZIP_DEFLATED) as z:

@@ -1,0 +1,44 @@
+Fire Axolotl Extension · Firefox geliştirici önizlemesi
+
+TÜRKÇE
+1. Bu ZIP'i bilgisayarında bir klasöre çıkar.
+2. Firefox adres çubuğuna about:debugging#/runtime/this-firefox yazıp Enter'a bas.
+3. Geçici Eklenti Yükle'ye bas ve bu klasördeki .xpi dosyasını seç.
+4. Listede Fire Axolotl Extension görünür. Araç çubuğundaki Aion simgesini veya
+   yapboz menüsündeki Fire Axolotl Extension öğesini aç.
+   Güncelleme sonrası açık YouTube sayfasını yenile.
+
+Aynı kimlikli eski önizlemeyi önce silme. Yeni XPI'yi geçici eklenti yükleme
+menüsünden seçerek güncelle; ayarların korunur. Bu paket Firefox'un mevcut yeni
+sekmesini korur. Aion oyunu menüden ayrıca açılabilir.
+
+Bu önizleme Mozilla tarafından imzalanmış kalıcı bir sürüm değildir. Firefox'u
+yeniden başlatınca tekrar yüklemen gerekir. İmza, TLS veya sandbox denetimlerini
+kapatma. Normal kalıcı kurulum, ayrı Mozilla imzasını bekler.
+
+YouTube: videoyu aç → Aion → Video kumandası → YouTube / çift altyazıyı aç. Kaynak ve hedef
+dili seç; Videoda AI çift altyazıyı aç / kapat anahtarını aç. İlk İngilizce–Türkçe
+kullanımında hazır motor başlar. Kontrol sekmesi açık kalsın; videonun sekmesine
+dönüp izle. Özgün satır ile çeviriyi ayrı ayrı açıp kapatabilirsin. Video zaten CC
+altyazısı sunmalı; ses yazıya dökülmez. YouTube arayüzü değiştikçe destek değişebilir.
+
+ENGLISH
+1. Extract this ZIP to a folder on your computer.
+2. In Firefox enter about:debugging#/runtime/this-firefox in the address bar.
+3. Click Load Temporary Add-on and select the .xpi file in this folder.
+4. Open the Aion toolbar icon or Fire Axolotl Extension in the extensions menu.
+
+To update an existing preview, load the new XPI using the same developer menu;
+do not uninstall the old preview first. Settings are retained. This package
+preserves Firefox's new-tab page; Aion's game remains available from the menu.
+
+This is an unsigned developer preview. Load it again after restarting Firefox.
+Do not disable signature, TLS or sandbox checks. Permanent installation needs
+a separate Mozilla signature.
+
+YouTube: open a captioned video → Aion → Video kumandası → YouTube / dual subtitles. Choose
+the source and target languages and turn on AI dual subtitles. Bundled English–
+Turkish translation starts on first use. Keep the control tab open and return
+to the video tab to watch. Original and translated lines have separate switches.
+The player must provide CC; audio transcription is not included. Support may
+change when YouTube changes its player.

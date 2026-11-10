@@ -6,7 +6,7 @@ const videoPort = browser.runtime.connect({name: 'aion-ai-video'});
 const languages = ["af", "am", "ar", "ast", "az", "ba", "be", "bg", "bn", "br", "bs", "ca", "ceb", "cs", "cy", "da", "de", "el", "en", "es", "et", "fa", "ff", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "he", "hi", "hr", "ht", "hu", "hy", "id", "ig", "ilo", "is", "it", "ja", "jv", "ka", "kk", "km", "kn", "ko", "lb", "lg", "ln", "lo", "lt", "lv", "mg", "mk", "ml", "mn", "mr", "ms", "my", "ne", "nl", "no", "ns", "oc", "or", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "so", "sq", "sr", "ss", "su", "sv", "sw", "ta", "th", "tl", "tn", "tr", "uk", "ur", "uz", "vi", "wo", "xh", "yi", "yo", "zh", "zu"];
 let modelState = {}, operation = 0, live = false, fileRunning = false, original = [], translated = [], downloadURL, targetId, loopTargetId;
 let pageSnapshot, pageRunning = false, pageOperation = 0;
-let loopStarting=false,loopGeneration=0;
+let loopStarting=false,loopGeneration=0,videoCleanup=Promise.resolve();
 const translate = (text, detectedSource) => callAI('translate', {text, source: UI.settings.aiSource==='auto'&&detectedSource?detectedSource:UI.settings.aiSource, target: UI.settings.aiTarget});
 const studyTrack = () => $('caption-track').value === 'local' ? 'local' : $('caption-track').value === 'auto' ? undefined : Number($('caption-track').value);
 function renderModel(state) {
@@ -36,7 +36,7 @@ function renderModel(state) {
   for (const id of ['model-download', 'model-load', 'model-import', 'aiModel']) $(id).disabled = busy || pageRunning;
   $('ai-generate').disabled = state.modelKind !== 'qwen' || state.phase !== 'ready' || live || fileRunning || pageRunning;
   for (const id of ['ai-translate', 'translate-file']) $(id).disabled = state.phase !== 'ready' || live || fileRunning || pageRunning;
-  $('live-mode').disabled = !live && (state.phase !== 'ready' || pageRunning);
+  $('live-mode').disabled = !live && (busy || pageRunning || fileRunning);
   $('page-translate').disabled = !pageSnapshot?.items.length || pageSnapshot.used || state.phase !== 'ready' || live || fileRunning || pageRunning;
   for (const id of ['page-scan','page-refresh','page-tab','page-scope']) $(id).disabled = pageRunning;
   $('page-stop').disabled = !pageRunning;
@@ -60,7 +60,9 @@ function render() {
   renderModel(modelState);
 }
 async function video(command, tabId=targetId || Number($('video-tab').value)) {
+  const token=operation;
   const tab = await browser.tabs.get(tabId);
+  if(['overlay','captionPrepare','captionWindow'].includes(command.action) && token!==operation)throw new Error('aiCancelled');
   if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
   videoPort.postMessage({tabId: tab.id});
   const result = await browser.runtime.sendMessage({type:'mediaTab',tabId:tab.id,command});
@@ -68,7 +70,7 @@ async function video(command, tabId=targetId || Number($('video-tab').value)) {
   return result;
 }
 async function overlay() {
-  if (!original.length && !translated.length) return;
+  if (!original.length && !translated.length && !live) return;
   await video({action: 'overlay', study:original, original: UI.settings.captionOriginal ? original : [], translated: UI.settings.captionTranslated ? translated : []});
   if (fileRunning && original.length && !$('caption-track').querySelector('option[value=local]')) {
     const option=document.createElement('option');option.value='local';option.textContent=UI.t('captionLocalSource');$('caption-track').append(option);$('caption-track').value='local';
@@ -132,17 +134,57 @@ async function translatePage() {
 }
 async function stopVideo() {
   loopGeneration++;
-  operation++; live = false; fileRunning = false; $('live-mode').checked = false;
-  if (targetId) {await video({action: 'closeOverlay'}).catch(() => {}); await video({action: 'captureStop'}).catch(() => {});}
-  if (loopTargetId) await video({action:'captionLoopStop'},loopTargetId).catch(()=>{});
-  loopTargetId=undefined;
+  const stoppedTarget=targetId,stoppedLoop=loopTargetId,token=++operation;
+  live=false;fileRunning=false;$('live-mode').checked=false;
+  // Clear owned references before awaiting. An older stop must never clear a
+  // newer session's tab/port; new starts wait for this cleanup barrier.
+  targetId=undefined;loopTargetId=undefined;
   $('caption-track').querySelector('option[value=local]')?.remove();
-  targetId = undefined; videoPort.postMessage({tabId:null}); $('video-state').textContent = UI.t('aiVideoStopped'); renderModel(modelState);
+  videoCleanup=videoCleanup.catch(()=>{}).then(async()=>{
+    let cleaned=true;
+    const cleanup=async(tabId,action)=>{try{await video({action},tabId);}catch{cleaned=false;}};
+    if(stoppedTarget){await cleanup(stoppedTarget,'closeOverlay');await cleanup(stoppedTarget,'captureStop');}
+    if(stoppedLoop)await cleanup(stoppedLoop,'captionLoopStop');
+    return cleaned;
+  });
+  const cleaned=await videoCleanup;
+  // If an unloading document loses its API context, retain the background
+  // port's target: its disconnect handler still owns the final cleanup.
+  if(token===operation){if(cleaned)videoPort.postMessage({tabId:null});$('video-state').textContent=UI.t(cleaned?'aiVideoStopped':'aiVideoCleanupPending');renderModel(modelState);}
 }
 async function liveLoop(token) {
-  const known = new Set(); let empty = 0;
+  const known = new Set(), cache=new Map(); let empty = 0, youtubePage, pendingDOM=false;
   while (live && token === operation) {
     const response = await video({action: 'captionWindow', track: $('caption-track').value === 'auto' ? undefined : Number($('caption-track').value)});
+    if(!live || token!==operation)return;
+    if(response.closed){await stopVideo();return;}
+    if(response.provider==='youtube') {
+      if(youtubePage && youtubePage!==response.pageKey)throw new Error('youtubeVideoChanged');
+      youtubePage=response.pageKey;
+      const cue=response.cues[0],key=cue?JSON.stringify([response.language,UI.settings.aiSource,UI.settings.aiTarget,cue.text]):'';
+      original=cue?[cue]:[];translated=cue&&cache.has(key)?[{...cue,text:cache.get(key)}]:[];
+      $('live-source').textContent=cue?.text || '';$('live-translation').textContent=translated[0]?.text || '';
+      $('video-state').textContent=UI.t(cue?'youtubeCaptionActive':++empty>8?'youtubeCaptionMissing':'aiWaitingCaption');
+      if(cue)empty=0;
+      await overlay();
+      // Poll source separately from inference. Never attach a late translation
+      // to a newer caption, seek position or SPA video. Only one job is pending.
+      if(cue && !cache.has(key) && !pendingDOM && UI.settings.captionTranslated) {
+        pendingDOM=true;
+        translate(cue.text,response.language).then(async result=>{
+          if(!live || token!==operation)return;
+          cache.set(key,result.text);if(cache.size>100)cache.delete(cache.keys().next().value);
+          const current=await video({action:'captionWindow'});
+          if(!live || token!==operation || current.closed || current.pageKey!==youtubePage || current.sourceId!==response.sourceId || !current.cues[0])return;
+          original=[current.cues[0]];translated=[{...current.cues[0],text:result.text}];
+          $('live-translation').textContent=result.text;await overlay();
+        }).catch(async error=>{
+          if(!live || token!==operation || error.message==='aiBusy')return;
+          await stopVideo();UI.status(error.message in UI.messages?error.message:'operationFailed',true);
+        }).finally(()=>{pendingDOM=false;});
+      }
+      await new Promise(resolve=>setTimeout(resolve,250));continue;
+    }
     if ($('caption-track').options.length === 1) response.tracks.forEach((track, index) => {const option = document.createElement('option'); option.value = index; option.textContent = `${track.label || index + 1} · ${track.language || '?'}`; $('caption-track').append(option);});
     if (!response.cues.length) {
       $('video-state').textContent = UI.t(++empty > 8 ? 'aiNoReadableCaptions' : 'aiWaitingCaption');
@@ -174,7 +216,7 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   await UI.init();
   $('open-wordbook').onclick=()=>UI.run(()=>browser.tabs.create({url:browser.runtime.getURL('aion/wordbook.html')}));
   const languageNames = new Intl.DisplayNames([UI.locale], {type:'language'});
-  for (const id of ['aiSource', 'aiTarget']) for (const code of languages) {const option=document.createElement('option');option.value=code;option.textContent=languageNames.of(code) || code;$(id).append(option);}
+  for (const id of ['aiSource', 'aiTarget','video-source','video-target']) for (const code of languages) {const option=document.createElement('option');option.value=code;option.textContent=languageNames.of(code) || code;$(id).append(option);}
   modelState = await callAI('status'); render(); await tabs();
   browser.runtime.onMessage.addListener((message, sender) => {
     if (sender.id === browser.runtime.id && message.type === 'aionAIState') renderModel(message.state);
@@ -226,7 +268,20 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
     if ($('caption-track').value==='local') {$('live-mode').checked=false;throw new Error('captionNativeForLive');}
     targetId = Number($('video-tab').value); if (!targetId) throw new Error('restrictedPage');
     original = []; translated = []; live = true; const token = ++operation;
+    $('live-source').textContent='';$('live-translation').textContent='';
     renderModel(modelState);
+    try {
+      const cleaned=await videoCleanup;if(cleaned===false)throw new Error('aiVideoCleanupPending');
+      if(!live || token!==operation)return;
+      await video({action:'captionPrepare'});
+      if(!live || token!==operation)return;
+      if(modelState.phase!=='ready') {
+        if($('aiModel').value!=='bergamot')throw new Error('aiModelMissing');
+        $('video-state').textContent=UI.t('aiState-loading');
+        await callAI('load',{backend:'wasm',modelKind:'bergamot'});
+      }
+      if(!live || token!==operation)return;
+    } catch(error) {if(token!==operation)return;await stopVideo();throw error;}
     liveLoop(token).catch(async error => {if (token === operation) {await stopVideo(); UI.status(error.message in UI.messages ? error.message : 'operationFailed', true);}});
   });
   action('stop-video', stopVideo);
@@ -272,7 +327,7 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   if(target && /^\d+$/.test(target))for(const id of ['video-tab','page-tab'])if([...$(id).options].some(option=>option.value===target))$(id).value=target;
   if(entry.get('model')==='qwen'){$('aiModel').value='qwen';await $('aiModel').onchange();$('ai-general-panel').open=true;}
   const destinations={models:'ai-model-section',video:'ai-video-section',page:'ai-page-section',text:'ai-text-section'};
-  if(destinations[entry.get('focus')] && (modelState.phase==='ready'||entry.get('focus')==='models'))$(destinations[entry.get('focus')]).scrollIntoView({block:'start'});
+  if(destinations[entry.get('focus')])$(destinations[entry.get('focus')]).scrollIntoView({block:'start'});
   document.body.inert=false;document.body.removeAttribute('aria-busy');
   document.body.dataset.ready = 'true';
 })().catch(error => {document.body.inert=false;document.body.removeAttribute('aria-busy');UI.status(error.message in UI.messages ? error.message : 'aiRuntimeFailed', true);});

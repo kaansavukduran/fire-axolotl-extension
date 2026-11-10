@@ -4,6 +4,7 @@
   if (globalThis.__aionVideoInstalled) return;
   globalThis.__aionVideoInstalled = true;
   let overlay, stopOverlay, capturedTrack, capturedMode, defaultSpeed, mediaObserver, localCaptionSource, stopLoop, refreshOverlay;
+  let captionsClosed=false;
   const speedListeners=new Map();
   function video(action) {
     const videos = [...document.querySelectorAll('video')].filter(v => v.getBoundingClientRect().width > 0);
@@ -121,6 +122,10 @@
     nativeTrack.mode = 'disabled';
     const escapeCue = text => String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
     function updateNative() {
+      // A disabled Firefox TextTrack exposes cues as null. Read its real list
+      // while hidden so frequent live refreshes replace rather than accumulate.
+      const previousMode=nativeTrack.mode;nativeTrack.mode='hidden';
+      try {
       for(const cue of [...(nativeTrack.cues || [])])nativeTrack.removeCue(cue);
       for (const [cues, line, id] of [[original, top ? 8 : translated.length ? 78 : 88, 'aion-native'], [translated, top ? 18 : 88, 'aion-native-translated']]) {
       for (const item of cues) {
@@ -130,6 +135,7 @@
         nativeTrack.addCue(cue);
       }
       }
+      } finally {nativeTrack.mode=previousMode;}
     }
     updateNative();
     function move() {
@@ -149,7 +155,7 @@
       first.hidden = !first.textContent; second.hidden = !second.textContent;
       const rect = v.getBoundingClientRect();
       study.style.maxHeight = Math.max(120,Math.min(innerHeight*.65,rect.height-50)) + 'px';
-      learn.hidden = !study.hidden || !studyToken || !studyCues.some(c=>v.currentTime>=c.start&&v.currentTime<c.end);
+      learn.hidden = !study.hidden || !studyToken || (!original.length && !translated.length) || !studyCues.some(c=>v.currentTime>=c.start&&v.currentTime<c.end);
       section.hidden = (study.hidden && !first.textContent && !second.textContent && learn.hidden) || rect.bottom < 0 || rect.top > innerHeight;
       const left = Math.max(0, rect.left), right = Math.min(innerWidth, rect.right);
       overlay.style.left = left + 'px'; overlay.style.width = Math.max(0, right - left) + 'px';
@@ -157,6 +163,7 @@
       overlay.style.top = Math.max(0, Math.min(innerHeight - height, top ? rect.top + 12 : rect.bottom - height - 12)) + 'px';
     }
     const timer = setInterval(update, 150); update();
+    globalThis.AionYouTubeCaptions?.cover(v);
     refreshOverlay = {video:v,token:studyToken,signature,update:(nextOriginal,nextTranslated,nextSource,nextRevision)=>{
       original=nextOriginal;translated=nextTranslated;studyCues=shift(nextSource);studyRevision=nextRevision;localCaptionSource={video:v,cues:nextSource};updateNative();update();
     }};
@@ -171,9 +178,10 @@
       previousTracks.forEach(track => {if (track.mode === 'hidden') track.mode = 'showing';});
       overlay.remove(); stopOverlay = null;
       localCaptionSource = undefined;
+      globalThis.AionYouTubeCaptions?.uncover();
       if(revoke && studyToken)sendStudy('close').catch(()=>{});
     };
-    close.onclick = () => {stopLoop?.();stopOverlay?.();};
+    close.onclick = () => {captionsClosed=true;stopLoop?.();stopOverlay?.();};
     window.addEventListener('pagehide', onPageHide, {once: true});
   }
   browser.runtime.onMessage.addListener((message, sender) => {
@@ -181,7 +189,7 @@
     const cmd = message.command || {};
     if(cmd.action==='closeOverlay'){stopLoop?.();stopOverlay?.();return Promise.resolve({stopped:true});}
     if(cmd.action==='captionLoopStop'){stopLoop?.();return Promise.resolve({stopped:true});}
-    if(cmd.action==='captureStop')stopLoop?.();
+    if(cmd.action==='captureStop'){stopLoop?.();globalThis.AionYouTubeCaptions?.stop();}
     if(cmd.action==='captureStop'&&!video('info')){if(capturedTrack&&capturedTrack.mode==='hidden')capturedTrack.mode=capturedMode;capturedTrack=null;return Promise.resolve({stopped:true});}
     if(cmd.action==='clearDefaultSpeed'){mediaObserver?.disconnect();mediaObserver=null;for(const [media,listener] of speedListeners)media.removeEventListener('loadedmetadata',listener);speedListeners.clear();defaultSpeed=undefined;return Promise.resolve({stopped:true});}
     if(cmd.action==='setDefaultSpeed'){
@@ -191,6 +199,7 @@
     }
     const v = video(cmd.action);
     if (!v) return Promise.resolve({error: 'noVideo'});
+    if(cmd.action==='captionPrepare'){captionsClosed=false;return Promise.resolve(globalThis.AionYouTubeCaptions?.prepare(v) || {provider:'texttrack'});}
     if (cmd.action === 'captureStop') {
       if (capturedTrack && capturedTrack.mode === 'hidden') capturedTrack.mode = capturedMode;
       capturedTrack = null;
@@ -201,6 +210,10 @@
       const tracks = [...v.textTracks].filter(track => track.label !== 'Aion');
       const selected = Number.isInteger(cmd.track) ? tracks[cmd.track] : tracks.find(track => track.mode === 'showing') || (tracks.includes(capturedTrack) ? capturedTrack : undefined) || tracks[0];
       const local = cmd.track === 'local';
+      if(!local && !selected && globalThis.AionYouTubeCaptions?.supports(v)) {
+        if(cmd.action==='captionCurrent')return Promise.resolve({text:globalThis.AionYouTubeCaptions.read(v).cues[0]?.text || ''});
+        return Promise.resolve({error:'captionSeekUnavailable'});
+      }
       if (local ? localCaptionSource?.video !== v || !localCaptionSource.cues.length : !selected) return Promise.resolve({error:'noCaptions'});
       const previousMode = local ? undefined : selected.mode;
       if (previousMode === 'disabled') selected.mode = 'hidden';
@@ -245,6 +258,7 @@
       return Promise.resolve(playing).then(() => ({time:cue.start,text:cue.text,playing:true}), () => ({time:cue.start,text:cue.text,playing:false}));
     }
     if (cmd.action === 'captionWindow') {
+      if(captionsClosed)return Promise.resolve({closed:true,cues:[],tracks:[]});
       const tracks = [...v.textTracks].filter(track => track.label !== 'Aion');
       const selected = Number.isInteger(cmd.track) ? tracks[cmd.track] : tracks.find(track => track.mode === 'showing') || tracks[0];
       if (selected && capturedTrack !== selected) {
@@ -254,6 +268,7 @@
       }
       const cues = [...(selected?.cues || [])].filter(cue => cue.endTime > v.currentTime && cue.startTime < v.currentTime + 20).slice(0, 4)
         .map(cue => ({start: cue.startTime, end: cue.endTime, text: String(cue.text || '').replace(/<[^>]*>/g, '').slice(0, 2000)}));
+      if(!cues.length){const youtube=globalThis.AionYouTubeCaptions?.read(v);if(youtube)return Promise.resolve(youtube);}
       return Promise.resolve({time: v.currentTime, language: selected?.language || '', cues,
         tracks: tracks.map(track => ({label: track.label, language: track.language}))});
     }
@@ -275,6 +290,7 @@
       player.setPlaybackQualityRange(requested, requested);
       return Promise.resolve({requested, width: v.videoWidth, height: v.videoHeight});
     } else if (cmd.action === 'captions') {
+      const youtube=globalThis.AionYouTubeCaptions?.read(v);if(youtube)return Promise.resolve({text:youtube.cues.map(c=>c.text).join('\n')});
       const cues = [...v.textTracks].flatMap(t => [...(t.activeCues || [])]).map(c => c.text || '').filter(Boolean);
       return Promise.resolve({text: cues.join('\n').slice(0, 5000)});
     } else if (cmd.action === 'overlay') {

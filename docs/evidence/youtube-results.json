@@ -1,0 +1,11 @@
+{
+  "passed": [
+    "The real engine icon writers keep the Aion toolbar logo in both blocking states; the normal video link cold-starts bundled inference, enables CC and displays paired original/Turkish captions without any source TextTrack",
+    "Original-only, translation-only, both hidden and both visible work through normal independent switches; native YouTube captions stay covered and player fullscreen retains the paired overlay",
+    "Blank/changed captions clear stale text; a deterministically delayed real inference result cannot be attached to a newer source line, and the newest source is translated next",
+    "Rapid off/on retains the newest session; the on-video close button stops translation and restores native CC; a YouTube SPA video change stops the old session with an actionable message and no leftover overlay",
+    "Unavailable CC reports an actionable error without an overlay; source/target choices and Stop work normally; English, 200% scale, larger text, OpenDyslexic and a narrow viewport preserve accessible controls, and closing the active controller with its page-side cleanup suppressed still lets the real background restore native CC without a leftover overlay"
+  ],
+  "scope": "Local HTTPS YouTube-shaped fixture only; real bundled model, real Firefox and TLS verification; not a live public-video test",
+  "public_video_access": "Cloud proxy denied public YouTube with HTTP 403; no bypass attempted"
+}

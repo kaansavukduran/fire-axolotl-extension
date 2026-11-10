@@ -32,3 +32,5 @@ Yetkili hedef `kaansavukduran/fire-axolotl-extension`; donör, sabit `2b739252a5
 Mozilla geliştirici hesabı/AMO imzası henüz sağlanmadı; bu sürüm geçici yüklenen bir geliştirici önizlemesidir. İmza denetimini kapatma, özel Firefox derleme, native messaging veya sahte otomatik güncelleme akışı eklenmez. Windows/macOS/Android donanım doğrulaması, iOS uyarlaması, gerçek hesap Sync deneyi ve geniş hizmet kalite/altyazı adaptörleri tamamlandı sayılmaz.
 
 Ek yerel çeviri modeli M2M100 418M, Firefox içinde çevrimdışı metin ve TextTrack örneklerinde kullanıldı. Test edilen örnekler [VALIDATION.md](VALIDATION.md) içindedir; tüm diller için kalite garantisi değildir.
+
+0.12.0 kullanıcı geri bildirimi: Aion araç çubuğu simgesi motorun runtime güncellemelerine karşı korunur. YouTube görünür CC kaynağı, tek açışta paket model başlatma, aynı ekran kaynak/hedef dilleri ve bağımsız iki satır anahtarı eklendi. CC olmayan videoda ses yazıya dökülmez; tam transkript veya her hizmet için eşdeğerlik iddiası yoktur. İmzasız önizleme için XPI içeren kurulum ZIP’i normal indirmeyi kolaylaştırır.

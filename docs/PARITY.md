@@ -27,3 +27,5 @@ Donör: `fire-axolotl` main, `2b739252a5ff66bfd870dfbe6a7e8f2b0ae106a2`. Donörd
 Tek eklentiyle motor, yerel arayüz ve servis yetkilerini değiştirerek forkla birebir eşitlik sağlamak Firefox WebExtensions modeliyle mümkün değildir. Bu tablo yapılabilen karşılıkları, geliştirme açıklarını ve platform sınırlarını ayrı kaydeder. / Exact native-fork parity cannot be achieved through standard WebExtensions alone; implementation gaps and platform restrictions are recorded separately above.
 
 Qwen 2.5 1.5B yerel metin/altyazı motoru ve kullanım sınırları: [LOCAL_AI.md](LOCAL_AI.md). Kapsamın kronolojik takibi: [REQUIREMENTS.md](REQUIREMENTS.md).
+
+0.12.0: YouTube görünür CC okuyucusu ve kaynak/hedef/iki satır görünürlüğü aynı video ekranındadır. CC yoksa konuşma tanıma yapılmaz; DOM kaynağı tam video transkripti değildir. Gerçek kamu videosu erişimi bu ortamda 403 ile engellendi; yerel HTTPS oynatıcı ve gerçek model testi hizmetin bütün sürümleri için garanti değildir.

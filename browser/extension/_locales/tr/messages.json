@@ -732,13 +732,13 @@
     "message": "Çift altyazı çeviri modu"
   },
   "aiVideoHelp": {
-    "message": "Kaynak ve hedef dili yukarıdan seç. Yüklediğin yerel model, okunabilen video altyazılarını veya VTT/SRT dosyanı çevirir. Orijinal ve çeviri aynı zaman damgalarında gösterilir."
+    "message": "İki satır birlikte gösterilir: özgün altyazı ve çeviri. Aşağıdaki anahtarlarla her satırı ayrı açıp kapatabilirsin. İngilizce ↔ Türkçe için hazır motor ilk açışta kendisi başlar."
   },
   "captionTrack": {
     "message": "Videonun kaynak altyazısı"
   },
   "aiLiveMode": {
-    "message": "Video altyazı çevirisini aç"
+    "message": "Videoda AI çift altyazıyı aç / kapat"
   },
   "aiLiveLimit": {
     "message": "Deneysel: yalnızca tarayıcıya metin altyazısı sunan oynatıcılar desteklenir. YouTube/Netflix gibi özel oynatıcılar altyazıyı paylaşmayabilir. Altyazısız sesi dinlemez; ayrı konuşma tanıma modeli yoktur. Çeviri gecikebilir; en tutarlı sonuç için dosyayı önceden çevir."
@@ -1329,7 +1329,7 @@
     "message": "Sayfa / popup yazılarını çevir"
   },
   "panelVideoTranslate": {
-    "message": "Video altyazısını çevir"
+    "message": "YouTube / çift altyazıyı aç"
   },
   "panelExternalTranslation": {
     "message": "İsteğe bağlı harici çeviri hizmeti"
@@ -1405,5 +1405,23 @@
   },
   "panelReadFromSite": {
     "message": "Siteden seçili metin / altyazı al"
+  },
+  "youtubeCaptionHelp": {
+    "message": "YouTube’da videoyu aç → kaynak ve hedef dili seç → Çift altyazıyı aç. Aion, CC altyazısını açıp görünen metni cihazda çevirir. Bu kontrol sekmesi açık kalsın; videoyu kendi sekmesinden izleyebilirsin."
+  },
+  "youtubeCaptionsUnavailable": {
+    "message": "Bu YouTube oynatıcısında CC düğmesi kullanılamıyor. Altyazısı olan bir video aç veya özgün VTT/SRT dosyası yükle. Ses yazıya çevrilmez."
+  },
+  "youtubeCaptionActive": {
+    "message": "YouTube CC okunuyor · çift altyazı bu cihazda hazırlanıyor."
+  },
+  "youtubeCaptionMissing": {
+    "message": "YouTube’dan altyazı satırı gelmedi. Oynatıcıda CC’yi ve altyazı dilini kontrol et; sesin kendisi yazıya çevrilmez."
+  },
+  "youtubeVideoChanged": {
+    "message": "Video değiştiği için önceki çeviri durduruldu. Yeni videoda çift altyazıyı yeniden aç."
+  },
+  "aiVideoCleanupPending": {
+    "message": "Altyazı temizliği tamamlanamadı. Bu kontrol sekmesini kapat; arka plan son temizliği yapar. Gerekirse video sayfasını yenile."
   }
 }

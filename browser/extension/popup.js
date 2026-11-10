@@ -105,7 +105,7 @@ async function fileCues(id) {
   if (!draftEdited && typeof draft === 'string') $('source-text').value = draft.slice(0, 5000);
   action('open-game',()=>browser.tabs.create({url:browser.runtime.getURL('aion/newtab.html')}));
   action('open-tabs', () => browser.sidebarAction.open());
-  action('open-ai',()=>launch('ai.html',{focus:'models'}));
+  action('open-ai',()=>launch('ai.html',{focus:'start'}));
   action('open-qwen',()=>launch('ai.html',{model:'qwen',focus:'models'}));
   action('open-video-ai',()=>launch('ai.html',{focus:'video'}));
   action('open-page-ai',()=>launch('ai.html',{focus:'page'}));

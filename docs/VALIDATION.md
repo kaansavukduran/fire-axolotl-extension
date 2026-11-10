@@ -6,9 +6,10 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 | --- | --- |
 | Node birim/izin/veri doğrulama | 51 geçti |
 | Gerçek popup, geniş panel, sağ tık konteyner ve AI başlangıcı · 0.11.0 | 6 geçti; [rapor](evidence/usability-results.json). |
+| Aion runtime simgesi ve YouTube biçiminde yerel HTTPS oyuncu · 0.12.0 | 5 geçti; [kapsam ve rapor](evidence/youtube-results.json). Gerçek kamu videosuna erişim 403 ile engellendi. |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
-| 0.1.0 → 0.11.0 geliştirici yükseltmesi | 2 geçti: ayarlar, eski Unicode/tekrar/boşluk içeren kelimeler, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
+| 0.1.0 → 0.12.0 geliştirici yükseltmesi | 2 geçti: ayarlar, eski Unicode/tekrar/boşluk içeren kelimeler, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
 | JS/HTML/yerelleştirme/manifest/vendor hash | Geçti; aynı kilitli girdilerden ikinci XPI üretimi bayt bayt aynı |
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | Gerçek kelime defteri · 0.10.0 | 6 geçti; [rapor](evidence/wordbook-results.json). |
@@ -170,3 +171,22 @@ Marionette popup’ın XUL browser’ına normal frame geçişini desteklemez. T
 ![AI başlangıç kılavuzu](evidence/ai-quick-start-tr.png)
 
 Bu sürüm Qwen’in Türkçe kalitesini, imzalı kalıcı kurulum kapsamını veya native Firefox/DRM sınırlarını değiştirmez.
+
+
+## 0.12.0: Aion araç çubuğu ve YouTube CC okuyucusu
+
+[Beş gerçek Firefox akışı](evidence/youtube-results.json) şu kapsamı doğrular: uBO’nun gerçek `setIcon`/`setDefaultIcon` çağrılarından sonra iki durumda da native araç simgesi Aion yolunu gösterir. Native kaynak TextTrack olmayan yerel HTTPS oynatıcıda normal video girişinden mevcut kaynak sekme alınır; ilk açışta CC açılır ve gerçek paket Bergamot `The cat is sleeping.` → `Kedi uyuyor.` üretir. Otomatik kaynak dili, oynatıcının verdiği English kodunu kullanır. Özgün ve çeviri native tam ekranda aynı zamanları taşır.
+
+Ayrı normal anahtarlarla yalnız özgün, yalnız çeviri, ikisi gizli ve ikisi görünür geçti. YouTube’un kaynak çizimi Aion açıkken örtülü, durdurunca geri gelir. Boş/değişmiş satırda eski yazı temizlenir. Gerçek modelin bir sonucu testte kontrollü geciktirilmiştir; motor taklit edilmemiştir. Kaynak satır değişince geç gelen kapı çevirisi müze satırına takılmaz ve yeni satır gerçek motorla sırada çevrilir.
+
+Hızlı kapat/açta eski cleanup yeni hedefi veya port kaydını silemez; yeni başlangıç önceki temizlemeyi bekler. Videodaki × aktif oturumu durdurur. SPA video değişimi eski katmanı kaldırır ve açıklamalı hata verir. CC kullanılamıyorsa yeni katman oluşmaz; kaynak/hedef seçimi ve Durdur düğmesi çalışır. English, %200 arayüz + bağımsız %120 metin + OpenDyslexic, 500 px pencere altında yatay taşma yoktur ve ana kontrol çalışır. Aktif kontrol sekmesi kapanınca katman kalkar ve native CC geri gelir. Son test yalnız bu kontrol sayfasının pagehide temizleme olayını engeller; gerçek arka plan port-disconnect temizliği katmanı kaldırır. uBO, kendi portlarını kaydederken sender bilgisini siliyordu ve Aion’un kanal doğrulaması bu nedenle atlanıyordu. Aion’un yaşam döngüsü kanalı artık uBO port işleyicisinden ayrılır. Model/arka plan API’si taklit edilmez.
+
+Firefox disabled TextTrack için `cues=null` verir. Yeni sık canlı yenilemede mevcut native izler hidden modda okunup temizlenir ve önceki moda döner; görünmeyen izde birikme önlenir. Mevcut ana 42 Firefox kontrolü ve paket motorunun 6 çevrimdışı akışı yeniden geçti.
+
+**Canlı hizmet sınırı:** Paylaşılan YouTube bağlantısı denendi. Bu ortamın proxy’si kamu YouTube alan adına HTTP 403 döndürdü. Erişim başka rotayla aşılmadı. Fikstürün `www.youtube.com` adı yalnız izole Firefox profilinde loopback’e çözülür ve rastgele yerel porta bağlanır; yerel CA ve ayrı sunucu sertifikası yalnız bu test için üretilir. TLS doğrulaması açıktır; sandbox ve imza kontrolü kapatılmaz. Gerçek YouTube sayfası, hesap veya o videonun altyazısı indirilmemiştir. Bu sonuç hizmetin bütün arayüz sürümlerini ya da istenen canlı videoyu doğrulamış sayılmaz. Ses yazıya dökülmez, DOM kaynağı tam transkript/VTT değildir.
+
+![Gerçek Aion araç çubuğu görüntüsü](evidence/aion-toolbar.png)
+
+![Yerel YouTube biçimli oynatıcıda gerçek modelin iki satırı; canlı kamu videosu değildir](evidence/youtube-local-dual-tr.png)
+
+![Dar ekranda English, büyük ölçek ve disleksi fontuyla video kontrolleri](evidence/youtube-controls-en-200-narrow.png)

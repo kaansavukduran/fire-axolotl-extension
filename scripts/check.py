@@ -40,6 +40,10 @@ with zipfile.ZipFile(package) as archive:
     assert final['browser_specific_settings']['gecko']['id'] != 'aion@fire-axolotl.browser'
     assert 'sessions' in final['optional_permissions'] and 'sessions' not in final['permissions']
     assert final['options_ui']['page'] == 'aion/settings.html'
+    assert final['browser_action']['default_title'] == 'Fire Axolotl · Aion'
+    assert 'path: browser.runtime.getManifest().browser_action.default_icon' in archive.read('js/vapi-background.js').decode()
+    assert "if (port.name === 'aion-ai-video') { return; }" in archive.read('js/vapi-background.js').decode()
+    assert archive.read('aion/youtube-captions.js') == (SOURCE/'youtube-captions.js').read_bytes()
     assert final['background'] == {'page': 'background.html'}
     assert 'mozilla-recommendation.json' not in archive.namelist()
     assert not any(name.startswith('META-INF/') for name in archive.namelist())

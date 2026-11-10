@@ -732,13 +732,13 @@
     "message": "Dual-subtitle translation mode"
   },
   "aiVideoHelp": {
-    "message": "Choose source and target languages above. The loaded local model translates readable video captions or local VTT/SRT files. Original and translation share the same timestamps."
+    "message": "Show two lines together: original captions and translation. Toggle each line separately below. For English ↔ Turkish, the bundled engine starts on first use."
   },
   "captionTrack": {
     "message": "Video source subtitle track"
   },
   "aiLiveMode": {
-    "message": "Enable video caption translation"
+    "message": "Turn AI dual subtitles on / off"
   },
   "aiLiveLimit": {
     "message": "Experimental: requires player captions exposed as browser text tracks. Custom players such as YouTube/Netflix may not expose them. It does not transcribe audio; no speech-recognition model is included. Translation can lag; pretranslate a subtitle file for more consistent timing."
@@ -1329,7 +1329,7 @@
     "message": "Translate page / dialog text"
   },
   "panelVideoTranslate": {
-    "message": "Translate video subtitles"
+    "message": "YouTube / dual subtitles"
   },
   "panelExternalTranslation": {
     "message": "Optional external translation service"
@@ -1405,5 +1405,23 @@
   },
   "panelReadFromSite": {
     "message": "Read selected website text / captions"
+  },
+  "youtubeCaptionHelp": {
+    "message": "Open your YouTube video → choose source and target languages → turn on dual subtitles. Aion enables CC and translates the visible text on your device. Keep this control tab open and watch the video in its own tab."
+  },
+  "youtubeCaptionsUnavailable": {
+    "message": "CC is unavailable in this YouTube player. Open a captioned video or load an original VTT/SRT file. Audio transcription is not included."
+  },
+  "youtubeCaptionActive": {
+    "message": "Reading YouTube CC · dual subtitles are prepared on this device."
+  },
+  "youtubeCaptionMissing": {
+    "message": "No YouTube caption line arrived. Check CC and the caption language in the player; the audio itself is not transcribed."
+  },
+  "youtubeVideoChanged": {
+    "message": "The video changed, so its previous translation stopped. Turn dual subtitles on again for the new video."
+  },
+  "aiVideoCleanupPending": {
+    "message": "Subtitle cleanup could not finish. Close this control tab so the background can finish cleanup. Reload the video page if needed."
   }
 }

@@ -12,6 +12,7 @@ globalThis.AionMedia = (() => {
   async function performCommand(tabId, command) {
     const tab = await browser.tabs.get(tabId);
     if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
+    await browser.tabs.executeScript(tabId, {file:'/aion/youtube-captions.js',allFrames:true}).catch(()=>{});
     await browser.tabs.executeScript(tabId, {file:'/aion/video.js',allFrames:true}).catch(()=>{});
     const frames = (await browser.webNavigation.getAllFrames({tabId})).map(frame=>frame.frameId);
     const send = (frameId, action) => browser.tabs.sendMessage(tabId,{type:'aionVideo',command:action},{frameId});
