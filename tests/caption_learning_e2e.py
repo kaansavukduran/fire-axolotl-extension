@@ -52,7 +52,12 @@ try:
     media('v.play();');wraps=media('return window.wraps;');w.until(lambda _:media('return window.wraps;')>wraps)
     d.switch_to.window(controller);d.find_element(By.ID,'caption-loop-stop').click();d.switch_to.window(page);w.until(lambda _:media('return v.currentTime>.85;'));media('v.pause();v.currentTime=.3;')
     passed.append('Native caption sources are selectable without AI; a real line loops repeatedly, pauses normally, resumes and stops explicitly')
-    d.switch_to.window(controller);d.find_element(By.ID,'caption-loop').click();d.switch_to.window(page);media('v.currentTime=1.1;');w.until(lambda _:media('return v.currentTime>1.45;'));media('v.pause();')
+    d.switch_to.window(controller);d.find_element(By.ID,'caption-loop').click()
+    # Wait for the intended first-line loop to actually start before seeking.
+    # Otherwise slower frame injection can capture the new 1.1 s position and
+    # correctly start the second-line loop, invalidating this test's premise.
+    w.until(lambda _:d.execute_script('return document.getElementById("status").textContent===UI.t("captionLooping");') and d.find_element(By.ID,'study-text').get_attribute('value')=='First native line')
+    d.switch_to.window(page);media('v.currentTime=1.1;');w.until(lambda _:media('return v.currentTime>1.45;'));media('v.pause();')
     passed.append('Seeking outside the loop lets playback continue and never forces the user back into the old line')
     media('v.currentTime=.3;');d.switch_to.window(controller)
     d.execute_script('document.getElementById("caption-loop").click();document.getElementById("caption-loop-stop").click();')

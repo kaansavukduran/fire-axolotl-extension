@@ -190,3 +190,5 @@ Firefox disabled TextTrack için `cues=null` verir. Yeni sık canlı yenilemede 
 ![Yerel YouTube biçimli oynatıcıda gerçek modelin iki satırı; canlı kamu videosu değildir](evidence/youtube-local-dual-tr.png)
 
 ![Dar ekranda English, büyük ölçek ve disleksi fontuyla video kontrolleri](evidence/youtube-controls-en-200-narrow.png)
+
+0.12.0’ın ilk uzak koşusu [42888624394](https://github.com/kaansavukduran/fire-axolotl-extension/actions/runs/42888624394), mevcut satır döngüsü testinde başlat düğmesine tıkladıktan hemen sonra dış zamana gitme varsayımı nedeniyle durdu. Daha yavaş frame hazırlığında yeni 1,1 saniye konumu henüz başlatılmamış döngünün kaynağı olabiliyordu. Test artık gerçek `captionLooping` yanıtını ve ilk kaynak satırını bekledikten sonra dışarı seek yapar; 1,45 saniyeyi geçme denetimi korunur. Oynatma zamanı/hızı veya uygulama davranışı değiştirilmez. Başarısız koşu korunur; yeni YouTube testi bu koşuda henüz çalışmamıştı.
