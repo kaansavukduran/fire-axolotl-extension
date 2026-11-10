@@ -147,3 +147,6 @@ Beş ek birim testi; dolu/uzun/yanlış tipte yeni metin ve tekrar kaydı; Unico
 ![Türkçe kelime defteri](evidence/wordbook-tr.png)
 
 ![Dar ekranda %200 arayüz, bağımsız büyük yazı ve OpenDyslexic ile çalışan kayıt eylemi](evidence/wordbook-en-200-narrow.png)
+
+
+0.10.0’ın ilk uzak koşusu [42847734543](https://github.com/kaansavukduran/fire-axolotl-extension/actions/runs/42847734543), mevcut altyazı gezinme testinin tekrar oynatma başladıktan sonra WebDriver sekme değiştirene kadar geçen sürede videonun dar zaman aralığında kalacağını varsayması nedeniyle durdu. Yeni kelime defteri adımına henüz gelmemişti. Test gerçek medyanın `seeking` olayını kaydederek 0,5 saniye ve gecikmeli 0,7 saniye hedeflerine gidildiğini denetler; sonraki gezinme için duraklatılmış konum açık seçilir. Oynatma hızı, gerçek zaman, video API’si ve uygulama davranışı değiştirilmez; zaman kontrolü atlanmaz. Başarısız koşu korunur.

@@ -34,3 +34,7 @@ Lisanslar ve tam ilgili kaynak dağıtımı: [THIRD_PARTY_NOTICES.md](THIRD_PART
 0.10.0: popup/AI/ayarlar girişli ayrı kelime defteri, Türkçe/English arama, 50 satırlık sayfalama, silme/son silmeyi geri alma ve kelimeye özel JSON önizle/birleştir/yedekle akışı. Tek arka plan sırası güncel kayıt üzerinde çalışır; başka sayfadaki kelimeler ezilmez. Eski string dizisi veri biçimi korunur. Dolu deftere yeni kayıt veya 300 karakteri aşan metin kaydı başarısız olur; sessiz kırpma/başarı yoktur. Yeni izin, AI çağrısı veya bulut aktarımı eklenmez. Deyim/Qwen/AMO/platform açıkları değişmez.
 
 0.10.0 yerel doğrulama: 45 Node testi, kelime defterinde 6 gerçek UI akışı, video kartında 5 (dolu-defter dahil), ana akışta 42 ve 0.1→0.10 geliştirici yükseltmesinde eski kelimeler dahil 2 kontrol geçti. web-ext 0 hata/11 mevcut uyarı. Kod/sürüm bağı `v0.10.0-preview.1` etiketi ve sürüm makbuzuyla korunur; nihai uzak CI/yayın/yedek makbuzları ayrıca doğrulanır. Sonraki öncelikler Qwen/çeviri kalite açığı, ek UI dilleri, servis altyazı adaptörleri ve erişilebilen gerçek platform denemeleridir; AMO/hesap gerektiren işler bekler.
+
+0.10.0 CI düzeltmesi: ilk `b846659` koşusu eski gezinme testinde, oynatma sürerken gecikmiş currentTime örneği dar aralıktan çıktığı için durdu. İki hedef artık gerçek seeking olaylarıyla doğrulanır; uygulama/XPI değişmez. İlk commit ve yedeği korunur; düzeltilmiş kaynak için yeni commit/CI/yedek gerekir.
+
+Seeking olayı düzeltmesi sonrası yerel ana 42 akış yeniden geçti; iki gerçek zaman hedefi denetimi korunur.

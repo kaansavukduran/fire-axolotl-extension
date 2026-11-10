@@ -303,15 +303,19 @@ try:
     wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
     driver.switch_to.window(web_handle)
     record('Subtitle offset UI delays both DOM and native cues, clips negative starts, drops expired cues and resets to zero')
-    driver.execute_script('const v=document.querySelector("video"),t=[...v.textTracks].find(t=>t.label==="English");v.pause();while(t.cues.length)t.removeCue(t.cues[0]);[[0,.4,"First line"],[.5,.9,"Second line"],[1,1.4,"Third line"]].forEach(c=>t.addCue(new VTTCue(...c)));v.currentTime=.6;')
+    driver.execute_script('const v=document.querySelector("video"),t=[...v.textTracks].find(t=>t.label==="English");v.pause();while(t.cues.length)t.removeCue(t.cues[0]);[[0,.4,"First line"],[.5,.9,"Second line"],[1,1.4,"Third line"]].forEach(c=>t.addCue(new VTTCue(...c)));v.currentTime=.8;window.aionTestCaptionSeeks=[];window.aionTestCaptionSeek=()=>window.aionTestCaptionSeeks.push(v.currentTime);v.addEventListener("seeking",window.aionTestCaptionSeek);')
     driver.switch_to.window(control_handle);driver.get(base+'ai.html')
     wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
     Select(driver.find_element(By.ID,'video-tab')).select_by_value(str(web_tab_id))
     assert driver.execute_async_script('browser.runtime.sendMessage({type:"localAI",action:"status"}).then(x=>arguments[0](x.phase==="unloaded"));')
     driver.find_element(By.ID,'caption-repeat').click()
     wait.until(lambda d:d.find_element(By.ID,'study-text').get_attribute('value')=='Second line')
-    driver.switch_to.window(web_handle);driver.execute_script('document.querySelector("video").pause();')
-    assert .5 <= driver.execute_script('return document.querySelector("video").currentTime') < 1
+    driver.switch_to.window(web_handle)
+    # Playback keeps advancing while WebDriver waits and switches tabs. Observe
+    # the real media seek event, rather than sampling that later playback time.
+    observed=driver.execute_script('document.querySelector("video").pause();return window.aionTestCaptionSeeks;')
+    assert any(abs(value-.5)<.05 for value in observed),observed
+    driver.execute_script('document.querySelector("video").currentTime=.6;')
     driver.switch_to.window(control_handle);driver.find_element(By.ID,'caption-previous').click()
     wait.until(lambda d:d.find_element(By.ID,'study-text').get_attribute('value')=='First line')
     driver.switch_to.window(web_handle);driver.execute_script('document.querySelector("video").pause();document.querySelector("video").currentTime=.1;')
@@ -325,13 +329,15 @@ try:
     driver.switch_to.window(web_handle);assert abs(driver.execute_script('return document.querySelector("video").currentTime')-1.8)<.01
     driver.switch_to.window(control_handle)
     driver.execute_script('const e=document.getElementById("captionOffset");e.value="0.2";e.dispatchEvent(new Event("input",{bubbles:true}));');saved('captionOffset',.2)
-    driver.switch_to.window(web_handle);driver.execute_script('document.querySelector("video").currentTime=.8;')
+    driver.switch_to.window(web_handle);driver.execute_script('window.aionTestCaptionSeeks=[];document.querySelector("video").currentTime=.8;')
     driver.switch_to.window(control_handle);driver.find_element(By.ID,'caption-read').click()
     wait.until(lambda d:d.find_element(By.ID,'study-text').get_attribute('value')=='Second line')
     driver.find_element(By.ID,'caption-repeat').click()
     wait.until(lambda d:d.find_element(By.ID,'status').get_attribute('data-error')=='false')
-    driver.switch_to.window(web_handle);driver.execute_script('document.querySelector("video").pause();')
-    assert .7 <= driver.execute_script('return document.querySelector("video").currentTime') < 1.2
+    driver.switch_to.window(web_handle)
+    observed=driver.execute_script('document.querySelector("video").pause();return window.aionTestCaptionSeeks;')
+    assert any(abs(value-.7)<.05 for value in observed),observed
+    driver.execute_script('document.querySelector("video").removeEventListener("seeking",window.aionTestCaptionSeek);delete window.aionTestCaptionSeek;delete window.aionTestCaptionSeeks;')
     driver.switch_to.window(control_handle);driver.find_element(By.ID,'reset-caption-offset').click();saved('captionOffset',0)
     driver.get(base+'popup.html');wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
     driver.switch_to.window(web_handle)
