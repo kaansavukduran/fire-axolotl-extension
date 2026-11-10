@@ -89,7 +89,7 @@ def value(element_id, text):
 
 
 def saved(key, expected):
-    wait.until(lambda d: d.execute_script('return UI.settings[arguments[0]]', key) == expected)
+    wait.until(lambda d: d.execute_script('return globalThis.UI?.settings?.[arguments[0]]', key) == expected)
 
 
 try:
@@ -135,6 +135,7 @@ try:
     record('One independently identified extension supplies both uBO and Aion; no second add-on installed')
     base = f'moz-extension://{ublock_uuid}/aion/'
     driver.get(base + 'settings.html')
+    wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: d.execute_script('return typeof UI !== "undefined" && !!UI.settings'))
     assert driver.execute_script('return UI.settings.theme') == 'dark'
     record('New companion profile defaults to dark')
@@ -183,6 +184,7 @@ try:
     wait.until(lambda d: 'vocabulary' in d.find_element(By.ID, 'status').text.lower())
     driver.find_element(By.ID, 'save-word').click()
     driver.get(base + 'settings.html')
+    wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: '1 ' in d.find_element(By.ID, 'word-count').text)
     assert driver.execute_script('return UI.settings.vocabulary.length') == 1
     record('Real persistent vocabulary, duplicate prevention and optional progress')
@@ -299,6 +301,7 @@ try:
     driver.set_context('chrome'); driver.execute_script('Services.io.offline = false;'); driver.set_context('content')
     record('Actual native image menu opens the explicitly chosen provider URL; offline test sends no image to a provider')
     driver.get(base + 'settings.html')
+    wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: d.find_element(By.ID, 'imageSearch').is_selected())
     driver.find_element(By.ID, 'imageSearch').click(); saved('imageSearch', False)
     driver.switch_to.window(web_handle)
@@ -383,6 +386,7 @@ try:
     assert Select(driver.find_element(By.ID, 'character')).first_selected_option.text == 'Kişisel Aion · Test'
     record('Actual character export, confirmed removal and JSON reimport preserve PNG bytes and animation settings')
     driver.get(base + 'settings.html')
+    wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: d.find_element(By.ID, 'language').is_displayed())
     Select(driver.find_element(By.ID, 'language')).select_by_value('en'); saved('language', 'en')
     value('scale-number', 200); saved('scale', 200)
@@ -394,6 +398,7 @@ try:
     record('English companion controls remain usable on a narrow screen at 200 percent interface scale')
     driver.set_window_size(1280, 1000)
     driver.get(base + 'settings.html')
+    wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: d.find_element(By.ID, 'reset-scale').is_displayed())
     driver.find_element(By.ID, 'reset-scale').click(); saved('scale', 100)
     wait.until(lambda d: d.find_element(By.ID, 'open-characters').is_displayed())
@@ -535,6 +540,7 @@ try:
     driver.set_context('chrome'); driver.execute_script('Services.io.offline = false'); driver.set_context('content')
     record('New-tab game loads offline and can be hidden without removing the main search control')
     driver.get(base + 'settings.html')
+    wait.until(lambda d: d.find_element(By.TAG_NAME, 'body').get_attribute('data-ready') == 'true')
     wait.until(lambda d: d.execute_script('return !!globalThis.UI?.settings'))
     if driver.find_element(By.CSS_SELECTOR, '[data-setting="browserTheme"]').is_selected():
         driver.find_element(By.CSS_SELECTOR, '[data-setting="browserTheme"]').click(); saved('browserTheme', False)

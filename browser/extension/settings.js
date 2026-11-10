@@ -91,4 +91,5 @@ async function save(patch) {await UI.save(patch); render();}
       $('release-notes').textContent = response.notes || '';
     } finally {$('check-updates').disabled = false;}
   });
+  document.body.dataset.ready = 'true';
 })().catch(() => UI.status('operationFailed', true));
