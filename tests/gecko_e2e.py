@@ -205,7 +205,7 @@ try:
     driver.switch_to.new_window('tab')
     control_handle = driver.current_window_handle
     driver.get(base + 'popup.html')
-    wait.until(lambda d: d.execute_script('return typeof UI !== "undefined" && !!UI.settings'))
+    wait.until(lambda d:d.find_element(By.TAG_NAME,'body').get_attribute('data-ready')=='true')
     web_tab_id = driver.execute_async_script('const [url,done]=arguments;browser.tabs.query({}).then(tabs=>done(tabs.find(tab=>tab.url===url)?.id));', f'http://127.0.0.1:{server.server_port}/')
     assert web_tab_id is not None, 'Toolbar activation must grant access to the original web tab'
 
@@ -219,20 +219,17 @@ try:
         ''', web_tab_id, command)
 
     # Use the packaged Apply button and its background handler against a real web tab.
-    ui_result = driver.execute_async_script('''
+    driver.execute_async_script('''
       const [tabId, done] = arguments;
-      (async () => {
-        await browser.tabs.update(tabId, {active: true});
+      browser.tabs.update(tabId, {active: true}).then(() => {
+        document.getElementById('status').textContent = '';
         document.getElementById('speed-number').value = '1.5';
-        document.getElementById('apply-speed').click();
-        for (let count=0; count<200; count++) {
-          await new Promise(resolve=>setTimeout(resolve,25));
-          const status=document.getElementById('status');
-          if (status.textContent) return {error:status.dataset.error,text:status.textContent};
-        }
-        throw new Error('UI video action timed out');
-      })().then(done,error=>done({error:error.message}));
+        document.getElementById('apply-speed').click(); done(true);
+      }, e => done({error:e.message}));
     ''', web_tab_id)
+    # Poll from WebDriver, not a background tab's throttled setTimeout loop.
+    wait.until(lambda d:bool(d.find_element(By.ID,'status').get_attribute('textContent')))
+    ui_result=driver.execute_script('const s=document.getElementById("status");return {error:s.dataset.error,text:s.textContent};')
     assert ui_result.get('error') == 'false', ui_result
     driver.switch_to.window(web_handle)
     assert driver.execute_script('return document.querySelector("video").playbackRate') == 1.5
