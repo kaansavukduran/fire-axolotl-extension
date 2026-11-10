@@ -664,6 +664,7 @@ try:
     wait.until(lambda d: d.execute_async_script('browser.storage.local.get("aionDraft").then(x=>arguments[0](x.aionDraft==="Taslak korunur · test draft"));'))
     driver.refresh()
     wait.until(lambda d: d.find_element(By.ID, 'source-text').get_attribute('value') == 'Taslak korunur · test draft')
+    driver.find_element(By.CSS_SELECTOR,'#external-translation > summary').click()
     driver.find_element(By.ID, 'translate').click()
     WebDriverWait(driver, 30).until(lambda d: d.find_element(By.ID, 'translate').is_enabled())
     assert driver.find_element(By.ID, 'status').get_attribute('data-error') == 'true'

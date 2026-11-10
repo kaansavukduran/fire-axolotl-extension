@@ -1282,5 +1282,128 @@
   },
   "wordFileTooLarge": {
     "message": "Kelime yedeği en fazla 12 MiB olabilir. Mevcut kayıtlar değişmedi."
+  },
+  "panelOpenWide": {
+    "message": "Tam sayfa paneli aç"
+  },
+  "panelWelcome": {
+    "message": "Ne yapmak istiyorsun? Çeviriyi buradan kullan veya daha geniş çalışma alanını aç."
+  },
+  "panelTasks": {
+    "message": "Araç seç"
+  },
+  "panelTranslate": {
+    "message": "Çeviri"
+  },
+  "panelAI": {
+    "message": "Yapay zekâ"
+  },
+  "panelTarget": {
+    "message": "Çalışılan site sekmesi"
+  },
+  "panelActiveTab": {
+    "message": "Etkin site sekmesi"
+  },
+  "panelTargetHelp": {
+    "message": "Video, seçili metin ve konteyner işlemleri burada seçtiğin siteye uygulanır. Paneli açtığın kaynak sekme korunur."
+  },
+  "panelTargetSelected": {
+    "message": "Çalışılan sekme seçildi."
+  },
+  "panelMoreTools": {
+    "message": "Diğer araçlar ve oyun"
+  },
+  "panelTranslationHelp": {
+    "message": "Metni yaz veya sitedeki seçimini al. Kaynak/hedef dili seçip Cihazda çevir düğmesine bas. Hazır İngilizce ↔ Türkçe çeviri için hesap ve indirme gerekmez."
+  },
+  "panelPackagedReady": {
+    "message": "Hazır: İngilizce ↔ Türkçe motoru eklentinin içinde. İlk Çevir tıklamasında çalışır."
+  },
+  "panelModelNeedsLoad": {
+    "message": "Seçilen modeli önce Yapay zekâ ekranında çalıştır. Hazır çeviri için Bergamot’u seçebilirsin."
+  },
+  "panelTranslateLocal": {
+    "message": "Cihazda çevir"
+  },
+  "panelPageTranslate": {
+    "message": "Sayfa / popup yazılarını çevir"
+  },
+  "panelVideoTranslate": {
+    "message": "Video altyazısını çevir"
+  },
+  "panelExternalTranslation": {
+    "message": "İsteğe bağlı harici çeviri hizmeti"
+  },
+  "panelAIHelp": {
+    "message": "Hazır çeviri ile Qwen farklı seçeneklerdir. İkisi de çalışırken metni cihazda işler. Qwen’in model dosyaları ayrıca indirilir."
+  },
+  "panelAIStepOne": {
+    "message": "Hızlı çeviri: Hazır çeviriyi aç → Çeviriyi başlat → metin yaz. İngilizce ↔ Türkçe modeli zaten eklentide."
+  },
+  "panelAIStepTwo": {
+    "message": "Qwen ile soru: Qwen’i aç → Modeli indir ve çalıştır → Genel soru alanına yaz. İlk CPU indirmesi yaklaşık 1,59 GB."
+  },
+  "panelAIStepThree": {
+    "message": "Video: videonun altyazısını aç → Video altyazısını çevir → sekme/dil seç → altyazı çevirisini aç."
+  },
+  "panelStartTranslation": {
+    "message": "Hazır çeviriyi aç"
+  },
+  "panelOpenQwen": {
+    "message": "Qwen 2.5’i aç · ilk kullanımda indirme"
+  },
+  "containerSimpleHelp": {
+    "message": "Konteyner, sitenin oturumunu ayrı bir sekme grubunda tutar. Örneğin aynı sitede İş ve Kişisel hesaplarına aynı anda girebilirsin. Firefox’un kayıtlı verileri ve mevcut sekmen korunur."
+  },
+  "containerStepOne": {
+    "message": "Bir ad seç veya İş / Kişisel gibi yeni bir konteyner oluştur."
+  },
+  "containerStepTwo": {
+    "message": "Bu konteynerde aç: site yeni, renkli bir sekmede açılır. Orada istediğin hesaba giriş yap."
+  },
+  "containerStepThree": {
+    "message": "Kısayol: sayfaya, bağlantıya veya sekmeye sağ tıkla → Aion · Konteynerde aç → adı seç."
+  },
+  "containerMenuTitle": {
+    "message": "Aion · Konteynerde aç"
+  },
+  "containerMenuTemporary": {
+    "message": "Yeni geçici konteyner"
+  },
+  "containerMenuManage": {
+    "message": "Konteyner oluştur / yönet…"
+  },
+  "targetTabMissing": {
+    "message": "Kaynak sekme kapalı. Başka bir site sekmesi seç."
+  },
+  "aiGuideTitle": {
+    "message": "Buradan başla"
+  },
+  "aiGuideHelp": {
+    "message": "İngilizce ↔ Türkçe hazırdır. Aşağıdaki düğmeyle cihazda çalıştır. Qwen ile sohbet için model listesinden Qwen’i seçip ilk kez indirmen gerekir; dosyalar bu cihazda saklanır."
+  },
+  "aiGuideOne": {
+    "message": "Hazır çeviriyi başlat. Bu seçenek internet kapalıyken de açılır."
+  },
+  "aiGuideTwo": {
+    "message": "Metin çevir bölümünde kaynak/hedef dili seç, metni yaz ve Yerel modelle çevir’e bas."
+  },
+  "aiGuideThree": {
+    "message": "Video için aşağıdaki Video altyazısını çevir bağlantısından sekmeyi seç ve oynatıcının altyazısını aç. Her sitenin altyazısına erişilemeyebilir."
+  },
+  "aiGuideStart": {
+    "message": "Çeviriyi başlat · indirme gerekmez"
+  },
+  "aiGuideGoText": {
+    "message": "Çeviri hazır · metin yaz"
+  },
+  "aiGuideModels": {
+    "message": "Modeli seç / çalıştır"
+  },
+  "aiGuideGeneral": {
+    "message": "Qwen ile genel soru"
+  },
+  "panelReadFromSite": {
+    "message": "Siteden seçili metin / altyazı al"
   }
 }

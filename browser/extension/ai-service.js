@@ -107,7 +107,7 @@ globalThis.AionLocalAI = (() => {
   }
   // Closing the controller must stop its video overlay and restore native tracks.
   browser.runtime.onConnect.addListener(port => {
-    if (port.name !== 'aion-ai-video' || port.sender?.id !== browser.runtime.id || port.sender?.url !== browser.runtime.getURL('aion/ai.html')) return;
+    if (port.name !== 'aion-ai-video' || port.sender?.id !== browser.runtime.id || String(port.sender?.url || '').split('#')[0] !== browser.runtime.getURL('aion/ai.html')) return;
     let target;
     port.onMessage.addListener(message => {if (Number.isInteger(message.tabId)) target = message.tabId; else if (message.tabId===null) target=undefined;});
     port.onDisconnect.addListener(() => {

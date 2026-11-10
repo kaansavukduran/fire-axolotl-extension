@@ -10,7 +10,7 @@ Bergamot’un çalışma kodu, WASM’ı ve EN↔TR model ağırlıkları XPI’
 
 ## Kullanım
 
-1. Eklenti menüsünden **Yerel yapay zekâ ve altyazı** sayfasını aç.
+1. Hızlı metin çevirisi için Aion düğmesi → **Çeviri** → **Cihazda çevir**. Ayrıntılı ekran için **Yapay zekâ** → **Hazır çeviriyi aç**; **Buradan başla** kılavuzundaki **Çeviriyi başlat** düğmesi paket motorunu yükler. Video / sayfa çeviri düğmeleri ilgili bölüme yönlendirir.
 2. İngilizce/Türkçe için Bergamot ve **Paket içindeki modeli çalıştır** seçeneğini kullan. İlk yerel popup çevirisi de paket motorunu kendisi başlatabilir. Diğer motorlar için M2M100 veya Qwen’i seç; **Modeli indir ve cihazda yükle** düğmesine bas. Kayıtlı model için **İndirmeden yerel modeli yükle** yeterlidir. İndirmenin çalışmadığı ortamlarda doğrulanmış model dosyalarını **Çevrimdışı model dosyaları** altında seçebilirsin.
 3. Kaynak ve hedef dili seç, metni gir ve **Yerel modelle çevir** düğmesine bas. Bergamot/M2M100 otomatik kaynak seçiminde önce video altyazısının dil bilgisini, diğer metinlerde Firefox’un dil algılamasını kullanır. Firefox yeterince emin değilse kaynak dili elle seçmeni ister.
 4. Video için sekmeyi seç, videonun altyazısını aç ve **Video altyazı çevirisini aç** anahtarını kullan. Yazı boyutu, font, renk, arka plan, konum ve iki satırın görünürlüğü ayarlanabilir. Yerel VTT/SRT çevirip VTT olarak indirme de vardır.
@@ -106,3 +106,14 @@ Popup’ın çeviri bölümündeki, AI ekranındaki öğrenme bölümündeki vey
 **Dışa aktar**, yalnız kelimeleri `fire-axolotl-vocabulary.json` dosyasına indirir. **Kelime yedeğini seç** gerçek dosyayı önizler; ilk 5 metin gösterilir. **Önizlenen kayıtları birleştir** mevcut kayıtları korur ve birebir aynı tekrarları atlar. Yanlış biçim/sürüm, geçersiz kayıt veya kapasite aşımında hiçbir kayıt yazılmaz. Dosya en fazla 12 MiB, 5.000 kayıt ve kayıt başına 300 karakter olabilir. Sınır, kaçışlı Unicode içeren geçerli tam yedeğin de tekrar alınabilmesi için ayrı tutulur. Bu dosya genel ayar yedeği değildir; tema, çeviri hizmeti ve taslak değiştirmez. Önizleme kapatılabilir.
 
 Çeviri modülü kapalıyken yeni elle kelime kaydı kapalıdır; mevcut veriye arama, silme/geri alma ve yedekten birleştirme erişimi sürer. Türkçe/English, mevcut tema/font/ölçek ayarlarını kullanır. Dil veya görünüm değişimi açık aramayı ve ekleme taslağını temizlemez. Sayfa kapatılınca kaydedilmemiş form/arama ve son geri alma düğmesi kalıcı saklanmaz; kaydedilen kelimeler korunur.
+
+
+## Popup, geniş panel ve model başlangıcı · 0.11.0
+
+Aion araç çubuğu düğmesi doğrudan **Çeviri** göreviyle açılır. Model durumu ve kaynak/hedef diller görünürdür. Metni girip **Cihazda çevir** düğmesine basmak, varsayılan paket EN↔TR modelini ilk kez de çevrimdışı başlatır. Harici HTTPS hizmeti isteğe bağlı ayrı ayrıntıdır; varsayılan çevirinin sunucu kurulumuna ihtiyacı yoktur.
+
+Firefox araç çubuğu popup’ı en fazla yaklaşık 800×600 CSS piksel olabilir; eklenti bu doğal sınırı aşmaz. Üstteki **Tam sayfa paneli aç** normal sekmede kalıcı, duyarlı çalışma alanını açar. Başlangıç hedefi uygunsa korunur; **Çalışılan site sekmesi** listesinden de seçilebilir. Seçili metni alma, video kontrolü ve konteynerde açma bu hedefe gider; panelin kendisini hedef almaz. Kapalı veya korumalı sekme yerine yanlış bir siteye sessizce geçilmez. Kaydedilmiş araç sırası ve kapatılmış modüller korunur.
+
+**Yapay zekâ → Hazır çeviriyi aç** başlangıç kılavuzunu açar. **Çeviriyi başlat · indirme gerekmez** paket Bergamot’u yükler ve metin alanına (video/sayfa girişinden gelindiğinde o göreve) götürür. **Qwen 2.5’i aç** ise Qwen seçimini ve Genel soru bölümünü açar; ortak tek motor belleği gerektiğinde bırakılır ama indirme başlamaz. **Modeli indir ve cihazda yükle** ayrıca seçilir. CPU için yaklaşık 1,59 GB, WebGPU için yaklaşık 1,23 GB model verisi gerekir. Qwen’in Türkçe çeviri hatası bu sürümde çözülmez.
+
+**Video altyazısını çevir** ve **Sayfa / popup yazılarını çevir** kaynak sekmeyi AI ekranına taşır. Erişilebilir TextTrack ve gözden geçirilmiş DOM çevirisi sınırları aynen sürer; her serviste altyazı erişimi veya native Firefox arayüzü çevirisi garantisi yoktur.

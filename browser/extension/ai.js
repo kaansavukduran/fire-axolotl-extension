@@ -11,6 +11,9 @@ const translate = (text, detectedSource) => callAI('translate', {text, source: U
 const studyTrack = () => $('caption-track').value === 'local' ? 'local' : $('caption-track').value === 'auto' ? undefined : Number($('caption-track').value);
 function renderModel(state) {
   modelState = state;
+  $('ai-start-ready').disabled=['loading','running','downloading'].includes(state.phase);
+  $('ai-start-ready').textContent=UI.t(state.phase==='ready'&&state.modelKind==='bergamot'?'aiGuideGoText':'aiGuideStart');
+  $('ai-quick-state').textContent=UI.t('aiState-'+state.phase)+(state.modelKind?' · '+({bergamot:'Bergamot EN ↔ TR',qwen:'Qwen 2.5 1.5B',m2m:'M2M100 418M'}[state.modelKind]||''):'');
   if (state.phase === 'ready') $('aiModel').value = state.modelKind || 'qwen';
   const embedded=$('aiModel').value==='bergamot';
   $('aiBackend').querySelector('option[value=webgpu]').disabled = $('aiModel').value !== 'qwen';
@@ -187,6 +190,11 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   action('reset-caption-offset', () => UI.save({captionOffset:0}));
   action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: $('aiModel').value !== 'qwen' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value});});
   action('model-load', () => callAI('load', {backend: $('aiModel').value !== 'qwen' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value}));
+  action('ai-start-ready',async()=>{
+    if(modelState.phase!=='ready'||modelState.modelKind!=='bergamot'){$('aiModel').value='bergamot';await callAI('load',{backend:'wasm',modelKind:'bergamot'});}
+    const focus=entry.get('focus'),id=focus==='video'?'ai-video-section':focus==='page'?'ai-page-section':'ai-text-section';
+    $(id).scrollIntoView({block:'start'});if(id==='ai-text-section')$('ai-text').focus({preventScroll:true});
+  });
   action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: $('aiModel').value !== 'qwen' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value, files: [...$('model-files').files]});});
   action('model-cancel', async () => {stopPage();await stopVideo(); await callAI('cancel');});
   action('model-unload', async () => {stopPage();await stopVideo(); await callAI('unload');});
@@ -260,5 +268,11 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   });
   $('settings').onclick = () => browser.runtime.openOptionsPage();
   window.addEventListener('pagehide', () => {stopPage();stopVideo(); if (downloadURL) URL.revokeObjectURL(downloadURL);});
+  const entry=new URLSearchParams(location.hash.slice(1)),target=entry.get('target');
+  if(target && /^\d+$/.test(target))for(const id of ['video-tab','page-tab'])if([...$(id).options].some(option=>option.value===target))$(id).value=target;
+  if(entry.get('model')==='qwen'){$('aiModel').value='qwen';await $('aiModel').onchange();$('ai-general-panel').open=true;}
+  const destinations={models:'ai-model-section',video:'ai-video-section',page:'ai-page-section',text:'ai-text-section'};
+  if(destinations[entry.get('focus')] && (modelState.phase==='ready'||entry.get('focus')==='models'))$(destinations[entry.get('focus')]).scrollIntoView({block:'start'});
+  document.body.inert=false;document.body.removeAttribute('aria-busy');
   document.body.dataset.ready = 'true';
-})().catch(error => UI.status(error.message in UI.messages ? error.message : 'aiRuntimeFailed', true));
+})().catch(error => {document.body.inert=false;document.body.removeAttribute('aria-busy');UI.status(error.message in UI.messages ? error.message : 'aiRuntimeFailed', true);});

@@ -1282,5 +1282,128 @@
   },
   "wordFileTooLarge": {
     "message": "Vocabulary backups can be up to 12 MiB. Existing entries were not changed."
+  },
+  "panelOpenWide": {
+    "message": "Open full-size panel"
+  },
+  "panelWelcome": {
+    "message": "What would you like to do? Translate here or open the full-size workspace."
+  },
+  "panelTasks": {
+    "message": "Choose a task"
+  },
+  "panelTranslate": {
+    "message": "Translate"
+  },
+  "panelAI": {
+    "message": "AI assistant"
+  },
+  "panelTarget": {
+    "message": "Website tab to work with"
+  },
+  "panelActiveTab": {
+    "message": "Active website tab"
+  },
+  "panelTargetHelp": {
+    "message": "Video, selected text and container actions use this website tab. Opening the panel preserves its source tab."
+  },
+  "panelTargetSelected": {
+    "message": "Target tab selected."
+  },
+  "panelMoreTools": {
+    "message": "More tools and game"
+  },
+  "panelTranslationHelp": {
+    "message": "Type text or read your website selection. Choose the source/target languages, then Translate on device. Built-in English ↔ Turkish needs no account or model download."
+  },
+  "panelPackagedReady": {
+    "message": "Ready: English ↔ Turkish is included. It starts on your first Translate click."
+  },
+  "panelModelNeedsLoad": {
+    "message": "Start the selected model on the AI screen first. Choose Bergamot for the included translator."
+  },
+  "panelTranslateLocal": {
+    "message": "Translate on device"
+  },
+  "panelPageTranslate": {
+    "message": "Translate page / dialog text"
+  },
+  "panelVideoTranslate": {
+    "message": "Translate video subtitles"
+  },
+  "panelExternalTranslation": {
+    "message": "Optional external translation service"
+  },
+  "panelAIHelp": {
+    "message": "Built-in translation and Qwen are separate choices. Both process text on your device during inference. Qwen model files are a separate download."
+  },
+  "panelAIStepOne": {
+    "message": "Quick translation: Open built-in translator → Start translation → type text. English ↔ Turkish is already included."
+  },
+  "panelAIStepTwo": {
+    "message": "Ask Qwen: Open Qwen → Download and run model → type in General questions. The first CPU download is about 1.59 GB."
+  },
+  "panelAIStepThree": {
+    "message": "Video: enable the player’s subtitles → Translate video subtitles → choose tab/languages → turn on subtitle translation."
+  },
+  "panelStartTranslation": {
+    "message": "Open built-in translator"
+  },
+  "panelOpenQwen": {
+    "message": "Open Qwen 2.5 · first-use download"
+  },
+  "containerSimpleHelp": {
+    "message": "Containers keep website sessions separate. For example, sign into Work and Personal accounts on the same site at the same time. Your Firefox data and original tab stay in place."
+  },
+  "containerStepOne": {
+    "message": "Choose a name or create a container such as Work / Personal."
+  },
+  "containerStepTwo": {
+    "message": "Open in this container: the site opens in a new colored tab. Sign into the account you want there."
+  },
+  "containerStepThree": {
+    "message": "Shortcut: right-click a page, link or tab → Aion · Open in container → choose its name."
+  },
+  "containerMenuTitle": {
+    "message": "Aion · Open in container"
+  },
+  "containerMenuTemporary": {
+    "message": "New temporary container"
+  },
+  "containerMenuManage": {
+    "message": "Create / manage containers…"
+  },
+  "targetTabMissing": {
+    "message": "The source tab is closed. Choose another website tab."
+  },
+  "aiGuideTitle": {
+    "message": "Start here"
+  },
+  "aiGuideHelp": {
+    "message": "English ↔ Turkish is included. Start it with the button below. To ask Qwen questions, select Qwen in the model list and download it once; files stay on this device."
+  },
+  "aiGuideOne": {
+    "message": "Start the included translator. It can start even while offline."
+  },
+  "aiGuideTwo": {
+    "message": "Under Translate text, choose source/target languages, type text and press Translate with local model."
+  },
+  "aiGuideThree": {
+    "message": "For video, use Translate video subtitles below, choose its tab and enable the player’s subtitles. Some sites do not expose their subtitles."
+  },
+  "aiGuideStart": {
+    "message": "Start translation · no download needed"
+  },
+  "aiGuideGoText": {
+    "message": "Translation is ready · type text"
+  },
+  "aiGuideModels": {
+    "message": "Choose / start model"
+  },
+  "aiGuideGeneral": {
+    "message": "General questions with Qwen"
+  },
+  "panelReadFromSite": {
+    "message": "Read selected website text / captions"
   }
 }

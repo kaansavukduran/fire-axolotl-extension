@@ -19,7 +19,7 @@ function fixture(seed = {}) {
       create: async details => {const identity = {...details, cookieStoreId: 'firefox-container-' + (identities.length + 1)}; identities.push(identity); return identity;},
       remove: async id => {removed.push(id); identities = identities.filter(i => i.cookieStoreId !== id);}
     },
-    tabs: {query: async () => tabs, create: async tab => {createdTabs.push(tab); return {id: 8};}, onRemoved: {addListener: fn => listeners.removed = fn}},
+    tabs: {query: async () => tabs, get:async id=>{const tab=tabs.find(tab=>tab.id===id);if(!tab)throw new Error('missing');return tab;},create: async tab => {createdTabs.push(tab); return {id: 8};}, onRemoved: {addListener: fn => listeners.removed = fn}},
     i18n: {getUILanguage: () => 'tr'},
     permissions: {contains: async () => false}
   };
@@ -145,4 +145,21 @@ test('wordbook data stays accessible with translation off and all wordbook mutat
   assert.equal((await f.listeners.message({type:'settings'},page)).vocabulary[0],'cat');
   await assert.rejects(f.send({type:'word',word:'new'}),/moduleDisabled/);
   const removed=await f.send({type:'wordbook',action:'remove',word:'cat'});await f.send({type:'wordbook',action:'undo',token:removed.token});assert.deepEqual(f.store.settings.vocabulary,['cat']);
+});
+test('owned UI fragments remain authorized but a website cannot impersonate a linked panel',async()=>{
+  const f=fixture();
+  assert.equal((await f.listeners.message({type:'settings'},{id:'test@aion',url:'moz-extension://test/aion/popup.html#target=7&section=containers'})).scale,100);
+  for(const url of ['https://example.org/#moz-extension://test/aion/popup.html','moz-extension://other/aion/popup.html#target=7','moz-extension://test/aion/popup.html.evil#target=7'])await assert.rejects(f.listeners.message({type:'settings'},{id:'test@aion',url}),/unauthorized/);
+});
+test('full-panel container actions use the explicitly selected source and reject closed or protected targets',async()=>{
+  const f=fixture();f.setTabs([{id:20,url:'moz-extension://test/aion/popup.html'},{id:7,url:'https://source.example/video',windowId:3,index:2},{id:9,url:'about:preferences'}]);
+  await f.send({type:'openContainer',id:'firefox-container-1',tabId:7});
+  assert.deepEqual(JSON.parse(JSON.stringify(f.createdTabs)),[{url:'https://source.example/video',cookieStoreId:'firefox-container-1',windowId:3,index:3}]);
+  await assert.rejects(f.send({type:'openContainer',id:'firefox-container-1',tabId:99}),/targetTabMissing/);
+  await assert.rejects(f.send({type:'openContainer',id:'firefox-container-1',tabId:9}),/restrictedPage/);assert.equal(f.createdTabs.length,1);
+});
+test('a failed temporary-container opening removes its new identity and tracking entry',async()=>{
+  const f=fixture({temporaryContainers:[]});f.browser.tabs.create=async()=>{throw new Error('create failed');};
+  await assert.rejects(f.send({type:'temporaryContainer',name:'Temporary'}),/create failed/);
+  assert.deepEqual(f.store.temporaryContainers,[]);assert.deepEqual(f.removed,['firefox-container-2']);
 });

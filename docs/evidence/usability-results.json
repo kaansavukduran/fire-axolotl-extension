@@ -1,0 +1,22 @@
+{
+  "passed": [
+    "The actual toolbar button opens a wide task popup within Firefox’s 800 px limit with Translate visible; its own controls cold-start bundled EN/TR translation while Firefox is offline",
+    "The popup opens a persistent full-size panel; choosing its source tab makes video speed and selected-text actions work while the panel itself is active, and the container form explains/creates named sessions",
+    "A real link context menu opens the exact URL in the chosen named container; actual server-visible cookies stay separate from the original account and persist on a second container tab",
+    "The real page context menu creates a fresh temporary session; closing its last tab removes only that temporary container and preserves the named one",
+    "The native browser-tab context menu also opens the source URL in the selected container without navigating the original tab",
+    "Video navigation carries its source into a guided AI screen; one explicit start uses bundled translation, Qwen opens its download/general-question controls without downloading, and English/narrow layouts remain usable"
+  ],
+  "popup_metrics": {
+    "bodyRight": 640,
+    "buttonBottom": 511.6666870117187,
+    "declaredWidth": "640px",
+    "height": 580,
+    "screenWidth": 1366,
+    "surface": "popup",
+    "visible": [
+      "translation"
+    ],
+    "width": 640
+  }
+}

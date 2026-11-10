@@ -4,10 +4,11 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 45 geçti |
+| Node birim/izin/veri doğrulama | 51 geçti |
+| Gerçek popup, geniş panel, sağ tık konteyner ve AI başlangıcı · 0.11.0 | 6 geçti; [rapor](evidence/usability-results.json). |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
-| 0.1.0 → 0.10.0 geliştirici yükseltmesi | 2 geçti: ayarlar, eski Unicode/tekrar/boşluk içeren kelimeler, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
+| 0.1.0 → 0.11.0 geliştirici yükseltmesi | 2 geçti: ayarlar, eski Unicode/tekrar/boşluk içeren kelimeler, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
 | JS/HTML/yerelleştirme/manifest/vendor hash | Geçti; aynı kilitli girdilerden ikinci XPI üretimi bayt bayt aynı |
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | Gerçek kelime defteri · 0.10.0 | 6 geçti; [rapor](evidence/wordbook-results.json). |
@@ -150,3 +151,22 @@ Beş ek birim testi; dolu/uzun/yanlış tipte yeni metin ve tekrar kaydı; Unico
 
 
 0.10.0’ın ilk uzak koşusu [42847734543](https://github.com/kaansavukduran/fire-axolotl-extension/actions/runs/42847734543), mevcut altyazı gezinme testinin tekrar oynatma başladıktan sonra WebDriver sekme değiştirene kadar geçen sürede videonun dar zaman aralığında kalacağını varsayması nedeniyle durdu. Yeni kelime defteri adımına henüz gelmemişti. Test gerçek medyanın `seeking` olayını kaydederek 0,5 saniye ve gecikmeli 0,7 saniye hedeflerine gidildiğini denetler; sonraki gezinme için duraklatılmış konum açık seçilir. Oynatma hızı, gerçek zaman, video API’si ve uygulama davranışı değiştirilmez; zaman kontrolü atlanmaz. Başarısız koşu korunur.
+
+
+## 0.11.0: görev paneli, anlaşılır konteynerler ve AI başlangıcı
+
+[Gerçek Firefox raporu](evidence/usability-results.json) altı akışı doğrular. Gerçek araç çubuğu paneli 640 × 580 piksel içinde yatay kesilmeden açılır, Çeviri ilk görünür görevdir ve ana çeviri düğmesi görünür alandadır. Firefox ağı kapatıldıktan sonra ilk paket motor çalışması gerçek “Kedi” çıktısı üretir. Tam sayfa paneli kalıcı bir sekmede açılır; açık kaynak sekmesi seçimi, panel etkinken hız ve seçili metin almayı doğru siteye uygular.
+
+Gerçek bağlantı menüsü aynı bağlantıyı iki kez İş konteynerinde açar. Yerel HTTP sunucusunun gördüğü oturum çerezleri normal hesapla ayrıdır; ikinci İş sekmesi İş hesabını korur. Seçili sayfa metninin menüsünden geçici konteyner açılır; son sekmesi kapanınca yalnız geçici kimlik temizlenir. Firefox’un native sekme menüsü de seçilen kimlikle sayfayı açar. Seçili metin bağlamı ilk denemede menü kapsamına girmiyordu; seçim/görsel/ses/video bağlamları da eklenerek düzeltildi.
+
+Video düğmesi kaynak sekme kimliğini AI ekranına taşır. Başlangıç kılavuzu ve açık düğme paket çevirisini başlatır. Qwen bağlantısı ayrı model indirme ve genel soru kontrollerini açar; kendiliğinden model indirmez. İngilizce arayüz ve dar tam sayfa panelinde yatay taşma yoktur. Mevcut Firefox temasıyla ilgili opt-in değişmemişse her ayar kaydında gereksiz tema sıfırlama yapılmaz; birim testi bunu denetler.
+
+Marionette popup’ın XUL browser’ına normal frame geçişini desteklemez. Test gerçek araç düğmesini açar, gerçek popup DOM’unu yalnız eklentinin getViews arayüzüyle kullanır; görüntü o popup’ın gerçek Firefox sürecinden drawSnapshot ile alınır. Native menüde görünür Firefox öğesinin kendi komutu ve menü kapatma işlemi kullanılır; konteyner API’si, çerezler ve model taklit edilmez. Headless Firefox’taki eski/başka native menüleri kapatmak için normal Escape olayı kullanılır. Önceki otomasyon denemeleri görünmeyen ön yüklenmiş popup’ı veya açık kalmış menüyü seçmişti; bu sonuçlar başarı olarak sayılmaz.
+
+![Gerçek Türkçe araç çubuğu popup’ı](evidence/toolbar-popup-tr.png)
+
+![Kalıcı geniş çalışma paneli](evidence/workspace-tr.png)
+
+![AI başlangıç kılavuzu](evidence/ai-quick-start-tr.png)
+
+Bu sürüm Qwen’in Türkçe kalitesini, imzalı kalıcı kurulum kapsamını veya native Firefox/DRM sınırlarını değiştirmez.

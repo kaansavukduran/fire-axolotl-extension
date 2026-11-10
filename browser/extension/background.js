@@ -15,6 +15,7 @@ async function writeSettings(patch) {
     if (settings.disabledModules.includes('video')) await globalThis.AionMedia?.clearAll();
     if (settings.disabledModules.includes('ai')) await globalThis.AionLocalAI?.call({action: 'unload'});
     if (patch && (Object.hasOwn(patch, 'imageSearch') || Object.hasOwn(patch, 'language'))) await globalThis.AionImageMenus?.synchronize();
+    if (patch && (Object.hasOwn(patch,'disabledModules') || Object.hasOwn(patch,'language'))) await globalThis.AionContainerMenus?.synchronize();
     return settings;
   });
 }
@@ -31,6 +32,36 @@ async function activeTab() {
   const [tab] = await browser.tabs.query({active: true, currentWindow: true});
   if (!tab || !Aion.webURL(tab.url)) throw new Error('restrictedPage');
   return tab;
+}
+async function sourceTab(id) {
+  if (id === undefined) return activeTab();
+  if (!Number.isSafeInteger(id) || id < 0) throw new Error('targetTabMissing');
+  let tab;try {tab=await browser.tabs.get(id);}catch {throw new Error('targetTabMissing');}
+  if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
+  return tab;
+}
+function containerTarget(tab,url,cookieStoreId) {
+  const target=Aion.webURL(url);
+  if (!target || tab?.incognito) throw new Error('restrictedPage');
+  const details={url:target,cookieStoreId};
+  if (Number.isInteger(tab?.windowId)) details.windowId=tab.windowId;
+  if (Number.isInteger(tab?.index)) details.index=tab.index+1;
+  return details;
+}
+async function openContainer(tab,id,url=tab.url) {
+  if (!(await browser.contextualIdentities.query({})).some(identity=>identity.cookieStoreId===id)) throw new Error('containerMissing');
+  const created=await browser.tabs.create(containerTarget(tab,url,id));await milestone('container');return {id:created.id};
+}
+async function openTemporaryContainer(tab,url=tab.url,language='tr') {
+  const details=containerTarget(tab,url,'');
+  return serial(async()=>{
+    const identity=await browser.contextualIdentities.create({name:language==='en'?'Aion · Temporary':'Aion · Geçici',color:'turquoise',icon:'circle'});
+    const temporary=(await browser.storage.local.get('temporaryContainers')).temporaryContainers || [];
+    await browser.storage.local.set({temporaryContainers:[...temporary,identity.cookieStoreId]});
+    try {await browser.tabs.create({...details,cookieStoreId:identity.cookieStoreId});}
+    catch(error) {await browser.contextualIdentities.remove(identity.cookieStoreId);await browser.storage.local.set({temporaryContainers:temporary});throw error;}
+    return true;
+  });
 }
 async function saveWord(text) {
   if (typeof text !== 'string') throw new Error('textRequired');
@@ -87,7 +118,7 @@ async function onMessage(message, sender) {
   if (message.type === 'captionStudy') return AionCaptionStudy.handle(message,sender);
   // General container/storage/network actions remain extension-page only.
   const allowedPages = ['popup.html', 'settings.html', 'characters.html', 'sidebar.html', 'newtab.html', 'tools.html', 'ai.html', 'wordbook.html'].map(page => browser.runtime.getURL('aion/' + page));
-  if (sender.id !== browser.runtime.id || !allowedPages.includes(sender.url)) throw new Error('unauthorized');
+  if (sender.id !== browser.runtime.id || !allowedPages.includes(String(sender.url || '').split('#')[0])) throw new Error('unauthorized');
   const modules = {containers: 'containers', temporaryContainer: 'containers', createContainer: 'containers', openContainer: 'containers', video: 'video', mediaTab: 'video', forgetSpeed: 'video', selection: 'translation', translate: 'translation', word: 'translation', localAI: 'ai'};
   const module = modules[message.type];
   if (message.type === 'pageTranslation' && message.command?.action !== 'restore' && (await readSettings()).disabledModules.some(name => ['ai','translation'].includes(name))) throw new Error('moduleDisabled');
@@ -122,19 +153,7 @@ async function onMessage(message, sender) {
       return (await browser.contextualIdentities.query({})).map(identity => ({...identity, temporary: temporary.includes(identity.cookieStoreId)}));
     }
     case 'temporaryContainer': {
-      return serial(async () => {
-        const tab = await activeTab();
-        const identity = await browser.contextualIdentities.create({name: message.name === 'Temporary' ? 'Aion · Temporary' : 'Aion · Geçici', color: 'turquoise', icon: 'circle'});
-        const temporary = (await browser.storage.local.get('temporaryContainers')).temporaryContainers || [];
-        await browser.storage.local.set({temporaryContainers: [...temporary, identity.cookieStoreId]});
-        try {await browser.tabs.create({url: tab.url, cookieStoreId: identity.cookieStoreId});}
-        catch (error) {
-          await browser.contextualIdentities.remove(identity.cookieStoreId);
-          await browser.storage.local.set({temporaryContainers: temporary});
-          throw error;
-        }
-        return true;
-      });
+      return openTemporaryContainer(await sourceTab(message.tabId),undefined,message.name==='Temporary'?'en':'tr');
     }
     case 'createContainer': {
       const name = String(message.name || '').trim().slice(0, 80);
@@ -144,17 +163,12 @@ async function onMessage(message, sender) {
       return identity;
     }
     case 'openContainer': {
-      const identities = await browser.contextualIdentities.query({});
-      if (!identities.some(i => i.cookieStoreId === message.id)) throw new Error('containerMissing');
-      const tab = await activeTab();
-      const created = await browser.tabs.create({url: tab.url, cookieStoreId: message.id});
-      await milestone('container');
-      return {id: created.id};
+      return openContainer(await sourceTab(message.tabId),message.id);
     }
-    case 'forgetSpeed': {const tab=await activeTab();await AionMedia.remember(tab.id,null);await AionMedia.command(tab.id,{action:'clearDefaultSpeed'});return AionMedia.command(tab.id,{action:'speed',value:1});}
+    case 'forgetSpeed': {const tab=await sourceTab(message.tabId);await AionMedia.remember(tab.id,null);await AionMedia.command(tab.id,{action:'clearDefaultSpeed'});return AionMedia.command(tab.id,{action:'speed',value:1});}
     case 'mediaTab':
     case 'video': {
-      const tab = message.type==='mediaTab'?await browser.tabs.get(Number(message.tabId)):await activeTab();
+      const tab = await sourceTab(message.type==='mediaTab'?Number(message.tabId):message.tabId);
       const settings = await readSettings();
       const command = {...message.command, style: Aion.captionStyle(settings), language: Aion.language(settings, browser.i18n.getUILanguage())};
       if (command.action === 'overlay') {
@@ -169,7 +183,7 @@ async function onMessage(message, sender) {
       return result;
     }
     case 'selection': {
-      const tab = await activeTab();
+      const tab = await sourceTab(message.tabId);
       const result = await browser.tabs.executeScript(tab.id, {allFrames:true,code: `(()=>{const e=document.activeElement;return ((e?.tagName==='TEXTAREA'||(e?.tagName==='INPUT'&&e.type!=='password'))&&Number.isInteger(e.selectionStart)?e.value.slice(e.selectionStart,e.selectionEnd):window.getSelection().toString()).slice(0,5000)})()`});
       return result.find(text=>text?.trim()) || '';
     }
