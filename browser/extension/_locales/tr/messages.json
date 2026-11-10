@@ -967,5 +967,38 @@
   },
   "resetCaptionOffset": {
     "message": "Altyazı zamanını sıfırla"
+  },
+  "captionStudy": {
+    "message": "Altyazıyla öğren"
+  },
+  "captionStudyHelp": {
+    "message": "Seçili videonun okunabilir altyazısında gezin. Model yüklemeden kullanılabilir. Dosyadan eklenen çift altyazı burada gezinme kaynağı değildir."
+  },
+  "captionPrevious": {
+    "message": "Önceki satır"
+  },
+  "captionRepeat": {
+    "message": "Satırı tekrar oynat"
+  },
+  "captionNext": {
+    "message": "Sonraki satır"
+  },
+  "captionRead": {
+    "message": "O anki satırı al"
+  },
+  "captionStudyText": {
+    "message": "Kaydedilecek kelime veya cümle · en fazla 300 karakter"
+  },
+  "captionBoundary": {
+    "message": "Bu yönde başka altyazı satırı yok."
+  },
+  "captionSeekUnavailable": {
+    "message": "Bu oynatıcıda seçilen altyazı zamanına gidilemiyor."
+  },
+  "captionReplaying": {
+    "message": "Altyazı satırı yeniden oynatılıyor."
+  },
+  "captionPositioned": {
+    "message": "Altyazı zamanına gidildi; oynatıcıdan oynatmayı başlat."
   }
 }

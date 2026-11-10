@@ -113,6 +113,31 @@
       capturedTrack = null;
       return Promise.resolve({stopped: true});
     }
+    if (['captionNavigate', 'captionCurrent'].includes(cmd.action)) {
+      const tracks = [...v.textTracks].filter(track => track.label !== 'Aion');
+      const selected = Number.isInteger(cmd.track) ? tracks[cmd.track] : tracks.find(track => track.mode === 'showing') || (tracks.includes(capturedTrack) ? capturedTrack : undefined) || tracks[0];
+      if (!selected) return Promise.resolve({error:'noCaptions'});
+      const previousMode = selected.mode;
+      if (previousMode === 'disabled') selected.mode = 'hidden';
+      const offset = Number.isFinite(cmd.style?.offset) ? Math.max(-10, Math.min(10, cmd.style.offset)) : 0;
+      const cues = [...(selected.cues || [])].filter(c => Number.isFinite(c.startTime) && Number.isFinite(c.endTime) && c.endTime > c.startTime)
+        .map(c => ({start:Math.max(0,c.startTime + offset),end:c.endTime + offset,text:String(c.text || '').replace(/<[^>]*>/g,'').slice(0,2000)})).filter(c => c.end > c.start);
+      if (previousMode === 'disabled') selected.mode = previousMode;
+      const active = cues.findIndex(c => c.start <= v.currentTime && v.currentTime < c.end);
+      if (cmd.action === 'captionCurrent') return Promise.resolve({text:active < 0 ? '' : cues[active].text});
+      if (!['previous','repeat','next'].includes(cmd.direction)) return Promise.resolve({error:'invalidCaptions'});
+      let index;
+      if (cmd.direction === 'next') index = cues.findIndex(c => c.start > v.currentTime + .001);
+      else if (cmd.direction === 'previous') index = active >= 0 ? active - 1 : cues.findLastIndex(c => c.start < v.currentTime);
+      else index = active >= 0 ? active : cues.findLastIndex(c => c.start <= v.currentTime);
+      if (index < 0 || index >= cues.length) return Promise.resolve({error:'captionBoundary'});
+      const cue = cues[index];
+      if (!Number.isFinite(v.duration) || cue.start >= v.duration) return Promise.resolve({error:'captionSeekUnavailable'});
+      try {v.currentTime = cue.start;} catch {return Promise.resolve({error:'captionSeekUnavailable'});}
+      let playing;
+      try {playing = v.play();} catch {return Promise.resolve({time:cue.start,text:cue.text,playing:false});}
+      return Promise.resolve(playing).then(() => ({time:cue.start,text:cue.text,playing:true}), () => ({time:cue.start,text:cue.text,playing:false}));
+    }
     if (cmd.action === 'captionWindow') {
       const tracks = [...v.textTracks].filter(track => track.label !== 'Aion');
       const selected = Number.isInteger(cmd.track) ? tracks[cmd.track] : tracks.find(track => track.mode === 'showing') || tracks[0];

@@ -20,6 +20,7 @@
     "Leaving native fullscreen restores the custom subtitle overlay",
     "Real dual-caption overlay and removal without reloading the page",
     "Subtitle offset UI delays both DOM and native cues, clips negative starts, drops expired cues and resets to zero",
+    "Caption study buttons replay, navigate, save vocabulary, respect offsets and leave playback unchanged at the end boundary without any AI model",
     "Actual native image menu opens the explicitly chosen provider URL; offline test sends no image to a provider",
     "Disabling image search through Aion settings removes its native context menu",
     "All four whole-character companions render locally with an actual reading animation and Turkish controls",

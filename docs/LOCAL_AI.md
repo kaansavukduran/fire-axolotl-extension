@@ -50,3 +50,7 @@ M2M100 temel modelinin kartı MIT bildirir; ONNX dönüşüm deposunun ayrı lis
 ## English
 
 M2M100 418M is a local CPU translation model with 100 language choices; Qwen 2.5 1.5B remains available for general prompts. Model weights are separately downloaded or imported, hash checked and cached. Inference is offline. Qwen failed the Turkish translation check; M2M100 passed the small English/Turkish examples documented in the validation report. Caption availability and translation quality vary. Firefox language detection may ask for a manual source language when uncertain.
+
+## Altyazıyla öğrenme · 0.4.0
+
+AI sayfasında videoyu seçip **Altyazıyla öğren** kontrollerini model yüklemeden kullanabilirsin. Önceki/sonraki satır ve tekrar oynatma, videonun okunabilir yerel TextTrack altyazısını ve seçili gecikmeyi kullanır. **O anki satırı al** metni düzenleme alanına getirir; kaydetmeden önce kelimeye kısaltabilir veya cümleyi düzeltebilirsin. En fazla 300 karakter açık kaydetme eylemiyle yerel kelime defterine eklenir. Bu akış metni çeviri sunucusuna göndermez. Dosyadan eklenen çift altyazı gezinme kaynağı değildir. Oynatıcı otomatik oynatmayı engellerse zaman seçilir ve videodan oynatmayı başlatman istenir.

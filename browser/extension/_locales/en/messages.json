@@ -967,5 +967,38 @@
   },
   "resetCaptionOffset": {
     "message": "Reset subtitle timing"
+  },
+  "captionStudy": {
+    "message": "Learn with captions"
+  },
+  "captionStudyHelp": {
+    "message": "Navigate readable captions in the selected video without loading a model. File-based dual captions are not a navigation source here."
+  },
+  "captionPrevious": {
+    "message": "Previous line"
+  },
+  "captionRepeat": {
+    "message": "Replay line"
+  },
+  "captionNext": {
+    "message": "Next line"
+  },
+  "captionRead": {
+    "message": "Read current line"
+  },
+  "captionStudyText": {
+    "message": "Word or sentence to save · up to 300 characters"
+  },
+  "captionBoundary": {
+    "message": "No further caption line in this direction."
+  },
+  "captionSeekUnavailable": {
+    "message": "This player cannot seek to the selected caption."
+  },
+  "captionReplaying": {
+    "message": "Replaying the caption line."
+  },
+  "captionPositioned": {
+    "message": "Moved to the caption; start playback in the player."
   }
 }

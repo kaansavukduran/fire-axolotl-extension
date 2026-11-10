@@ -122,8 +122,8 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   action('ai-translate', async () => {$('ai-result').value = (await translate($('ai-text').value)).text;});
   action('ai-generate', async () => {$('ai-answer').textContent = (await callAI('generate', {text: $('ai-prompt').value})).text;});
   action('video-refresh', tabs);
-  $('video-tab').onchange = () => UI.run(async () => {await stopVideo(); $('caption-track').replaceChildren($('caption-track').options[0]);});
-  $('caption-track').onchange = () => UI.run(stopVideo);
+  $('video-tab').onchange = () => UI.run(async () => {await stopVideo(); $('study-text').value = ''; $('caption-track').replaceChildren($('caption-track').options[0]);});
+  $('caption-track').onchange = () => UI.run(async () => {await stopVideo(); $('study-text').value='';});
   $('live-mode').onchange = () => UI.run(async () => {
     if (!$('live-mode').checked) {await stopVideo(); return;}
     targetId = Number($('video-tab').value); if (!targetId) throw new Error('restrictedPage');
@@ -132,6 +132,16 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
     liveLoop(token).catch(async error => {if (token === operation) {await stopVideo(); UI.status(error.message in UI.messages ? error.message : 'operationFailed', true);}});
   });
   action('stop-video', stopVideo);
+  for (const direction of ['previous','repeat','next']) action('caption-'+direction, async () => {
+    const result = await video({action:'captionNavigate',direction,track:$('caption-track').value === 'auto' ? undefined : Number($('caption-track').value)});
+    $('study-text').value = result.text.slice(0,300);
+    UI.status(result.playing ? 'captionReplaying' : 'captionPositioned');
+  });
+  action('caption-read', async () => {
+    const result = await video({action:'captionCurrent',track:$('caption-track').value === 'auto' ? undefined : Number($('caption-track').value)});
+    $('study-text').value = result.text.slice(0,300); UI.status(result.text ? 'selectionRead' : 'noCaptions');
+  });
+  action('caption-save', async () => {await browser.runtime.sendMessage({type:'word',word:$('study-text').value});UI.status('wordSaved');});
   action('translate-file', async () => {
     await stopVideo(); const token = ++operation;
     const file = $('subtitle-file').files[0]; if (!file) throw new Error('chooseSubtitle');

@@ -16,3 +16,5 @@ Kaynak yedeği `scripts/backup.py` ile temiz commit’ten ZIP, tam ulaşılabili
 Lisanslar ve tam ilgili kaynak dağıtımı: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [INTEGRATION.md](docs/INTEGRATION.md). Ücretsiz dağıtım, üçüncü taraf lisans koşullarını kaldırmaz; hukuki/marka uygunluğu garantisi verilmez.
 
 0.3.0: ±10 saniye altyazı oynatma ayarı eklendi; DOM ve yerel tam ekran izleri aynı kaydırmayı kullanır, dışa aktarma özgün zamanları korur. Aynı tür model yeniden yüklenince eski dil algılama sonucunun veya eski worker olayının yeni oturuma karışması engellendi. Model çeviri kalite sınırları değişmedi.
+
+0.4.0: modelden bağımsız TextTrack altyazı gezinmesi, satır tekrarı ve açık eylemle kelime/cümle kaydı eklendi. Kaynak değişince çalışma metni temizlenir. Dosya altyazıları ve erişilemeyen özel oynatıcılar bu gezinme akışına dâhil değildir.

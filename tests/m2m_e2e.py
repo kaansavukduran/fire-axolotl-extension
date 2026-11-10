@@ -71,7 +71,7 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.3.0-unsigned.xpi'), temporary=True)
+    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.4.0-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
