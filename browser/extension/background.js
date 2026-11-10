@@ -37,11 +37,21 @@ async function onMessage(message, sender) {
   if (sender.id !== browser.runtime.id || !allowedPages.includes(sender.url)) throw new Error('unauthorized');
   const modules = {containers: 'containers', temporaryContainer: 'containers', createContainer: 'containers', openContainer: 'containers', video: 'video', mediaTab: 'video', forgetSpeed: 'video', selection: 'translation', translate: 'translation', word: 'translation', localAI: 'ai'};
   const module = modules[message.type];
+  if (message.type === 'pageTranslation' && message.command?.action !== 'restore' && (await readSettings()).disabledModules.some(name => ['ai','translation'].includes(name))) throw new Error('moduleDisabled');
   if (module && (await readSettings()).disabledModules.includes(module) && !(message.type === 'localAI' && ['status','cancel','unload','clear'].includes(message.action)) && !(['video','mediaTab'].includes(message.type) && ['closeOverlay','captureStop'].includes(message.command?.action))) throw new Error('moduleDisabled');
   switch (message.type) {
     case 'settings': return readSettings();
     case 'save': return writeSettings(message.patch);
     case 'localAI': return AionLocalAI.call(message);
+    case 'pageTranslation': {
+      const tab = await browser.tabs.get(Number(message.tabId));
+      if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
+      if (!['scan','apply','restore'].includes(message.command?.action)) throw new Error('unknownAction');
+      await browser.tabs.executeScript(tab.id, {file:'/aion/page-translator.js',frameId:0});
+      const result = await browser.tabs.sendMessage(tab.id, {type:'aionPageTranslation',command:message.command}, {frameId:0});
+      if (result.error) throw new Error(result.error);
+      return result;
+    }
     case 'syncPush': return AionSync.push();
     case 'syncPull': return AionSync.pull();
     case 'siteStyle': return AionSiteStyles.configure(message);
@@ -137,11 +147,17 @@ async function onMessage(message, sender) {
       return true;
     }
     case 'checkUpdates': {
-      const response = await fetch('https://api.github.com/repos/kaansavukduran/fire-axolotl-extension/releases/latest', {credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(20000)});
+      // GitHub's /latest excludes all developer previews and can return 404
+      // even while this project's usable preview packages are published.
+      const response = await fetch('https://api.github.com/repos/kaansavukduran/fire-axolotl-extension/releases?per_page=20', {credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer', signal: AbortSignal.timeout(20000)});
       if (response.status === 404) return {available: false};
       if (!response.ok) throw new Error('updateFailed');
-      const release = await response.json();
-      return {available: true, version: String(release.tag_name), notes: String(release.body || '').slice(0, 4000), url: 'https://github.com/kaansavukduran/fire-axolotl-extension/releases/latest'};
+      const releases = await response.json();
+      if (!Array.isArray(releases)) throw new Error('updateFailed');
+      const release = releases.filter(item => item && item.draft === false && /^v\d+\.\d+\.\d+(?:-preview\.\d+)?$/.test(item.tag_name) && typeof item.published_at === 'string' && Number.isFinite(Date.parse(item.published_at)))
+        .sort((a,b) => Date.parse(b.published_at) - Date.parse(a.published_at))[0];
+      if (!release) return {available:false};
+      return {available: true, version: release.tag_name, notes: String(release.body || '').slice(0, 4000), url: 'https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/' + encodeURIComponent(release.tag_name)};
     }
     default: throw new Error('unknownAction');
   }

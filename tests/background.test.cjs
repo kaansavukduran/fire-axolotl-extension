@@ -23,10 +23,10 @@ function fixture(seed = {}) {
     i18n: {getUILanguage: () => 'tr'},
     permissions: {contains: async () => false}
   };
-  const context = vm.createContext({browser, Aion, console, setTimeout, clearTimeout, URL, fetch: () => {throw new Error('Unexpected network request');}});
+  const context = vm.createContext({browser, Aion, console, setTimeout, clearTimeout, URL, AbortSignal, fetch: () => {throw new Error('Unexpected network request');}});
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../browser/extension/background.js'), 'utf8'), context);
   const sender = {id: 'test@aion', url: 'moz-extension://test/aion/settings.html', tab: {id: 20}};
-  return {store, removed, createdTabs, browser, listeners, send: message => listeners.message(message, sender), setTabs: value => tabs = value, setIdentities: value => identities = value};
+  return {store, removed, createdTabs, browser, listeners, send: message => listeners.message(message, sender), setTabs: value => tabs = value, setIdentities: value => identities = value, setFetch:fn => {context.fetch=fn;}};
 }
 
 test('options opened in a browser tab retain authority; web content cannot send privileged commands', async () => {
@@ -82,4 +82,25 @@ test('runner record writes serialize and reject invalid scores without corruptin
   assert.equal(f.store.aionRunnerBest, 12);
   for (const score of [-1, 1.25, 1000001, 'bad']) await assert.rejects(f.send({type: 'runnerBest', score}), /unknownAction/);
   assert.equal(f.store.aionRunnerBest, 12);
+});
+test('manual release checks include published previews, exclude drafts and never accept a remote download URL', async () => {
+  const f=fixture();let calls=0;
+  const releases=[
+    {tag_name:'v0.1.0',draft:false,published_at:'2026-11-09T10:00:00Z',body:'Stable'},
+    {tag_name:'v0.6.0-preview.1',draft:false,prerelease:true,published_at:'2026-11-10T10:00:00Z',body:'Preview',html_url:'https://untrusted.example/'},
+    {tag_name:'v9.0.0',draft:true,published_at:'2026-11-11T10:00:00Z'},
+    {tag_name:'../../bad',draft:false,published_at:'2026-11-11T10:00:00Z'}
+  ];
+  f.setFetch(async (url,options) => {
+    calls++;assert.equal(url,'https://api.github.com/repos/kaansavukduran/fire-axolotl-extension/releases?per_page=20');
+    assert.equal(options.credentials,'omit');assert.equal(options.redirect,'error');assert.equal(options.referrerPolicy,'no-referrer');
+    return {ok:true,json:async()=>releases};
+  });
+  assert.equal(calls,0);
+  const result=await f.send({type:'checkUpdates'});
+  assert.equal(result.version,'v0.6.0-preview.1');assert.equal(result.notes,'Preview');
+  assert.equal(result.url,'https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.6.0-preview.1');
+  f.setFetch(async()=>({ok:true,json:async()=>[]}));assert.equal((await f.send({type:'checkUpdates'})).available,false);
+  f.setFetch(async()=>({ok:true,json:async()=>({unexpected:true})}));await assert.rejects(f.send({type:'checkUpdates'}),/updateFailed/);
+  f.setFetch(async()=>({ok:false,status:503}));await assert.rejects(f.send({type:'checkUpdates'}),/updateFailed/);
 });

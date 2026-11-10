@@ -5,6 +5,7 @@ const callAI = (action, options = {}) => browser.runtime.sendMessage({type: 'loc
 const videoPort = browser.runtime.connect({name: 'aion-ai-video'});
 const languages = ["af", "am", "ar", "ast", "az", "ba", "be", "bg", "bn", "br", "bs", "ca", "ceb", "cs", "cy", "da", "de", "el", "en", "es", "et", "fa", "ff", "fi", "fr", "fy", "ga", "gd", "gl", "gu", "ha", "he", "hi", "hr", "ht", "hu", "hy", "id", "ig", "ilo", "is", "it", "ja", "jv", "ka", "kk", "km", "kn", "ko", "lb", "lg", "ln", "lo", "lt", "lv", "mg", "mk", "ml", "mn", "mr", "ms", "my", "ne", "nl", "no", "ns", "oc", "or", "pa", "pl", "ps", "pt", "ro", "ru", "sd", "si", "sk", "sl", "so", "sq", "sr", "ss", "su", "sv", "sw", "ta", "th", "tl", "tn", "tr", "uk", "ur", "uz", "vi", "wo", "xh", "yi", "yo", "zh", "zu"];
 let modelState = {}, operation = 0, live = false, fileRunning = false, original = [], translated = [], downloadURL, targetId;
+let pageSnapshot, pageRunning = false, pageOperation = 0;
 const translate = (text, detectedSource) => callAI('translate', {text, source: UI.settings.aiSource==='auto'&&detectedSource?detectedSource:UI.settings.aiSource, target: UI.settings.aiTarget});
 function renderModel(state) {
   modelState = state;
@@ -21,10 +22,13 @@ function renderModel(state) {
     $('model-progress').max = state.total; $('model-progress').value = state.loaded || 0;
     $('model-bytes').textContent = `${new Intl.NumberFormat(UI.locale, {maximumFractionDigits: 1}).format((state.loaded || 0) / 1e9)} / ${new Intl.NumberFormat(UI.locale, {maximumFractionDigits: 2}).format(state.total / 1e9)} GB · ${state.file || ''}`;
   } else $('model-bytes').textContent='';
-  for (const id of ['model-download', 'model-load', 'model-import', 'aiModel']) $(id).disabled = busy;
-  $('ai-generate').disabled = state.modelKind === 'm2m' || state.phase !== 'ready' || live || fileRunning;
-  for (const id of ['ai-translate', 'translate-file']) $(id).disabled = state.phase !== 'ready' || live || fileRunning;
-  $('live-mode').disabled = !live && state.phase !== 'ready';
+  for (const id of ['model-download', 'model-load', 'model-import', 'aiModel']) $(id).disabled = busy || pageRunning;
+  $('ai-generate').disabled = state.modelKind === 'm2m' || state.phase !== 'ready' || live || fileRunning || pageRunning;
+  for (const id of ['ai-translate', 'translate-file']) $(id).disabled = state.phase !== 'ready' || live || fileRunning || pageRunning;
+  $('live-mode').disabled = !live && (state.phase !== 'ready' || pageRunning);
+  $('page-translate').disabled = !pageSnapshot?.items.length || pageSnapshot.used || state.phase !== 'ready' || live || fileRunning || pageRunning;
+  for (const id of ['page-scan','page-refresh','page-tab','page-scope']) $(id).disabled = pageRunning;
+  $('page-stop').disabled = !pageRunning;
 }
 function render() {
   for (const element of document.querySelectorAll('[data-setting]')) {
@@ -60,6 +64,48 @@ async function tabs() {
   items.sort((a,b) => b.lastAccessed - a.lastAccessed);
   $('video-tab').replaceChildren(...items.map(tab => {const option = document.createElement('option'); option.value = tab.id; option.textContent = tab.title || tab.url; return option;}));
   if (items.some(tab => String(tab.id) === previous)) $('video-tab').value = previous;
+  const pagePrevious = $('page-tab').value;
+  $('page-tab').replaceChildren(...items.map(tab => {const option=document.createElement('option');option.value=tab.id;option.textContent=tab.title || tab.url;return option;}));
+  if (items.some(tab => String(tab.id) === pagePrevious)) $('page-tab').value = pagePrevious;
+  if (pageSnapshot && Number($('page-tab').value) !== pageSnapshot.tabId) clearPagePreview();
+}
+function clearPagePreview() {
+  pageSnapshot=undefined; $('page-preview').value=''; $('page-result').textContent=''; renderModel(modelState);
+}
+function stopPage() {pageOperation++;pageRunning=false;renderModel(modelState);}
+async function pageCommand(command, tabId=Number($('page-tab').value)) {
+  const result=await browser.runtime.sendMessage({type:'pageTranslation',tabId,command});
+  if (result?.error) throw new Error(result.error);
+  return result;
+}
+async function translatePage() {
+  const snapshot=pageSnapshot;
+  if (!snapshot?.items.length || snapshot.used || pageRunning) throw new Error('pageScanRequired');
+  const token=++pageOperation;snapshot.used=true;pageRunning=true;renderModel(modelState);
+  let applied=0,skipped=0;
+  const completed=new Map();
+  $('page-progress').hidden=false;$('page-progress').max=snapshot.items.length;$('page-progress').value=0;
+  try {
+    let source=UI.settings.aiSource;
+    if (source==='auto') {
+      const detection=await browser.i18n.detectLanguage(snapshot.items.map(item=>item.text).join('\n').slice(0,4000));
+      if (!detection.isReliable || !detection.languages?.length || detection.languages[0].percentage<50) throw new Error('aiSourceRequired');
+      source=detection.languages[0].language;
+    }
+    for (const item of snapshot.items) {
+      if (token!==pageOperation) break;
+      let text=completed.get(item.text);
+      if (!text) {
+        const result=await callAI('translate',{text:item.text,source,target:UI.settings.aiTarget});
+        text=result.text;completed.set(item.text,text);
+      }
+      if (token!==pageOperation) break;
+      const result=await pageCommand({action:'apply',token:snapshot.token,id:item.id,text},snapshot.tabId);
+      if (result.applied) applied++; else skipped++;
+      $('page-progress').value=applied+skipped;
+      $('page-result').textContent=UI.t('pageTranslatedCount')+': '+applied+' · '+UI.t('pageSkippedCount')+': '+skipped;
+    }
+  } finally {if(token===pageOperation){pageRunning=false;renderModel(modelState);}}
 }
 async function stopVideo() {
   operation++; live = false; fileRunning = false; $('live-mode').checked = false;
@@ -108,17 +154,33 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   document.addEventListener('aion-settings', () => {render(); if (targetId && (original.length || translated.length)) UI.run(overlay);});
   for (const element of document.querySelectorAll('[data-setting]')) element.addEventListener(element.type === 'range' ? 'input' : 'change', () => UI.run(async () => {
     const value = element.type === 'checkbox' ? element.checked : element.type === 'range' ? Number(element.value) : element.value;
-    if (['aiSource','aiTarget','aiBackend'].includes(element.dataset.setting)) await stopVideo();
+    if (['aiSource','aiTarget','aiBackend'].includes(element.dataset.setting)) {stopPage();await stopVideo();}
     await UI.save({[element.dataset.setting]: value});
   }));
-  $('aiModel').onchange = () => UI.run(async () => {const selected = $('aiModel').value; await stopVideo(); const state = await callAI('unload'); $('aiModel').value = selected; renderModel(state); if (selected === 'm2m') await UI.save({aiBackend:'wasm'}); render();});
+  $('aiModel').onchange = () => UI.run(async () => {const selected = $('aiModel').value; stopPage();await stopVideo(); const state = await callAI('unload'); $('aiModel').value = selected; renderModel(state); if (selected === 'm2m') await UI.save({aiBackend:'wasm'}); render();});
   action('reset-caption-offset', () => UI.save({captionOffset:0}));
   action('model-download', async () => {await navigator.storage.persist?.(); await callAI('load', {download: true, backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value});});
   action('model-load', () => callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value}));
   action('model-import', async () => {await navigator.storage.persist?.(); await callAI('load', {backend: $('aiModel').value === 'm2m' ? 'wasm' : UI.settings.aiBackend, modelKind: $('aiModel').value, files: [...$('model-files').files]});});
-  action('model-cancel', async () => {await stopVideo(); await callAI('cancel');});
-  action('model-unload', async () => {await stopVideo(); await callAI('unload');});
-  action('model-delete', async () => {if (confirm(UI.t('aiConfirmDelete'))) {await stopVideo(); await callAI('clear', {modelKind: $('aiModel').value});}});
+  action('model-cancel', async () => {stopPage();await stopVideo(); await callAI('cancel');});
+  action('model-unload', async () => {stopPage();await stopVideo(); await callAI('unload');});
+  action('model-delete', async () => {if (confirm(UI.t('aiConfirmDelete'))) {stopPage();await stopVideo(); await callAI('clear', {modelKind: $('aiModel').value});}});
+  action('page-refresh',tabs);
+  $('page-tab').onchange=()=>clearPagePreview();
+  $('page-scope').onchange=()=>clearPagePreview();
+  action('page-scan',async()=>{
+    const tabId=Number($('page-tab').value),result=await pageCommand({action:'scan',scope:$('page-scope').value},tabId);
+    pageSnapshot={...result,tabId};$('page-preview').value=result.items.map(item=>item.text).join('\n\n');
+    $('page-result').textContent=UI.t('pageScannedCount')+': '+result.items.length+(result.limited?' · '+UI.t('pageScanLimited'):'');
+    $('page-progress').hidden=true;renderModel(modelState);
+  });
+  action('page-translate',translatePage);
+  action('page-stop',async()=>{stopPage();await callAI('cancel');});
+  action('page-restore',async()=>{
+    const running=pageRunning;stopPage();if(running)await callAI('cancel');
+    const result=await pageCommand({action:'restore'});clearPagePreview();
+    $('page-result').textContent=UI.t('pageRestoredCount')+': '+result.restored+' · '+UI.t('pageSkippedCount')+': '+result.skipped;
+  });
   action('ai-translate', async () => {$('ai-result').value = (await translate($('ai-text').value)).text;});
   action('ai-generate', async () => {$('ai-answer').textContent = (await callAI('generate', {text: $('ai-prompt').value})).text;});
   action('video-refresh', tabs);
@@ -160,6 +222,6 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
     }} finally {fileRunning = false; renderModel(modelState);}
   });
   $('settings').onclick = () => browser.runtime.openOptionsPage();
-  window.addEventListener('pagehide', () => {stopVideo(); if (downloadURL) URL.revokeObjectURL(downloadURL);});
+  window.addEventListener('pagehide', () => {stopPage();stopVideo(); if (downloadURL) URL.revokeObjectURL(downloadURL);});
   document.body.dataset.ready = 'true';
 })().catch(error => UI.status(error.message in UI.messages ? error.message : 'aiRuntimeFailed', true));

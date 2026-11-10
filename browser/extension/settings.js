@@ -89,6 +89,9 @@ async function save(patch) {await UI.save(patch); render();}
       const response = await browser.runtime.sendMessage({type: 'checkUpdates'});
       $('update-result').textContent = response.available ? `${UI.t('latestPublished')}: ${response.version}` : UI.t('noRelease');
       $('release-notes').textContent = response.notes || '';
+      $('release-link').href = response.url || 'https://github.com/kaansavukduran/fire-axolotl-extension/releases';
+    } catch (error) {
+      $('update-result').textContent = UI.t('updateFailed');throw error;
     } finally {$('check-updates').disabled = false;}
   });
   document.body.dataset.ready = 'true';

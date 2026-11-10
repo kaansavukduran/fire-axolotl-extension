@@ -64,6 +64,8 @@ class Fixture(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/video.webm':
             body=(ROOT / 'tests/fixtures/video.webm').read_bytes(); content='video/webm'
+        elif self.path == '/page':
+            body=b'<!doctype html><meta charset="utf-8"><title>Local page translation fixture</title><p id="sentence">The cat is sleeping.</p><div role="dialog"><p id="dialog">The cat is sleeping.</p></div>';content='text/html'
         else:
             body=b'''<!doctype html><meta charset="utf-8"><title>Local Qwen caption fixture</title><video controls muted loop src="/video.webm" style="width:640px;max-width:100%"></video><button id="play">Play</button><button id="fullscreen">Fullscreen</button><script>document.getElementById("fullscreen").onclick=()=>document.querySelector("video").requestFullscreen();document.getElementById("play").onclick=()=>{const v=document.querySelector("video"),t=v.addTextTrack("subtitles","English","en");t.addCue(new VTTCue(0,3600,"The cat is sleeping."));t.mode="showing";v.play();};</script>''';content='text/html'
         self.send_response(200);self.send_header('Content-Type',content);self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
@@ -71,7 +73,7 @@ class Fixture(BaseHTTPRequestHandler):
 server=ThreadingHTTPServer(('127.0.0.1',0),Fixture)
 Thread(target=server.serve_forever,daemon=True).start()
 try:
-    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.5.0-unsigned.xpi'), temporary=True)
+    addon = driver.install_addon(str(ROOT / 'dist/fire-axolotl-extension-0.6.0-unsigned.xpi'), temporary=True)
     driver.set_context('chrome')
     uuid = driver.execute_script("return JSON.parse(Services.prefs.getStringPref('extensions.webextensions.uuids'))[arguments[0]]", addon)
     driver.set_context('content')
@@ -107,10 +109,13 @@ try:
     fixture_url=f'http://127.0.0.1:{server.server_port}/'
     driver.get(fixture_url);driver.find_element(By.ID,'play').click()
     wait.until(lambda d:d.execute_script('return document.querySelector("video").videoWidth')==320)
+    driver.switch_to.new_window('tab');page_handle=driver.current_window_handle;page_url=fixture_url+'page';driver.get(page_url)
     driver.switch_to.window(ai_handle)
     driver.find_element(By.ID,'video-refresh').click()
     target=driver.execute_async_script('const [url,done]=arguments;browser.tabs.query({}).then(tabs=>done(tabs.find(tab=>tab.url===url)?.id));',fixture_url)
     Select(driver.find_element(By.ID,'video-tab')).select_by_value(str(target))
+    page_target=driver.execute_async_script('const [url,done]=arguments;browser.tabs.query({}).then(tabs=>done(tabs.find(tab=>tab.url===url)?.id));',page_url)
+    Select(driver.find_element(By.ID,'page-tab')).select_by_value(str(page_target))
     # Network is off before inference: this must be the actual local model.
     driver.set_context('chrome'); driver.execute_script('Services.io.offline = true'); driver.set_context('content')
     Select(driver.find_element(By.ID,'aiSource')).select_by_value('en')
@@ -184,6 +189,21 @@ try:
     driver.find_element(By.ID,'reset-caption-offset').click()
     wait.until(lambda d:d.execute_script('return UI.settings.captionOffset')==0)
     driver.find_element(By.ID,'stop-video').click()
+    driver.find_element(By.ID,'page-scan').click()
+    wait.until(lambda d:'The cat is sleeping.' in d.find_element(By.ID,'page-preview').get_attribute('value'))
+    driver.find_element(By.ID,'page-translate').click()
+    WebDriverWait(driver,600).until(lambda d:d.find_element(By.ID,'page-progress').get_attribute('value')=='2')
+    driver.switch_to.window(page_handle)
+    page_outputs=[driver.find_element(By.ID,name).text for name in ['sentence','dialog']]
+    quality.append({'input':'The cat is sleeping. (page and dialog offline)','target':'tr','output':page_outputs,'passed':all('kedi' in text.lower() and any(word in text.lower() for word in ['uyu','uyku']) for text in page_outputs)})
+    driver.save_screenshot(str(ARTIFACTS/'m2m-offline-page.png'))
+    driver.switch_to.window(ai_handle)
+    driver.find_element(By.ID,'page-restore').click()
+    wait.until(lambda d:'2' in d.find_element(By.ID,'page-result').text)
+    driver.switch_to.window(page_handle)
+    assert all(driver.find_element(By.ID,name).text=='The cat is sleeping.' for name in ['sentence','dialog'])
+    driver.switch_to.window(ai_handle)
+    results.append('Normal AI UI translates reviewed page/dialog text with the actual offline model, reuses duplicate text and restores originals')
     driver.find_element(By.ID, 'model-unload').click()
     wait.until(lambda d: d.execute_async_script('browser.runtime.sendMessage({type:"localAI",action:"status"}).then(x=>arguments[0](x.phase==="unloaded"));'))
     results.append('Unloading the shared AI worker releases model memory without deleting model files')

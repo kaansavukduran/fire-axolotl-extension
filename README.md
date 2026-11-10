@@ -2,7 +2,7 @@
 
 Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci bir reklam engelleme eklentisi gerekmez. Fire Axolotl donör olarak kullanılır; donör depo bu çalışma tarafından değiştirilmez.
 
-**Durum: 0.5.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
+**Durum: 0.6.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
 
 ## Neler var?
 
@@ -10,6 +10,7 @@ Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci b
 - Kalıcı ve son sekmesi kapanınca temizlenen geçici konteynerler.
 - Ana belge ve erişilebilen iframe’lerde video/ses hızı 0,25×–4×, site hız tercihi, atanabilir kısayollar, gerçek çözünürlük okuma, deneysel YouTube kalite isteği, yerel VTT/SRT çift altyazı ve video tam ekranında altyazı.
 - Aynı pakette yerel yapay zekâ çalışma motoru: çeviri için M2M100 418M, genel metin için Qwen 2.5 1.5B; model verisi ayrıca indirilir veya yerelden içe aktarılır. M2M100 metin ve okunabilir video altyazısı çevirisinde 100 dil seçeneği sunar; kalite dile göre değişir. [Kullanım ve deneysel kalite sınırları](docs/LOCAL_AI.md).
+- Yerel modelle ana belge veya açık web diyaloğu çevirisi: önce metin önizlemesi, ardından açık uygula eylemi ve özgün metne geri dönme. Her taramada en fazla 40 parça / 12.000 karakter; site değişiklikleri ezilmez.
 - Açık eylemle HTTPS çeviri hizmeti, seçili metin/altyazı alma, kelime defteri. Çeviri taslağı açılır pencere kapandıktan sonra korunur.
 - Model yüklemeden okunabilir video altyazısında önceki/sonraki satır, tekrar oynatma ve kelime/cümle kaydı.
 - Altyazı senkronu için −10 / +10 saniye oynatma ayarı; özgün ve çeviri birlikte kayar, VTT dışa aktarma zamanları korunur.
@@ -24,11 +25,11 @@ Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci b
 
 İki alternatif paket vardır; **yalnızca birini** kur:
 
-- `fire-axolotl-extension-0.5.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
-- `fire-axolotl-extension-0.5.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
+- `fire-axolotl-extension-0.6.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
+- `fire-axolotl-extension-0.6.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
 
-1. [Geliştirici sürümünü](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.5.0-preview.1) aç.
-2. Mevcut yeni sekmeyi korumak için `fire-axolotl-extension-0.5.0-native-newtab-unsigned.xpi` dosyasını indir. Aion yeni sekmesi için diğer XPI’yi seç.
+1. [Geliştirici sürümünü](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.6.0-preview.1) aç.
+2. Mevcut yeni sekmeyi korumak için `fire-axolotl-extension-0.6.0-native-newtab-unsigned.xpi` dosyasını indir. Aion yeni sekmesi için diğer XPI’yi seç.
 3. Masaüstü Firefox'ta adres çubuğuna `about:debugging#/runtime/this-firefox` yaz.
 4. **Geçici Eklenti Yükle / Load Temporary Add-on** düğmesine bas, bu XPI'yi seç.
 5. Firefox'un eklenti menüsünden **Fire Axolotl Extension** düğmesini aç. Ayarlar, Sekmeler, Engelleme ve Araçlar buradadır. Aion yeni sekmeli pakette yeni sekme açınca oyun görünür; diğer pakette popup içinden açılır.

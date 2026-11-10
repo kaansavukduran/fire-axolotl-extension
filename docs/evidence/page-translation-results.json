@@ -1,0 +1,9 @@
+{
+  "passed": [
+    "Normal AI UI previews website dialogs or page text without a model; hidden, editable, code and iframe text are excluded",
+    "Text-only application preserves DOM handlers and form values; apply and restore never overwrite newer website text",
+    "A fresh scan restores previous text; stale scans cannot write after rescanning or navigation; the 40-fragment bound holds",
+    "Disabling AI blocks page scans while allowing existing translations to be restored"
+  ],
+  "inference": "Fixed strings exercise DOM safety only; model accuracy is not asserted here."
+}

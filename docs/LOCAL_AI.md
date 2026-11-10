@@ -54,3 +54,12 @@ M2M100 418M is a local CPU translation model with 100 language choices; Qwen 2.5
 ## Altyazıyla öğrenme · 0.4.0
 
 AI sayfasında videoyu seçip **Altyazıyla öğren** kontrollerini model yüklemeden kullanabilirsin. Önceki/sonraki satır ve tekrar oynatma, videonun okunabilir yerel TextTrack altyazısını ve seçili gecikmeyi kullanır. **O anki satırı al** metni düzenleme alanına getirir; kaydetmeden önce kelimeye kısaltabilir veya cümleyi düzeltebilirsin. En fazla 300 karakter açık kaydetme eylemiyle yerel kelime defterine eklenir. Bu akış metni çeviri sunucusuna göndermez. Dosyadan eklenen çift altyazı gezinme kaynağı değildir. Oynatıcı otomatik oynatmayı engellerse zaman seçilir ve videodan oynatmayı başlatman istenir.
+
+
+## Sayfa ve web popup metni · 0.6.0
+
+Yerel AI ekranında kaynak/hedef dili ve hedef sekmeyi seç. **Ana belgedeki görüntülenebilir metin** veya **Yalnız açık web diyalogları** alanını seçip **Metni oku ve önizle** düğmesine bas. Önizleme model yüklemeden çalışır; **Önizlenen metni yerelde çevir ve uygula** yüklü ortak modeli kullanır. Kısa metinlerde otomatik dil tespiti kararsızsa kaynak dili elle seç. Aynı taramadaki birebir aynı metin yalnız bir kez modele verilir.
+
+En çok 40 metin parçası / 12.000 karakter ve parça başına 1.000 karakter işlenir. Çok uzun parçalar atlanır; bu tam sayfa ve her sitede eksiksiz çeviri garantisi değildir. Modelin çıktı sınırı ve dil doğruluğu uzun çevirileri sınırlayabilir. Formlar, düzenlenebilir alanlar, kod, görünmeyen metin ve iframe’ler kapsam dışıdır. Web popup kapsamı açık HTML `dialog`, `role=dialog` ve `role=alertdialog` öğeleridir; ayrı pencere olarak açılmış bir web sayfası kendi sekmesi seçilerek çevrilebilir. Firefox’un sistem popup’larına erişilmez.
+
+**Özgün metne geri dön** yalnız eklentinin değiştirdiği ve o zamandan beri site tarafından değiştirilmemiş metni geri yükler. Yeniden tarama önce önceki uygulamayı geri alır. Site değişiklikleri ezilmez; dinamik siteler kendi yeniden çiziminde çeviriyi kaldırabilir. Durdur düğmesi ortak modeli bellekten çıkarır; önbellek ağırlıklarını silmez. Çeviri panelini kapatmak yeni uygulamaları durdurur; uygulanmış metni geri almak için paneli yeniden açıp sekmeyi seçebilirsin veya sayfayı yenileyebilirsin.

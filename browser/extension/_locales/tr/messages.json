@@ -243,7 +243,7 @@
     "message": "imzasız geliştirici önizlemesi"
   },
   "updateHelp": {
-    "message": "Bu eklentinin sürümleri kontrol edilir. Kalıcı kurulum ve otomatik güncelleme için Mozilla imzası ve ayrı bir dağıtım kanalı gerekir. Tarayıcı güncellemelerini Firefox yönetir."
+    "message": "Yayımlanmış önizlemeler dahil bu eklentinin sürümlerini kontrol eder. Kalıcı kurulum ve otomatik güncelleme Mozilla imzası ve dağıtım kanalı gerektirir. Tarayıcı güncellemelerini Firefox yönetir."
   },
   "checkUpdates": {
     "message": "Güncellemeleri kontrol et"
@@ -1042,5 +1042,59 @@
   },
   "sessionsRevoked": {
     "message": "Oturum izni kaldırıldı."
+  },
+  "pageTranslationTitle": {
+    "message": "Sayfa ve web popup çevirisi"
+  },
+  "pageTranslationHelp": {
+    "message": "Önce sayfadaki metni incele; ardından seçili yerel modelle çevir ve sayfaya uygula. Kaynak ve hedef dil yukarıdaki seçimleri kullanır. Metin bir çeviri sunucusuna gönderilmez."
+  },
+  "pageScope": {
+    "message": "Çeviri alanı"
+  },
+  "pageScopePage": {
+    "message": "Ana belgedeki görüntülenebilir metin"
+  },
+  "pageScopeDialogs": {
+    "message": "Yalnız açık web diyalogları"
+  },
+  "pageScan": {
+    "message": "Metni oku ve önizle"
+  },
+  "pagePreview": {
+    "message": "Çevrilecek metin önizlemesi"
+  },
+  "pageTranslationLimits": {
+    "message": "Her taramada en çok 40 metin parçası / 12.000 karakter; parça başına 1.000 karakter. Form alanları, düzenlenebilir alanlar, kod, gizli metin ve iframe’ler atlanır. Yeni tarama önceki uygulamayı geri alır. Site tarafından değiştirilen metin ezilmez. Firefox sistem ekranları desteklenmez; çeviriler hata içerebilir."
+  },
+  "pageTranslate": {
+    "message": "Önizlenen metni yerelde çevir ve uygula"
+  },
+  "pageStop": {
+    "message": "Çeviriyi durdur / modeli çıkar"
+  },
+  "pageRestore": {
+    "message": "Özgün metne geri dön"
+  },
+  "pageScannedCount": {
+    "message": "Önizlenen parça"
+  },
+  "pageTranslatedCount": {
+    "message": "Uygulanan parça"
+  },
+  "pageSkippedCount": {
+    "message": "Değiştiği için atlanan"
+  },
+  "pageRestoredCount": {
+    "message": "Geri alınan parça"
+  },
+  "pageScanLimited": {
+    "message": "Sınır nedeniyle bazı metinler atlandı"
+  },
+  "pageScanExpired": {
+    "message": "Sayfa veya tarama değişti; yeniden önizle."
+  },
+  "pageScanRequired": {
+    "message": "Önce hedef sayfanın metnini önizle."
   }
 }

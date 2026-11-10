@@ -4,7 +4,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 29 geçti |
+| Node birim/izin/veri doğrulama | 30 geçti |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
 | 0.1.0 → 0.2.0 geliştirici yükseltmesi | 2 geçti: ayarlar, taslak, site kuralı, önbellek ve engelleyici filtresi korundu; [ayrıntı](evidence/upgrade-results.json). |
@@ -12,7 +12,7 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 | Fontlar ÇçĞğIıİiÖöŞşÜü | Üç yerel fontta geçti |
 | web-ext 10.8.0 | 0 hata, 11 uyarı; [rapor](evidence/web-ext-lint.json) |
 | npm audit | 0 açık; [rapor](evidence/npm-audit.json); kapsamlı güvenlik garantisi değildir |
-| Gerçek M2M100 418M CPU | 7 teknik akış ve 3 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
+| Gerçek M2M100 418M CPU · 0.6.0 | 8 teknik akış ve 4 sınırlı İngilizce/Türkçe kalite kontrolü geçti; [rapor](evidence/m2m-results.json). Ayrı indirme deneyi de geçti; [rapor](evidence/m2m-download-results.json). |
 | Gerçek Qwen 2.5 1.5B CPU · 0.2.0 | 6 teknik kontrol geçti (dosya SHA, yükleme, sayfayı yeniden açma, çevrimdışı genel soru/çeviri çıktısı ve altyazı aktarımı, bellekten çıkarma); [rapor](evidence/qwen-results.json); **Türkçe çeviri kalite kapısı başarısız** |
 | WebGPU, Windows/macOS/Android, gerçek hesapla cihazlar arası Sync | Doğrulanmadı |
 
@@ -75,3 +75,16 @@ Gerçek Firefox’ta, AI modeli yüklenmeden satırı tekrar oynatma, önceki/so
 Gerçek Firefox testinde görünür sekmeleri seçme, filtre değişince seçimi temizleme, toplu kapatmayı iptal etme ve onaylayarak kapatma doğrulandı. İlgisiz sekmeler korundu. Firefox izin penceresinde Deny/Allow kararları, pencere odağı ve Firefox’un güvenlik gecikmesi korunarak otomatik tetiklendi; izin reddi erişim vermedi, izin verme bir kapanmış sekmeyi geri açtı, izin kaldırma erişimi geri çekti. WebDriver’ın açılır pencere kaydırma sınırlaması nedeniyle native izin düğmelerinin kendi click olayları kullanıldı; izin veritabanı değiştirilmedi ve güvenlik gecikmesi kapatılmadı. [Rapor](evidence/tab-manager-results.json). Bu test gerçek hesap Sync veya imzalı güncelleme testi değildir.
 
 ![Dar ekranda sekme yöneticisi](evidence/tab-manager.png)
+
+
+## 0.6.0: önizlenen sayfa ve web diyaloğu çevirisi
+
+[DOM uygulama raporu](evidence/page-translation-results.json), normal AI arayüzünde sayfa/açık web diyaloğu önizlemesini ve model olmadan uygula düğmesinin kapalı kaldığını doğrular. Gizli, tamamen saydam, düzenlenebilir, form, kod ve iframe metni alınmadı. Sabit çeviri dizeleriyle HTML olarak yorumlanmayan metin uygulaması, DOM olaylarının ve parola/form değerlerinin korunması, site güncellemelerinin ezilmemesi, tarama/gezinme sonrası eski token reddi, 40 parça sınırı ve AI kapalıyken geri alma sınandı. Bu sabit dizeler model doğruluğu testi sayılmaz.
+
+Ayrı [gerçek M2M100 raporunda](evidence/m2m-results.json), hash doğrulanmış model Firefox içinde yüklendi; ağ kapatıldıktan sonra normal AI ekranındaki önizle/çevir/geri al düğmeleriyle ana sayfa ve web diyaloğundaki `The cat is sleeping.` → `Kedi uyuyor.` doğrulandı. Aynı metin bir taramada tekrar kullanıldı. Önceki İngilizce/Türkçe metin, otomatik algılama, çift video altyazısı ve VTT kontrolleri de geçti. Bilinen `I was about to give up.` anlam/zaman hatası aynen sürüyor. Bu örnekler tüm sitelerde veya 100 dilde kalite onayı değildir.
+
+![Sayfa çevirisi önizlemesi](evidence/page-translation.png)
+
+![Ağ kapalıyken gerçek yerel modelin sayfa ve web diyaloğu çıktısı](evidence/m2m-offline-page.png)
+
+0.6.0 elle sürüm kontrolü testinde yayımlanmış önizlemenin seçilmesi, taslakların ve geçersiz etiketlerin dışlanması, boş liste/hatalı API yanıtı ve yalnız proje GitHub sürüm adresinin kullanılması doğrulandı. GitHub’ın `/releases/latest` uç noktası yalnız önizleme bulunan bu depoda gerçekten 404 döndürüyordu; liste API’sine geçildi. Bu bir otomatik kurulum veya imza doğrulama testi değildir.

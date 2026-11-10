@@ -243,7 +243,7 @@
     "message": "unsigned developer preview"
   },
   "updateHelp": {
-    "message": "Checks this extension’s releases. Permanent installation and automatic updates require Mozilla signing and a distribution channel. Firefox manages browser updates."
+    "message": "Checks this extension’s published releases, including developer previews. Permanent installation and automatic updates require Mozilla signing and a distribution channel. Firefox manages browser updates."
   },
   "checkUpdates": {
     "message": "Check for updates"
@@ -1042,5 +1042,59 @@
   },
   "sessionsRevoked": {
     "message": "Sessions permission revoked."
+  },
+  "pageTranslationTitle": {
+    "message": "Page and website dialog translation"
+  },
+  "pageTranslationHelp": {
+    "message": "Review the page text first, then translate and apply using the selected local model. Source and target use the language choices above. Text is not sent to a translation server."
+  },
+  "pageScope": {
+    "message": "Translation scope"
+  },
+  "pageScopePage": {
+    "message": "Rendered text in the main document"
+  },
+  "pageScopeDialogs": {
+    "message": "Open website dialogs only"
+  },
+  "pageScan": {
+    "message": "Read and preview text"
+  },
+  "pagePreview": {
+    "message": "Preview of text to translate"
+  },
+  "pageTranslationLimits": {
+    "message": "Up to 40 text fragments / 12,000 characters per scan, at most 1,000 per fragment. Form fields, editable areas, code, hidden text and frames are skipped. Scanning again first restores the previous application. Text changed by the website is never overwritten. Firefox system pages are unsupported; translations may be wrong."
+  },
+  "pageTranslate": {
+    "message": "Translate previewed text locally and apply"
+  },
+  "pageStop": {
+    "message": "Stop translation / unload model"
+  },
+  "pageRestore": {
+    "message": "Restore original text"
+  },
+  "pageScannedCount": {
+    "message": "Previewed fragments"
+  },
+  "pageTranslatedCount": {
+    "message": "Applied fragments"
+  },
+  "pageSkippedCount": {
+    "message": "Skipped changed fragments"
+  },
+  "pageRestoredCount": {
+    "message": "Restored fragments"
+  },
+  "pageScanLimited": {
+    "message": "Some text was skipped because of limits"
+  },
+  "pageScanExpired": {
+    "message": "The document or scan changed; preview again."
+  },
+  "pageScanRequired": {
+    "message": "Preview the target page text first."
   }
 }
