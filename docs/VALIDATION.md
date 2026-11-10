@@ -4,8 +4,8 @@ Linux x86_64 üzerinde SHA sabitli, değiştirilmemiş Firefox ESR 153.6.0 ve ge
 
 | Denetim | Sonuç |
 | --- | --- |
-| Node birim/izin/veri doğrulama | 51 geçti |
-| Gerçek popup, geniş panel, sağ tık konteyner ve AI başlangıcı · 0.11.0 | 6 geçti; [rapor](evidence/usability-results.json). |
+| Node birim/izin/veri doğrulama · 0.13.0 | 58 geçti |
+| Gerçek popup, geniş panel, sağ tık konteyner ve AI başlangıcı · 0.13.0 | 6 geçti; [rapor](evidence/usability-results.json). |
 | Aion runtime simgesi ve YouTube biçiminde yerel HTTPS oyuncu · 0.12.0 | 5 geçti; [kapsam ve rapor](evidence/youtube-results.json). Gerçek kamu videosuna erişim 403 ile engellendi. |
 | Gerçek Firefox ana akış | 42 geçti; [ayrıntı](evidence/firefox-results.json) |
 | Firefox yeni sekmesini koruyan alternatif | 2 geçti; [ayrıntı](evidence/native-newtab-results.json) |
@@ -192,3 +192,15 @@ Firefox disabled TextTrack için `cues=null` verir. Yeni sık canlı yenilemede 
 ![Dar ekranda English, büyük ölçek ve disleksi fontuyla video kontrolleri](evidence/youtube-controls-en-200-narrow.png)
 
 0.12.0’ın ilk uzak koşusu [42888624394](https://github.com/kaansavukduran/fire-axolotl-extension/actions/runs/42888624394), mevcut satır döngüsü testinde başlat düğmesine tıkladıktan hemen sonra dış zamana gitme varsayımı nedeniyle durdu. Daha yavaş frame hazırlığında yeni 1,1 saniye konumu henüz başlatılmamış döngünün kaynağı olabiliyordu. Test artık gerçek `captionLooping` yanıtını ve ilk kaynak satırını bekledikten sonra dışarı seek yapar; 1,45 saniyeyi geçme denetimi korunur. Oynatma zamanı/hızı veya uygulama davranışı değiştirilmez. Başarısız koşu korunur; yeni YouTube testi bu koşuda henüz çalışmamıştı.
+
+## 0.13.0 · Popup’ta tek anahtar
+
+Gerçek Firefox toolbar popup’ında altı otomatik altyazı akışı geçti: video yokken anahtar açık kalır; video sonradan bulunur ve paket model soğuk başlar; popup kapandıktan sonra iki satır sürer; YouTube SPA video değişimi izlenir; yeniden açılan popup gerçek işareti gösterir; kapatınca yerel CC geri gelir; aynı anahtarla ikinci native TextTrack oynatıcı da otomatik bulunur. [Rapor ve kapsam](evidence/auto-captions-results.json). Sekme seçimi veya AI kontrol sekmesi kullanıcı adımı değildir. Testteki normal popup.html sekmesi yalnız ayrıcalıklı WebDriver inceleme aracıdır. Yeni arka plan hizmeti veri/izin testleri, geç kalan çıkarım ve kuyruktaki eski overlay engeliyle de sınanır.
+
+Aşağıdaki görüntüler gerçek toolbar popup’ı ve yerel HTTPS oynatıcıdan alınmıştır. Gerçek model kullanılır; kamu YouTube testi değildir.
+
+![Tek kutu, inline durum ve isteğe bağlı ayarlar](evidence/automatic-popup.png)
+
+![Popup kapalıyken otomatik iki satır](evidence/automatic-dual-captions.png)
+
+Yerel regresyon denemesinde Firefox’un ilk 288 px popup görünümünün gövdeye geri yazılmasıyla panelin bazen dar kaldığı yakalandı. Tercih edilen genişlik artık tarayıcı penceresinden hesaplanır; geçici viewport değeri geri beslenmez. Sağ tık testinde Firefox’un asenkron uzantı grubu görünmeden kontrol edilmesi yarışı da giderildi; test gerçek görünür grup/öğeyi bekler ve headless hover yerine görünür XUL alt menüsünün kendi açma komutunu kullanır.

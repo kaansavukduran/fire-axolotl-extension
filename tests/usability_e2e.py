@@ -46,9 +46,13 @@ def capture(name):
 def new_tab(before):w.until(lambda _:bool(set(d.window_handles)-before));handle=next(iter(set(d.window_handles)-before));d.set_context('content');d.switch_to.window(handle);return handle
 def menu(kind,label):
     d.set_context('chrome');prefix='#tabContextMenu' if kind=='tab' else '#contentAreaContextMenu'
-    grouped=d.find_elements(By.CSS_SELECTOR,prefix+' menu[label="Fire Axolotl Extension"]')
-    if grouped and grouped[0].is_displayed():ActionChains(d).move_to_element(grouped[0]).perform()
-    parent=w.until(lambda _:next((e for e in d.find_elements(By.CSS_SELECTOR,prefix+' menu[id*="aion-container-open"]') if e.is_displayed()),None));ActionChains(d).move_to_element(parent).perform()
+    # Firefox populates its grouped extension submenu asynchronously. Wait for
+    # either visible entry before deciding whether to expand that group.
+    entry=w.until(lambda _:next((e for e in d.find_elements(By.CSS_SELECTOR,prefix+' menu[label="Fire Axolotl Extension"],'+prefix+' menu[id*="aion-container-open"]') if e.is_displayed()),None))
+    # Headless Marionette can hover an adjacent submenu while Firefox changes
+    # selection-menu geometry. Open the visible native XUL menu itself.
+    if entry.get_attribute('label')=='Fire Axolotl Extension':d.execute_script('arguments[0].openMenu(true);',entry)
+    parent=w.until(lambda _:next((e for e in d.find_elements(By.CSS_SELECTOR,prefix+' menu[id*="aion-container-open"]') if e.is_displayed()),None));d.execute_script('arguments[0].openMenu(true);',parent)
     child=w.until(lambda _:next((e for e in parent.find_elements(By.CSS_SELECTOR,'menuitem') if e.get_attribute('label')==label and e.is_displayed()),None))
     # Marionette can hit the underlying page on a repeated XUL submenu click.
     # Invoke the visible Firefox menu item's own command; no addon API is mocked.
@@ -61,7 +65,7 @@ try:
     source_id=d.execute_async_script('const [url,done]=arguments;browser.tabs.query({}).then(t=>done(t.find(x=>x.url===url).id));',url)
     d.execute_async_script('browser.runtime.getBackgroundPage().then(bg=>{bg.__testContainerClicks=[];bg.browser.menus.onClicked.addListener((info,tab)=>{if(String(info.menuItemId).startsWith("aion-container"))bg.__testContainerClicks.push({id:info.menuItemId,tabId:tab.id,link:info.linkUrl});});arguments[0](true);});')
     toolbar();d.set_context('chrome');d.execute_script('Services.io.offline=true');d.set_context('content')
-    metrics=popup('return {width:p.innerWidth,height:p.innerHeight,screenWidth:p.screen.availWidth,declaredWidth:p.document.documentElement.style.width,bodyRight:p.document.body.getBoundingClientRect().right,surface:p.document.documentElement.dataset.surface,visible:[...p.document.querySelectorAll("[data-module]")].filter(n=>!n.hidden).map(n=>n.dataset.module),buttonBottom:p.document.getElementById("translate-local").getBoundingClientRect().bottom};')
+    metrics=popup('return {width:p.innerWidth,height:p.innerHeight,screenWidth:p.screen.availWidth,declaredWidth:p.document.documentElement.style.width,bodyRight:p.document.body.getBoundingClientRect().right,surface:p.document.documentElement.dataset.surface,visible:[...p.document.querySelectorAll("[data-module]")].filter(n=>!n.hidden).map(n=>n.dataset.module),buttonBottom:p.document.getElementById("auto-captions").getBoundingClientRect().bottom};')
     assert 600<=metrics['width']<=800 and metrics['height']<=600 and metrics['visible']==['translation'],metrics;assert metrics['buttonBottom']<=metrics['height'] and metrics['bodyRight']<=metrics['width']+1,metrics
     assert popup('return p.document.getElementById("local-model-status").textContent.includes("Hazır");');capture('toolbar-popup-tr.png')
     popup('const e=p.document.getElementById("source-text");e.value="The cat is sleeping.";e.dispatchEvent(new p.Event("input",{bubbles:true}));p.document.getElementById("translate-local").click();')

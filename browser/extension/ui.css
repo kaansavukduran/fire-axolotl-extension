@@ -33,3 +33,5 @@ html[data-surface=popup]{background:var(--bg)}html[data-surface=popup] header{po
 html[data-surface=popup] .row{margin:.35rem 0}html[data-surface=popup] label{margin:.2rem 0}html[data-surface=popup] label>span{font-size:.85em;line-height:1.3;margin-bottom:.2rem}html[data-surface=popup] select{min-height:2.4rem}html[data-surface=popup] #local-model-status{margin:.25rem 0;padding:.35rem}
 
 html[data-surface=popup]{overflow-x:hidden}
+
+#auto-caption-card{border:1px solid var(--cyan);grid-column:1/-1}#auto-caption-card h2{margin:0 0 .6rem}#auto-caption-help,#auto-caption-status{margin:.5rem 0;font-size:.9em}#auto-caption-video{font-size:.8em;overflow-wrap:anywhere;margin:.3rem 0;color:var(--muted)}.auto-caption-switch{font-weight:700}#auto-caption-card .auto-caption-switch input{width:1.4rem;height:1.4rem;flex:none}#auto-caption-card details{margin-top:.6rem}

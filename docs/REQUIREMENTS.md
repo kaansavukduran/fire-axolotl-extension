@@ -34,3 +34,5 @@ Mozilla geliştirici hesabı/AMO imzası henüz sağlanmadı; bu sürüm geçici
 Ek yerel çeviri modeli M2M100 418M, Firefox içinde çevrimdışı metin ve TextTrack örneklerinde kullanıldı. Test edilen örnekler [VALIDATION.md](VALIDATION.md) içindedir; tüm diller için kalite garantisi değildir.
 
 0.12.0 kullanıcı geri bildirimi: Aion araç çubuğu simgesi motorun runtime güncellemelerine karşı korunur. YouTube görünür CC kaynağı, tek açışta paket model başlatma, aynı ekran kaynak/hedef dilleri ve bağımsız iki satır anahtarı eklendi. CC olmayan videoda ses yazıya dökülmez; tam transkript veya her hizmet için eşdeğerlik iddiası yoktur. İmzasız önizleme için XPI içeren kurulum ZIP’i normal indirmeyi kolaylaştırır.
+
+0.13.0 UX: gerçek popup’taki tek kutu otomatik video keşfini, paket motorunun ilk açılışını ve arka planda çift altyazıyı yönetir. Video yoksa açık kalır; popup kapatma/sonraki video için yeni elle adım gerekmez. Okunabilir CC ve EN↔TR paket motoru sınırları geçerlidir.

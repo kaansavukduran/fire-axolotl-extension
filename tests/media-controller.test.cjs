@@ -32,3 +32,9 @@ test('a failed media command does not prevent its queued cleanup or later contro
   await failure;await stopping;await f.media.command(1,{action:'closeOverlay'});
   assert.deepEqual(f.calls,[[1,'captionLoop'],[1,'captionLoopStop'],[1,'closeOverlay']]);
 });
+test('a superseded automatic overlay is discarded while waiting in its tab queue',async()=>{
+  const f=fixture();const first=f.media.command(1,{action:'captionLoop'});await turn();
+  let valid=true;const stale=f.media.command(1,{action:'overlay'},()=>valid);valid=false;
+  f.finish().resolve({});await first;assert.equal((await stale).stale,true);
+  assert.deepEqual(f.calls,[[1,'captionLoop']]);
+});

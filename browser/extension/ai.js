@@ -221,7 +221,7 @@ function action(id, fn) {$(id).onclick = () => UI.run(fn);}
   browser.runtime.onMessage.addListener((message, sender) => {
     if (sender.id === browser.runtime.id && message.type === 'aionAIState') renderModel(message.state);
   });
-  document.addEventListener('aion-settings', () => {render(); if (targetId && (original.length || translated.length)) UI.run(overlay);});
+  document.addEventListener('aion-settings', () => {render(); if(UI.settings.autoCaptions){UI.run(stopVideo);return;} if (targetId && (original.length || translated.length)) UI.run(overlay);});
   for (const element of document.querySelectorAll('[data-setting]')) element.addEventListener(element.type === 'range' ? 'input' : 'change', () => UI.run(async () => {
     const value = element.type === 'checkbox' ? element.checked : element.type === 'range' ? Number(element.value) : element.value;
     if (['aiSource','aiTarget','aiBackend'].includes(element.dataset.setting)) {stopPage();await stopVideo();}

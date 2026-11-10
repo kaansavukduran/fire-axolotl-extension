@@ -29,3 +29,5 @@ Tek eklentiyle motor, yerel arayüz ve servis yetkilerini değiştirerek forkla 
 Qwen 2.5 1.5B yerel metin/altyazı motoru ve kullanım sınırları: [LOCAL_AI.md](LOCAL_AI.md). Kapsamın kronolojik takibi: [REQUIREMENTS.md](REQUIREMENTS.md).
 
 0.12.0: YouTube görünür CC okuyucusu ve kaynak/hedef/iki satır görünürlüğü aynı video ekranındadır. CC yoksa konuşma tanıma yapılmaz; DOM kaynağı tam video transkripti değildir. Gerçek kamu videosu erişimi bu ortamda 403 ile engellendi; yerel HTTPS oynatıcı ve gerçek model testi hizmetin bütün sürümleri için garanti değildir.
+
+0.13.0: popup’ın ilk kartındaki tek kutu otomatik video seçimini ve arka plan çift altyazısını yönetir. Ayrı kontrol sekmesi gerekmez; tercih sonraki videolarda sürer. Paket motoru EN↔TR; erişilebilir CC gerekir.

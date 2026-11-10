@@ -111,7 +111,7 @@ globalThis.AionLocalAI = (() => {
     let target;
     port.onMessage.addListener(message => {if (Number.isInteger(message.tabId)) target = message.tabId; else if (message.tabId===null) target=undefined;});
     port.onDisconnect.addListener(() => {
-      if (!target) return;
+      if (!target || globalThis.AionAutoCaptions?.owns(target)) return;
       AionMedia.command(target, {action:'closeOverlay'}).catch(() => {});
       AionMedia.command(target, {action:'captureStop'}).catch(() => {});
     });

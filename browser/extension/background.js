@@ -40,6 +40,15 @@ async function sourceTab(id) {
   if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
   return tab;
 }
+async function decorateMediaCommand(input,settings) {
+  const command={...input,style:Aion.captionStyle(settings),language:Aion.language(settings,browser.i18n.getUILanguage())};
+  if(command.action==='overlay') {
+    const messages=await (await fetch(browser.runtime.getURL(`aion/_locales/${command.language}/messages.json`))).json();
+    const keys=['captionStudy','captionStudyHelp','captionStudyContinue','captionStudyTranslate','captionStudySave','captionStudySaved','captionStudySentence','captionStudySource','captionStudyTarget','captionStudyLocal','captionStudyPending','aiBusy','aiSourceRequired','aiBergamotPairUnsupported','aiTargetUnsupported','moduleDisabled','operationFailed','wordLimit','wordTooLong'];
+    command.studyUI={source:settings.aiSource,target:settings.aiTarget,labels:Object.fromEntries(keys.map(key=>[key,messages[key]?.message || key]))};
+  }
+  return command;
+}
 function containerTarget(tab,url,cookieStoreId) {
   const target=Aion.webURL(url);
   if (!target || tab?.incognito) throw new Error('restrictedPage');
@@ -125,6 +134,7 @@ async function onMessage(message, sender) {
   if (module && (await readSettings()).disabledModules.includes(module) && !(message.type === 'localAI' && ['status','cancel','unload','clear'].includes(message.action)) && !(['video','mediaTab'].includes(message.type) && ['closeOverlay','captureStop','captionLoopStop'].includes(message.command?.action))) throw new Error('moduleDisabled');
   switch (message.type) {
     case 'settings': return readSettings();
+    case 'autoCaptions': return message.action==='set'?AionAutoCaptions.set(message.enabled):AionAutoCaptions.status();
     case 'save': return writeSettings(message.patch);
     // Data management remains available when translation is disabled.
     case 'wordbook': return manageWords(message);
@@ -170,12 +180,9 @@ async function onMessage(message, sender) {
     case 'video': {
       const tab = await sourceTab(message.type==='mediaTab'?Number(message.tabId):message.tabId);
       const settings = await readSettings();
-      const command = {...message.command, style: Aion.captionStyle(settings), language: Aion.language(settings, browser.i18n.getUILanguage())};
-      if (command.action === 'overlay') {
-        const messages = await (await fetch(browser.runtime.getURL(`aion/_locales/${command.language}/messages.json`))).json();
-        const keys = ['captionStudy','captionStudyHelp','captionStudyContinue','captionStudyTranslate','captionStudySave','captionStudySaved','captionStudySentence','captionStudySource','captionStudyTarget','captionStudyLocal','captionStudyPending','aiBusy','aiSourceRequired','aiBergamotPairUnsupported','aiTargetUnsupported','moduleDisabled','operationFailed','wordLimit','wordTooLong'];
-        command.studyUI = {source:settings.aiSource,target:settings.aiTarget,labels:Object.fromEntries(keys.map(key=>[key,messages[key]?.message || key]))};
-      }
+      if(['captionPrepare','overlay','captureStart','captionLoop'].includes(message.command?.action))await globalThis.AionAutoCaptions?.stop();
+      if(globalThis.AionAutoCaptions?.owns(tab.id) && ['closeOverlay','captureStop','captionLoopStop'].includes(message.command?.action))return {stopped:true};
+      const command = await decorateMediaCommand(message.command,settings);
       const result = await AionMedia.command(tab.id, command);
       if(message.remember && command.action==='speed'){await AionMedia.remember(tab.id,command.value);await AionMedia.command(tab.id,{action:'setDefaultSpeed',value:command.value});}
       if (result.error) throw new Error(result.error);

@@ -2,14 +2,15 @@
 globalThis.AionMedia = (() => {
   const touched = new Set();
   const queues = new Map();
-  function command(tabId, action) {
-    const result = (queues.get(tabId) || Promise.resolve()).then(()=>performCommand(tabId,action));
+  function command(tabId, action, valid = () => true) {
+    const result = (queues.get(tabId) || Promise.resolve()).then(()=>performCommand(tabId,action,valid));
     const tail = result.catch(()=>{});
     queues.set(tabId,tail);
     tail.then(()=>{if(queues.get(tabId)===tail)queues.delete(tabId);});
     return result;
   }
-  async function performCommand(tabId, command) {
+  async function performCommand(tabId, command, valid) {
+    if (!valid()) return {stale:true};
     const tab = await browser.tabs.get(tabId);
     if (!Aion.webURL(tab.url)) throw new Error('restrictedPage');
     await browser.tabs.executeScript(tabId, {file:'/aion/youtube-captions.js',allFrames:true}).catch(()=>{});
@@ -18,6 +19,7 @@ globalThis.AionMedia = (() => {
     const send = (frameId, action) => browser.tabs.sendMessage(tabId,{type:'aionVideo',command:action},{frameId});
     const probes = await Promise.allSettled(frames.map(async frameId=>({frameId,info:await send(frameId,{action:'info'})})));
     const media = probes.filter(item=>item.status==='fulfilled' && !item.value.info.error).map(item=>item.value);
+    if (!valid()) return {stale:true};
     touched.add(tabId);
     if (['closeOverlay','captureStop','clearDefaultSpeed','captionLoopStop'].includes(command.action)) {
       if (command.action === 'closeOverlay') AionCaptionStudy.revoke(tabId);
@@ -35,6 +37,7 @@ globalThis.AionMedia = (() => {
     const chosen = media[0].frameId;
     if (command.action === 'overlay') {
       const frame = (await browser.webNavigation.getAllFrames({tabId})).find(item=>item.frameId === chosen);
+      if (!valid()) return {stale:true};
       if (!frame || !Aion.webURL(frame.url)) throw new Error('restrictedPage');
       const access=AionCaptionStudy.grant(tabId,frame,command.study || command.original);
       command = {...command,studyToken:access.token,studyRevision:access.revision};

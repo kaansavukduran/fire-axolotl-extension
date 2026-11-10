@@ -2,13 +2,13 @@
 
 Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci bir reklam engelleme eklentisi gerekmez. Fire Axolotl donör olarak kullanılır; donör depo bu çalışma tarafından değiştirilmez.
 
-**Durum: 0.12.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
+**Durum: 0.13.0 imzasız geliştirici önizlemesi. Kalıcı kurulum için henüz Mozilla imzası yok. Bütün Fire Axolotl isteklerinin tamamlandığı veya Firefox motorunun değiştiği iddia edilmez.** [Özellik karşılıkları ve sınırlar](docs/PARITY.md). [Gerçek Firefox sonuçları ve ekran görüntüleri](docs/VALIDATION.md).
 
 ## Hızlı başlangıç
 
 - **Metin çevirisi:** Aion araç çubuğu düğmesi → Çeviri → kaynak/hedef dil → metni yaz → **Cihazda çevir**. İngilizce ↔ Türkçe motoru pakettedir; ilk tıklamada çevrimdışı da başlar.
 - **Geniş ekran:** popup üstündeki **Tam sayfa paneli aç**. Site sekmesini seç; video, seçili metin ve konteyner işlemleri panel açıkken bu sekmede çalışır. Firefox popup sınırının dışındaki alan normal bir tarayıcı sekmesidir.
-- **YouTube / video:** videoyu aç → Aion → Video kumandası → **YouTube / çift altyazıyı aç** → kaynak/hedef dili seç → **Videoda AI çift altyazıyı aç / kapat**. İlk İngilizce↔Türkçe kullanımı paket motorunu başlatır. Özgün satır ve çevirinin ayrı anahtarları vardır. Kontrol sekmesini açık tutup video sekmesine dön. CC altyazısı gerekir; ses yazıya dökülmez.
+- **YouTube / video:** Aion simgesine tıkla → **Videoları otomatik çift altyazıyla izle** kutusunu işaretle. Hepsi bu; popup’ı kapatabilirsin. İzlediğin video otomatik bulunur, YouTube CC açılır, orijinal ve çeviri birlikte gösterilir. Sonraki videolarda da çalışır. Dil ve satır görünürlüğü aynı kartın isteğe bağlı bölümündedir. Paket motoru İngilizce ↔ Türkçe; okunabilir altyazı gerekir, ses yazıya dökülmez.
 - **Qwen:** Yapay zekâ → **Qwen 2.5’i aç** → **Modeli indir ve cihazda yükle** → **Genel soru**. Qwen ağırlıkları ayrıca indirilir (CPU yaklaşık 1,59 GB); hazır çeviriyle aynı şey değildir. Türkçe çeviri kalite sorunu sürer.
 - **Konteyner:** sayfa, bağlantı veya sekmeye sağ tık → **Aion · Konteynerde aç** → **İş / Kişisel / oluşturduğun ad**. Yeni sekme ayrı site oturumuyla açılır. **Yeni geçici konteyner** son sekmesi kapanınca temizlenir. Oluştur/yönet seçeneği açıklamalı paneli açar.
 
@@ -38,11 +38,11 @@ Normal Firefox'a kurulan **tek bir eklenti**. Ayrı bir tarayıcı veya ikinci b
 
 İki alternatif paket vardır; **yalnızca birini** kur:
 
-- `fire-axolotl-extension-0.12.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
-- `fire-axolotl-extension-0.12.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
+- `fire-axolotl-extension-0.13.0-native-newtab-unsigned.xpi`: Firefox’un mevcut yeni sekmesini korur. Oyunu eklenti düğmesinden açarsın.
+- `fire-axolotl-extension-0.13.0-unsigned.xpi`: yeni sekmeyi Aion araması ve oyunuyla değiştirir. Başka yeni sekme eklentisi varsa etkin sayfayı Firefox yönetir. Oyun gizlenebilir; bu pakette yeni sekme override’ı ayrı bir çalışma anı anahtarıyla kaldırılamaz.
 
-1. [Kurulum ZIP’ini](https://github.com/kaansavukduran/fire-axolotl-extension/releases/download/v0.12.0-preview.1/fire-axolotl-extension-0.12.0-firefox-preview.zip) indir ve bir klasöre çıkar. Bu ZIP mevcut Firefox yeni sekmesini koruyan XPI ve Türkçe/English kurulum metni içerir.
-2. Klasördeki `fire-axolotl-extension-0.12.0-native-newtab-unsigned.xpi` dosyasını kullan. Diğer XPI ve kaynak dosyaları [sürüm sayfasındadır](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.12.0-preview.1).
+1. [Kurulum ZIP’ini](https://github.com/kaansavukduran/fire-axolotl-extension/releases/download/v0.13.0-preview.1/fire-axolotl-extension-0.13.0-firefox-preview.zip) indir ve bir klasöre çıkar. Bu ZIP mevcut Firefox yeni sekmesini koruyan XPI ve Türkçe/English kurulum metni içerir.
+2. Klasördeki `fire-axolotl-extension-0.13.0-native-newtab-unsigned.xpi` dosyasını kullan. Diğer XPI ve kaynak dosyaları [sürüm sayfasındadır](https://github.com/kaansavukduran/fire-axolotl-extension/releases/tag/v0.13.0-preview.1).
 3. Masaüstü Firefox'ta adres çubuğuna `about:debugging#/runtime/this-firefox` yaz.
 4. **Geçici Eklenti Yükle / Load Temporary Add-on** düğmesine bas, bu XPI'yi seç.
 5. Firefox'un eklenti menüsünden **Fire Axolotl Extension** düğmesini aç. Ayarlar, Sekmeler, Engelleme ve Araçlar buradadır. Aion yeni sekmeli pakette yeni sekme açınca oyun görünür; diğer pakette popup içinden açılır.

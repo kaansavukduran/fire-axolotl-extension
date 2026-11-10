@@ -46,3 +46,5 @@ Seeking olayı düzeltmesi sonrası yerel ana 42 akış yeniden geçti; iki ger�
 0.12.0 kapanış doğrulaması: uBO onPortConnect sender bilgisini kendi kaydından sonra siliyordu; Aion portu sonradan doğrulanamadığı için arka plan fallback çalışmıyordu. Paketleyici aion-ai-video kanalını motor handler’ından ayırır, Aion’un kimlik/URL doğrulaması korunur. Test kendi pagehide callback’ini engelleyip gerçek arka planın kapatmayı tamamladığını sınar. UI kapatma sırası eski hedefi temizlemeyi bekler ve başarısız cleanup’ta port hedefini erken unutmaz.
 
 0.12.0 ilk CI (42888624394), eski caption_learning testinin ilk döngü başlamadan 1,1 saniyeye seek etmesi yüzünden durdu. Test gerçek captionLooping/ilk satır yanıtını bekler; dışarı seek ve 1,45 saniyeyi geçme şartı korunur. Yerelde altı akış yeniden geçti; XPI/uygulama kodu değişmedi. İlk commit ve özel yedeği korunur, test düzeltmesi yeni commit ve CI ile izlenir.
+
+0.13.0: popup’ta tek otomatik çift altyazı anahtarı; arka plan sahipliği, otomatik video keşfi, sonraki video/SPA takibi ve inline durum. Gelişmiş elle hedefli panel korunur. Yeni mod varsayılan kapalıdır; ilk açık seçimden sonra tercih kalır.

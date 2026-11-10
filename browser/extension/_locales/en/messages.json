@@ -1329,7 +1329,7 @@
     "message": "Translate page / dialog text"
   },
   "panelVideoTranslate": {
-    "message": "YouTube / dual subtitles"
+    "message": "Advanced caption and file tools"
   },
   "panelExternalTranslation": {
     "message": "Optional external translation service"
@@ -1423,5 +1423,41 @@
   },
   "aiVideoCleanupPending": {
     "message": "Subtitle cleanup could not finish. Close this control tab so the background can finish cleanup. Reload the video page if needed."
+  },
+  "autoCaptionTitle": {
+    "message": "Dual subtitles"
+  },
+  "autoCaptionToggle": {
+    "message": "Automatically show dual subtitles"
+  },
+  "autoCaptionHelp": {
+    "message": "Turn on once. Aion finds the video and shows original captions with their translation. You can close this popup."
+  },
+  "autoCaptionOptions": {
+    "message": "Language and caption visibility"
+  },
+  "autoCaptionScope": {
+    "message": "The bundled engine translates English ↔ Turkish on your device and starts automatically on first use. Readable video captions are required; audio is not transcribed. Other languages and file tools are in the advanced AI panel."
+  },
+  "autoCaptionOff": {
+    "message": "Off. Turn on to follow the videos you watch automatically."
+  },
+  "autoCaptionWaiting": {
+    "message": "On · Waiting for a video. Open and play a video; no tab selection needed."
+  },
+  "autoCaptionNoCaptions": {
+    "message": "On · Waiting for captions. YouTube CC is enabled automatically. Videos without captions cannot be translated."
+  },
+  "autoCaptionActive": {
+    "message": "On · Dual subtitles are running."
+  },
+  "autoCaptionTranslating": {
+    "message": "On · Translating on your device. First use can take a few seconds."
+  },
+  "autoCaptionBusy": {
+    "message": "On · Waiting for the local AI to finish another task, then resuming automatically."
+  },
+  "autoCaptionHidden": {
+    "message": "On · Both lines are hidden. Enable a line under Language and caption visibility."
   }
 }

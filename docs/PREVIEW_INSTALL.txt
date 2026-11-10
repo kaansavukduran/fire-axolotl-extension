@@ -16,11 +16,11 @@ Bu önizleme Mozilla tarafından imzalanmış kalıcı bir sürüm değildir. Fi
 yeniden başlatınca tekrar yüklemen gerekir. İmza, TLS veya sandbox denetimlerini
 kapatma. Normal kalıcı kurulum, ayrı Mozilla imzasını bekler.
 
-YouTube: videoyu aç → Aion → Video kumandası → YouTube / çift altyazıyı aç. Kaynak ve hedef
-dili seç; Videoda AI çift altyazıyı aç / kapat anahtarını aç. İlk İngilizce–Türkçe
-kullanımında hazır motor başlar. Kontrol sekmesi açık kalsın; videonun sekmesine
-dönüp izle. Özgün satır ile çeviriyi ayrı ayrı açıp kapatabilirsin. Video zaten CC
-altyazısı sunmalı; ses yazıya dökülmez. YouTube arayüzü değiştikçe destek değişebilir.
+YouTube: Aion simgesini aç → “Videoları otomatik çift altyazıyla izle” kutusunu
+işaretle. Bitti; popup’ı kapatabilirsin. Videoyu kendi bulur; sonraki videolarda
+da otomatik çalışır. Paketli İngilizce↔Türkçe motoru ilk kullanımda başlar.
+Dil ve iki satırın görünürlüğü aynı kartın isteğe bağlı bölümündedir.
+Videonun okunabilir altyazısı gerekir; ses yazıya dökülmez.
 
 ENGLISH
 1. Extract this ZIP to a folder on your computer.
@@ -36,9 +36,7 @@ This is an unsigned developer preview. Load it again after restarting Firefox.
 Do not disable signature, TLS or sandbox checks. Permanent installation needs
 a separate Mozilla signature.
 
-YouTube: open a captioned video → Aion → Video kumandası → YouTube / dual subtitles. Choose
-the source and target languages and turn on AI dual subtitles. Bundled English–
-Turkish translation starts on first use. Keep the control tab open and return
-to the video tab to watch. Original and translated lines have separate switches.
-The player must provide CC; audio transcription is not included. Support may
-change when YouTube changes its player.
+Video: open Aion → check “Automatically show dual subtitles”. Close the popup
+and watch. Video detection and bundled EN/TR inference start automatically.
+Readable captions are required; audio is not transcribed. Language and line
+visibility are optional controls in the same card.

@@ -1,0 +1,11 @@
+{
+  "passed": [
+    "One checkbox in the actual toolbar popup persists on with no video; no manual target, model-load or AI controller is needed",
+    "Opening a video later automatically enables YouTube CC and cold-starts real bundled EN/TR inference, showing both lines after the popup has closed",
+    "Caption changes and SPA video navigation automatically continue without re-enabling the switch or showing the previous caption translation",
+    "Reopening the actual popup shows the persistent checked state; its checkbox is above the fold, the tab chooser is hidden, and switching off removes Aion and restores native captions",
+    "Closing subtitles on the video also switches the persistent automatic mode off without resurrecting its overlay",
+    "The same automatic switch detects a second native TextTrack player and renders both original and real local translation without tab selection"
+  ],
+  "scope": "Local HTTPS YouTube-shaped fixture; real Firefox toolbar and packaged inference. No claim about blocked public YouTube."
+}

@@ -7,7 +7,7 @@
     progress: true, animations: true, sounds: false, imageSearch: true, browserTheme: false, runner: true,
     targetLanguage: 'tr', endpoint: '', vocabulary: [], milestones: [], quality: 'auto', character: 'aion', characterActivity: 'idle',
     captionSize: 24, captionOpacity: 90, captionOffset: 0, captionFont: 'system', captionPosition: 'bottom', captionColor: '#ffffff', captionTranslationColor: '#85e7ff',
-    captionOriginal: true, captionTranslated: true, aiSource: 'auto', aiTarget: 'tr', aiBackend: 'wasm',
+    captionOriginal: true, captionTranslated: true, autoCaptions: false, aiSource: 'auto', aiTarget: 'tr', aiBackend: 'wasm',
     moduleOrder: ['containers', 'video', 'translation', 'ai', 'characters'], disabledModules: []
   });
   const clamp = (v, lo, hi, fallback) => Number.isFinite(Number(v)) ? Math.min(hi, Math.max(lo, Number(v))) : fallback;
@@ -16,7 +16,7 @@
     const out = {...defaults, vocabulary: [], milestones: [], moduleOrder: [...defaults.moduleOrder], disabledModules: []};
     if (Array.isArray(input.moduleOrder)) out.moduleOrder = [...new Set([...input.moduleOrder.filter(key => defaults.moduleOrder.includes(key)), ...defaults.moduleOrder])];
     if (Array.isArray(input.disabledModules)) out.disabledModules = [...new Set(input.disabledModules.filter(key => defaults.moduleOrder.includes(key)))];
-    for (const key of ['progress', 'animations', 'sounds', 'imageSearch', 'browserTheme', 'runner', 'captionOriginal', 'captionTranslated']) if (typeof input[key] === 'boolean') out[key] = input[key];
+    for (const key of ['progress', 'animations', 'sounds', 'imageSearch', 'browserTheme', 'runner', 'captionOriginal', 'captionTranslated', 'autoCaptions']) if (typeof input[key] === 'boolean') out[key] = input[key];
     for (const [key, values] of Object.entries({language: ['', 'tr', 'en'], theme: ['system', 'light', 'dark', 'contrast'], font: ['system', 'sans', 'serif', 'dyslexic', 'opendyslexic'], quality: ['auto', 'best', 'hd720', 'hd1080', 'hd1440', 'hd2160']})) {
       if (values.includes(input[key])) out[key] = input[key];
     }

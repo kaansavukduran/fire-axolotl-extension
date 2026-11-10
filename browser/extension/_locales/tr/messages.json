@@ -1329,7 +1329,7 @@
     "message": "Sayfa / popup yazılarını çevir"
   },
   "panelVideoTranslate": {
-    "message": "YouTube / çift altyazıyı aç"
+    "message": "Gelişmiş altyazı ve dosya araçları"
   },
   "panelExternalTranslation": {
     "message": "İsteğe bağlı harici çeviri hizmeti"
@@ -1423,5 +1423,41 @@
   },
   "aiVideoCleanupPending": {
     "message": "Altyazı temizliği tamamlanamadı. Bu kontrol sekmesini kapat; arka plan son temizliği yapar. Gerekirse video sayfasını yenile."
+  },
+  "autoCaptionTitle": {
+    "message": "Çift altyazı"
+  },
+  "autoCaptionToggle": {
+    "message": "Videoları otomatik çift altyazıyla izle"
+  },
+  "autoCaptionHelp": {
+    "message": "Bir kez açman yeterli. Videoyu bulur, orijinal altyazı ile çevirisini birlikte gösterir. Bu pencereyi kapatabilirsin."
+  },
+  "autoCaptionOptions": {
+    "message": "Dil ve altyazı görünümü"
+  },
+  "autoCaptionScope": {
+    "message": "Paketli motor İngilizce ↔ Türkçe çeviriyi cihazında yapar; ilk kullanımda otomatik başlar. Videonun okunabilir altyazısı gerekir; sesten altyazı üretmez. Diğer diller ve dosya araçları gelişmiş AI panelindedir."
+  },
+  "autoCaptionOff": {
+    "message": "Kapalı. Açınca izlediğin videolarda otomatik çalışır."
+  },
+  "autoCaptionWaiting": {
+    "message": "Açık · Video bekleniyor. Bir video açıp oynat; seçim yapman gerekmiyor."
+  },
+  "autoCaptionNoCaptions": {
+    "message": "Açık · Altyazı bekleniyor. YouTube’da CC otomatik açılır. Altyazı yoksa çeviri yapılamaz."
+  },
+  "autoCaptionActive": {
+    "message": "Açık · Çift altyazı çalışıyor."
+  },
+  "autoCaptionTranslating": {
+    "message": "Açık · Cihazında çevriliyor. İlk açılış birkaç saniye sürebilir."
+  },
+  "autoCaptionBusy": {
+    "message": "Açık · Yerel AI diğer işlemi tamamlayınca otomatik devam edecek."
+  },
+  "autoCaptionHidden": {
+    "message": "Açık · İki satır da gizli. Dil ve altyazı görünümü bölümünden birini aç."
   }
 }

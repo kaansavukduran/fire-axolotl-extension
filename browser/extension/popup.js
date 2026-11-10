@@ -6,6 +6,23 @@ let draftEdited = false;
 const toolbarPopup=browser.extension.getViews({type:'popup'}).includes(window);
 const entry=new URLSearchParams(location.hash.slice(1));
 let activeModule=entry.get('section') || 'translation',modelState={phase:'unloaded',modelKind:'bergamot'};
+let autoChanging=false,autoError;
+async function renderAutoCaptions() {
+  const state=await send({type:'autoCaptions',action:'status'});
+  if(autoChanging)return;
+  $('auto-captions').checked=state.enabled;
+  const key=autoError || state.key;
+  $('auto-caption-status').textContent=UI.messages[key]?UI.t(key):UI.t('operationFailed');
+  $('auto-caption-video').textContent=state.title;
+  $('auto-caption-original').checked=UI.settings.captionOriginal;$('auto-caption-translated').checked=UI.settings.captionTranslated;
+  for(const [id,pref] of [['auto-caption-source','aiSource'],['auto-caption-target','aiTarget']]){
+    const select=$(id),optionsKey=JSON.stringify([UI.locale,UI.settings[pref]]);
+    if(select.dataset.optionsKey===optionsKey)continue;
+    const names=new Intl.DisplayNames([UI.locale],{type:'language'}),codes=[...(pref==='aiSource'?['auto']:[]),'tr','en',UI.settings[pref]];
+    select.replaceChildren(...[...new Set(codes)].map(code=>{const o=document.createElement('option');o.value=code;o.textContent=code==='auto'?UI.t('autoDetect'):names.of(code);return o;}));
+    select.value=UI.settings[pref];select.dataset.optionsKey=optionsKey;
+  }
+}
 const targetId=()=>$('target-tab').value==='active'?undefined:Number($('target-tab').value);
 async function targetForLink() {
   const id=targetId();if(id!==undefined)return id;
@@ -51,7 +68,7 @@ async function refresh() {
     if(section){section.hidden=UI.settings.disabledModules.includes(key)||(toolbarPopup&&activeModule!==key);document.querySelector('main').insertBefore(section,$('progress-section'));}
     if(button){button.hidden=UI.settings.disabledModules.includes(key);button.setAttribute('aria-pressed',String(key===activeModule));$('quick-nav').append(button);}
   }
-  languageChoices();renderModelStatus();
+  languageChoices();renderModelStatus();await renderAutoCaptions();
 }
 async function containers() {
   if (UI.settings.disabledModules.includes('containers')) return;
@@ -81,15 +98,26 @@ async function fileCues(id) {
 (async () => {
   document.documentElement.dataset.surface=toolbarPopup?'popup':'workspace';
   if(toolbarPopup){
-    const width=Math.max(240,Math.min(640,screen.availWidth-32));
+    const browserWindow=await browser.windows.getCurrent();
+    const width=Math.max(240,Math.min(640,screen.availWidth-32,browserWindow.width-32));
     document.documentElement.style.width=width+'px';document.body.style.width=width+'px';
-    // Keep the native panel's preferred width stable; fit its content if Firefox
-    // constrains the anchored viewport. Viewport-sized roots cause resize loops.
-    const fit=()=>{if(document.visibilityState==='visible'&&innerWidth>=240)document.body.style.width=Math.min(width,innerWidth)+'px';};
-    window.addEventListener('resize',fit);document.addEventListener('visibilitychange',fit);
+    // Firefox can initially expose its 288 px placeholder viewport. Feeding
+    // that width back into the body permanently shrinks the native panel.
+    // Derive the preferred size from the browser window, never that placeholder.
   }
   if(!toolbarPopup){document.body.classList.remove('popup');document.body.classList.add('workspace');}
   await UI.init();await targets();modelState=await send({type:'localAI',action:'status'});await refresh();await containers();
+  $('auto-captions').onchange=async()=>{
+    autoChanging=true;autoError=undefined;$('auto-captions').disabled=true;
+    try{await send({type:'autoCaptions',action:'set',enabled:$('auto-captions').checked});}
+    catch(error){autoError=error.message;}
+    finally{autoChanging=false;$('auto-captions').disabled=false;await renderAutoCaptions();}
+  };
+  $('auto-caption-target').onchange=()=>UI.run(()=>UI.save({aiTarget:$('auto-caption-target').value}));
+  $('auto-caption-source').onchange=()=>UI.run(()=>UI.save({aiSource:$('auto-caption-source').value}));
+  for(const [id,key] of [['auto-caption-original','captionOriginal'],['auto-caption-translated','captionTranslated']])$(id).onchange=()=>UI.run(()=>UI.save({[key]:$(id).checked}));
+  const autoTimer=setInterval(()=>{renderAutoCaptions().catch(()=>{});},700);
+  window.addEventListener('pagehide',()=>clearInterval(autoTimer),{once:true});
   $('open-workspace').hidden=!toolbarPopup;$('target-section').hidden=toolbarPopup;$('more-tools').open=!toolbarPopup;
   $('source-tools').open=!toolbarPopup;
   if(toolbarPopup)document.querySelector('main').insertBefore($('more-tools'),$('status'));

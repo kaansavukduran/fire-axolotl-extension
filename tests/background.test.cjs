@@ -163,3 +163,8 @@ test('a failed temporary-container opening removes its new identity and tracking
   await assert.rejects(f.send({type:'temporaryContainer',name:'Temporary'}),/create failed/);
   assert.deepEqual(f.store.temporaryContainers,[]);assert.deepEqual(f.removed,['firefox-container-2']);
 });
+test('automatic subtitles retain the extension-page privilege boundary',async()=>{
+  const f=fixture();
+  await assert.rejects(f.listeners.message({type:'autoCaptions',action:'set',enabled:true},{id:'test@aion',url:'https://example.org/'}),/unauthorized/);
+  assert.equal(f.store.settings,undefined);
+});

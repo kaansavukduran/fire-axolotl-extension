@@ -44,6 +44,8 @@ with zipfile.ZipFile(package) as archive:
     assert 'path: browser.runtime.getManifest().browser_action.default_icon' in archive.read('js/vapi-background.js').decode()
     assert "if (port.name === 'aion-ai-video') { return; }" in archive.read('js/vapi-background.js').decode()
     assert archive.read('aion/youtube-captions.js') == (SOURCE/'youtube-captions.js').read_bytes()
+    assert archive.read('aion/auto-captions.js') == (SOURCE/'auto-captions.js').read_bytes()
+    assert '<script src="aion/auto-captions.js"></script>' in archive.read('background.html').decode()
     assert final['background'] == {'page': 'background.html'}
     assert 'mozilla-recommendation.json' not in archive.namelist()
     assert not any(name.startswith('META-INF/') for name in archive.namelist())
